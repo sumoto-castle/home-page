@@ -1,0 +1,1988 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>洲本城 | 淡路島の名城 - 公式観光サイト</title>
+  <meta name="description" content="淡路島に聳える洲本城。1526年築城の歴史ある山城で、日本最古の模擬天守が残ります。観光情報・アクセス・イベント情報を公式サイトでご確認ください。">
+  <meta name="keywords" content="洲本城,淡路島,観光,兵庫県,洲本市,日本100名城,城跡">
+  <meta property="og:title" content="洲本城 | 淡路島の名城">
+  <meta property="og:description" content="淡路島に聳える洲本城。歴史と絶景が織りなす名城へ。">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0a0e1a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;700&family=Noto+Sans+JP:wght@300;400;500&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sumi: '#0a0e1a',
+            ai: '#1a2744',
+            kon: '#1c3557',
+            kin: '#c9a84c',
+            kinHover: '#e0c170',
+            washi: '#f5f0e8',
+            giniro: '#8899aa',
+          },
+          fontFamily: {
+            mincho: ['Shippori Mincho', 'Noto Serif JP', 'serif'],
+            sans: ['Noto Sans JP', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --sumi: #0a0e1a;
+      --ai: #1a2744;
+      --kon: #1c3557;
+      --kin: #c9a84c;
+      --kin-light: #e0c170;
+      --washi: #f5f0e8;
+      --gin: #8899aa;
+      --glass: rgba(10, 14, 26, 0.55);
+      --glass-light: rgba(255,255,255,0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--sumi);
+      color: var(--washi);
+      font-family: 'Noto Sans JP', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--sumi); }
+    ::-webkit-scrollbar-thumb { background: var(--kin); border-radius: 2px; }
+
+    /* ===== BREAKING NEWS BAR ===== */
+    #breaking-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: 36px; display: flex; align-items: center; overflow: hidden;
+    }
+    .breaking-label {
+      padding: 0 16px; white-space: nowrap; font-size: 11px;
+      font-weight: 600; letter-spacing: 0.15em; height: 100%;
+      display: flex; align-items: center; z-index: 1;
+    }
+    .breaking-track {
+      flex: 1; overflow: hidden; position: relative;
+    }
+    .breaking-text {
+      display: inline-block; white-space: nowrap; font-size: 12px;
+      letter-spacing: 0.08em; animation: marquee 30s linear infinite;
+    }
+    @keyframes marquee {
+      from { transform: translateX(100vw); }
+      to { transform: translateX(-100%); }
+    }
+
+    /* ===== HEADER ===== */
+    #main-header {
+      position: fixed; top: 36px; left: 0; right: 0; z-index: 900;
+      transition: background 0.5s, backdrop-filter 0.5s, box-shadow 0.5s;
+      padding: 0 24px;
+    }
+    #main-header.scrolled {
+      background: rgba(10,14,26,0.92);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 1px 0 rgba(201,168,76,0.2);
+    }
+    .header-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .logo-mark {
+      display: flex; flex-direction: column; line-height: 1;
+    }
+    .logo-jp {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 22px; font-weight: 600;
+      color: var(--kin); letter-spacing: 0.2em;
+    }
+    .logo-en {
+      font-size: 9px; letter-spacing: 0.3em;
+      color: var(--gin); margin-top: 3px;
+    }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: 12px; letter-spacing: 0.15em;
+      color: rgba(245,240,232,0.75);
+      text-decoration: none; position: relative;
+      transition: color 0.3s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 1px; background: var(--kin);
+      transform: scaleX(0); transition: transform 0.3s;
+    }
+    .nav-links a:hover { color: var(--kin); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* ===== HAMBURGER ===== */
+    #hamburger {
+      display: none; flex-direction: column; gap: 5px; cursor: pointer;
+      padding: 8px; background: none; border: none;
+    }
+    #hamburger span {
+      display: block; width: 24px; height: 1px;
+      background: var(--washi); transition: all 0.3s;
+    }
+    #hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+    #hamburger.open span:nth-child(2) { opacity: 0; }
+    #hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
+
+    /* ===== MOBILE MENU ===== */
+    #mobile-menu {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10,14,26,0.97);
+      backdrop-filter: blur(20px);
+      z-index: 800; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 40px;
+      opacity: 0; pointer-events: none; transition: opacity 0.4s;
+    }
+    #mobile-menu.open { opacity: 1; pointer-events: all; }
+    #mobile-menu a {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 28px; color: var(--washi);
+      text-decoration: none; letter-spacing: 0.2em;
+      transition: color 0.3s;
+    }
+    #mobile-menu a:hover { color: var(--kin); }
+
+    /* ===== HERO ===== */
+    #hero {
+      position: relative; height: 100svh; min-height: 600px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #0a0e1a 0%, #1a2744 40%, #0d1829 100%);
+    }
+
+    /* 洲本城 SVG イラスト */
+    .castle-silhouette {
+      position: absolute; bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: min(700px, 100vw);
+      opacity: 0.18;
+      filter: drop-shadow(0 0 40px rgba(201,168,76,0.3));
+    }
+
+    .hero-stars {
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 15% 20%, rgba(201,168,76,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 85% 10%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 45% 5%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 70% 30%, rgba(201,168,76,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 50%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 60% 15%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 40%, rgba(201,168,76,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 10% 70%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 35% 35%, rgba(255,255,255,0.2) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 55% 60%, rgba(201,168,76,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 80% 55%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 20% 80%, rgba(255,255,255,0.2) 0%, transparent 100%);
+    }
+
+    .hero-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 80%, rgba(201,168,76,0.08) 0%, transparent 60%);
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(10,14,26,0.3) 0%, rgba(10,14,26,0.1) 50%, rgba(10,14,26,0.7) 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 10; text-align: center;
+      padding: 0 24px; max-width: 800px;
+    }
+    .hero-badge {
+      display: inline-block; border: 1px solid rgba(201,168,76,0.5);
+      padding: 6px 20px; font-size: 10px; letter-spacing: 0.4em;
+      color: var(--kin); margin-bottom: 28px;
+      animation: fadeInDown 1s ease both;
+    }
+    .hero-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(52px, 12vw, 96px);
+      font-weight: 600; line-height: 1.1;
+      letter-spacing: 0.15em; color: #fff;
+      text-shadow: 0 0 80px rgba(201,168,76,0.3);
+      animation: fadeInUp 1s 0.2s ease both;
+    }
+    .hero-title span { color: var(--kin); }
+    .hero-sub {
+      margin-top: 20px; font-size: clamp(13px, 2.5vw, 16px);
+      letter-spacing: 0.2em; color: rgba(245,240,232,0.65);
+      font-weight: 300; animation: fadeInUp 1s 0.4s ease both;
+    }
+    .hero-en {
+      margin-top: 8px; font-size: 10px; letter-spacing: 0.5em;
+      color: rgba(201,168,76,0.5); animation: fadeInUp 1s 0.5s ease both;
+    }
+    .hero-divider {
+      width: 60px; height: 1px; background: linear-gradient(to right, transparent, var(--kin), transparent);
+      margin: 28px auto; animation: scaleX 1s 0.6s ease both;
+    }
+    .hero-desc {
+      font-size: 14px; line-height: 2; color: rgba(245,240,232,0.6);
+      max-width: 480px; margin: 0 auto;
+      animation: fadeInUp 1s 0.7s ease both;
+    }
+    .hero-cta {
+      margin-top: 40px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+      animation: fadeInUp 1s 0.9s ease both;
+    }
+    .btn-primary {
+      padding: 14px 36px; background: var(--kin);
+      color: var(--sumi); font-size: 12px; letter-spacing: 0.2em;
+      font-weight: 600; cursor: pointer; border: none;
+      transition: all 0.3s; text-decoration: none; display: inline-block;
+    }
+    .btn-primary:hover { background: var(--kin-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.3); }
+    .btn-outline {
+      padding: 14px 36px; border: 1px solid rgba(201,168,76,0.5);
+      color: var(--kin); font-size: 12px; letter-spacing: 0.2em;
+      cursor: pointer; background: transparent; transition: all 0.3s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-outline:hover { border-color: var(--kin); background: rgba(201,168,76,0.08); transform: translateY(-2px); }
+    .scroll-indicator {
+      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      animation: fadeIn 1s 1.5s ease both;
+    }
+    .scroll-indicator span { font-size: 9px; letter-spacing: 0.4em; color: rgba(201,168,76,0.6); }
+    .scroll-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, var(--kin), transparent);
+      animation: scrollPulse 2s infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(0.5); transform-origin: top; }
+      50% { opacity: 1; transform: scaleY(1); }
+    }
+
+    /* ===== WEATHER WIDGET ===== */
+    #weather-widget {
+      position: fixed; top: 100px; right: 16px; z-index: 500;
+      background: var(--glass); backdrop-filter: blur(20px);
+      border: 1px solid rgba(201,168,76,0.2);
+      padding: 12px 16px; min-width: 140px;
+      transition: opacity 0.3s;
+    }
+    .weather-title {
+      font-size: 9px; letter-spacing: 0.3em;
+      color: rgba(201,168,76,0.7); margin-bottom: 10px;
+      text-align: center;
+    }
+    .weather-days { display: flex; gap: 12px; }
+    .weather-day { text-align: center; flex: 1; }
+    .weather-day-label { font-size: 9px; color: var(--gin); letter-spacing: 0.1em; margin-bottom: 4px; }
+    .weather-icon { font-size: 22px; margin: 4px 0; }
+    .weather-temp { font-size: 16px; font-family: 'Shippori Mincho', serif; color: var(--washi); }
+    .weather-rain { font-size: 9px; color: #7ab3d4; margin-top: 2px; }
+
+    /* ===== SECTION BASE ===== */
+    .section { padding: 100px 24px; max-width: 1200px; margin: 0 auto; }
+    .section-full { padding: 100px 0; }
+    .section-label {
+      font-size: 9px; letter-spacing: 0.5em; color: var(--kin);
+      margin-bottom: 16px; display: block;
+    }
+    .section-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 500; letter-spacing: 0.1em; line-height: 1.3;
+    }
+    .section-divider {
+      width: 48px; height: 1px;
+      background: linear-gradient(to right, var(--kin), transparent);
+      margin: 20px 0;
+    }
+
+    /* ===== ABOUT / FEATURES ===== */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2px; margin-top: 60px;
+    }
+    .feature-card {
+      background: var(--glass-light); border: 1px solid rgba(201,168,76,0.1);
+      padding: 40px 32px; position: relative; overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .feature-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: linear-gradient(to right, transparent, var(--kin), transparent);
+      transform: scaleX(0); transition: transform 0.5s;
+    }
+    .feature-card:hover { border-color: rgba(201,168,76,0.3); transform: translateY(-4px); }
+    .feature-card:hover::before { transform: scaleX(1); }
+    .feature-num {
+      font-family: 'Shippori Mincho', serif; font-size: 48px;
+      color: rgba(201,168,76,0.12); line-height: 1; margin-bottom: 16px;
+    }
+    .feature-icon { font-size: 32px; margin-bottom: 16px; }
+    .feature-title {
+      font-family: 'Shippori Mincho', serif; font-size: 20px;
+      color: var(--kin); margin-bottom: 12px; letter-spacing: 0.1em;
+    }
+    .feature-text { font-size: 13px; line-height: 2; color: rgba(245,240,232,0.65); }
+
+    /* ===== HISTORY ===== */
+    #history-section {
+      position: relative;
+      background: linear-gradient(to bottom, var(--sumi), rgba(26,39,68,0.3), var(--sumi));
+      padding: 100px 0;
+    }
+    .history-inner { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+    .timeline { margin-top: 60px; position: relative; }
+    .timeline::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 1px; background: linear-gradient(to bottom, transparent, var(--kin), transparent);
+    }
+    .timeline-item {
+      padding: 0 0 48px 36px; position: relative;
+      opacity: 0; transform: translateX(-20px); transition: all 0.6s;
+    }
+    .timeline-item.visible { opacity: 1; transform: translateX(0); }
+    .timeline-dot {
+      position: absolute; left: -4px; top: 6px;
+      width: 9px; height: 9px; background: var(--kin);
+      border-radius: 50%;
+      box-shadow: 0 0 12px rgba(201,168,76,0.5);
+    }
+    .timeline-year {
+      font-family: 'Shippori Mincho', serif; font-size: 13px;
+      color: var(--kin); letter-spacing: 0.2em; margin-bottom: 8px;
+    }
+    .timeline-title {
+      font-family: 'Shippori Mincho', serif; font-size: 20px;
+      margin-bottom: 8px; letter-spacing: 0.05em;
+    }
+    .timeline-text { font-size: 13px; line-height: 2; color: rgba(245,240,232,0.6); }
+
+    /* ===== ARTICLES ===== */
+    .articles-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px; margin-top: 48px;
+    }
+    .article-card {
+      background: var(--glass-light); border: 1px solid rgba(201,168,76,0.1);
+      overflow: hidden; cursor: pointer; transition: all 0.4s;
+      opacity: 0; transform: translateY(20px);
+    }
+    .article-card.visible { opacity: 1; transform: translateY(0); }
+    .article-card:hover { border-color: rgba(201,168,76,0.3); transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,0.4); }
+    .article-thumb {
+      width: 100%; height: 200px; object-fit: cover;
+      background: linear-gradient(135deg, #1a2744, #0d1829);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 48px; transition: transform 0.6s;
+    }
+    .article-card:hover .article-thumb { transform: scale(1.05); }
+    .article-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .article-body { padding: 24px; }
+    .article-category {
+      font-size: 9px; letter-spacing: 0.3em; color: var(--kin);
+      margin-bottom: 10px;
+    }
+    .article-title {
+      font-family: 'Shippori Mincho', serif; font-size: 17px;
+      line-height: 1.6; margin-bottom: 12px; letter-spacing: 0.05em;
+    }
+    .article-date { font-size: 11px; color: var(--gin); }
+
+    /* ===== EVENTS ===== */
+    .events-list { margin-top: 48px; display: flex; flex-direction: column; gap: 2px; }
+    .event-item {
+      display: grid; grid-template-columns: 80px 1fr;
+      background: var(--glass-light); border: 1px solid rgba(201,168,76,0.08);
+      overflow: hidden; transition: all 0.3s;
+      opacity: 0; transform: translateX(-10px);
+    }
+    .event-item.visible { opacity: 1; transform: translateX(0); }
+    .event-item:hover { border-color: rgba(201,168,76,0.25); background: rgba(201,168,76,0.04); }
+    .event-date-box {
+      background: rgba(201,168,76,0.08); display: flex; flex-direction: column;
+      align-items: center; justify-content: center; padding: 20px 12px;
+      border-right: 1px solid rgba(201,168,76,0.1);
+    }
+    .event-month { font-size: 10px; letter-spacing: 0.1em; color: var(--kin); }
+    .event-day {
+      font-family: 'Shippori Mincho', serif; font-size: 28px;
+      color: var(--washi); line-height: 1;
+    }
+    .event-body { padding: 20px 24px; }
+    .event-title {
+      font-family: 'Shippori Mincho', serif; font-size: 17px;
+      margin-bottom: 6px; letter-spacing: 0.05em;
+    }
+    .event-desc { font-size: 12px; color: rgba(245,240,232,0.55); line-height: 1.8; }
+
+    /* ===== ACCESS ===== */
+    .access-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2px; margin-top: 48px;
+    }
+    .access-item {
+      background: var(--glass-light); border: 1px solid rgba(201,168,76,0.1);
+      padding: 32px;
+    }
+    .access-method { font-size: 10px; letter-spacing: 0.3em; color: var(--kin); margin-bottom: 16px; }
+    .access-detail { font-size: 14px; line-height: 2; color: rgba(245,240,232,0.75); }
+    .access-note { font-size: 11px; color: var(--gin); margin-top: 8px; }
+    .map-embed {
+      width: 100%; height: 300px; background: rgba(26,39,68,0.5);
+      border: 1px solid rgba(201,168,76,0.1); margin-top: 2px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gin); font-size: 13px;
+    }
+
+    /* ===== CONTACT ===== */
+    .contact-form { max-width: 600px; margin: 48px auto 0; }
+    .form-group { margin-bottom: 24px; }
+    .form-label { font-size: 11px; letter-spacing: 0.2em; color: var(--kin); display: block; margin-bottom: 8px; }
+    .form-input, .form-textarea {
+      width: 100%; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.2); padding: 14px 16px;
+      color: var(--washi); font-size: 14px; font-family: inherit;
+      transition: border-color 0.3s; outline: none;
+    }
+    .form-input:focus, .form-textarea:focus { border-color: var(--kin); }
+    .form-textarea { height: 140px; resize: vertical; }
+    .form-submit {
+      width: 100%; padding: 16px; background: var(--kin);
+      color: var(--sumi); font-size: 13px; letter-spacing: 0.25em;
+      font-weight: 600; cursor: pointer; border: none; transition: all 0.3s;
+    }
+    .form-submit:hover { background: var(--kin-light); }
+    .form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .form-success {
+      text-align: center; padding: 40px;
+      border: 1px solid rgba(201,168,76,0.3);
+      display: none;
+    }
+
+    /* ===== POPUP MODAL ===== */
+    #popup-modal {
+      position: fixed; inset: 0; z-index: 2000;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px; opacity: 0; transition: opacity 0.4s;
+      pointer-events: none;
+    }
+    #popup-modal.show { opacity: 1; pointer-events: all; }
+    .popup-box {
+      background: linear-gradient(135deg, #0f1729, #1a2744);
+      border: 1px solid rgba(201,168,76,0.3);
+      padding: 48px 40px; max-width: 480px; width: 100%;
+      position: relative;
+      transform: scale(0.95); transition: transform 0.4s;
+    }
+    #popup-modal.show .popup-box { transform: scale(1); }
+    .popup-close {
+      position: absolute; top: 16px; right: 16px;
+      background: none; border: none; color: var(--gin);
+      font-size: 20px; cursor: pointer; transition: color 0.3s;
+    }
+    .popup-close:hover { color: var(--kin); }
+    .popup-title {
+      font-family: 'Shippori Mincho', serif; font-size: 22px;
+      color: var(--kin); margin-bottom: 16px; letter-spacing: 0.1em;
+    }
+    .popup-body { font-size: 14px; line-height: 2; color: rgba(245,240,232,0.75); }
+    .popup-no-today {
+      margin-top: 20px; font-size: 11px; color: var(--gin);
+      cursor: pointer; text-decoration: underline;
+    }
+
+    /* ===== ARTICLE MODAL ===== */
+    #article-modal {
+      position: fixed; inset: 0; z-index: 1500;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(12px);
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 60px 24px; overflow-y: auto;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    #article-modal.show { opacity: 1; pointer-events: all; }
+    .modal-box {
+      background: linear-gradient(160deg, #0f1729, #0a0e1a);
+      border: 1px solid rgba(201,168,76,0.2);
+      max-width: 720px; width: 100%; position: relative;
+      transform: translateY(20px); transition: transform 0.3s;
+    }
+    #article-modal.show .modal-box { transform: translateY(0); }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px; z-index: 10;
+      background: rgba(0,0,0,0.5); border: 1px solid rgba(201,168,76,0.2);
+      color: var(--washi); width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.3s; font-size: 16px;
+    }
+    .modal-close:hover { border-color: var(--kin); color: var(--kin); }
+    .modal-thumb {
+      width: 100%; height: 280px; object-fit: cover;
+      background: linear-gradient(135deg, #1a2744, #0d1829);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 64px;
+    }
+    .modal-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .modal-body { padding: 40px; }
+    .modal-category { font-size: 10px; letter-spacing: 0.3em; color: var(--kin); margin-bottom: 16px; }
+    .modal-title {
+      font-family: 'Shippori Mincho', serif; font-size: 24px;
+      line-height: 1.5; margin-bottom: 8px; letter-spacing: 0.05em;
+    }
+    .modal-date { font-size: 11px; color: var(--gin); margin-bottom: 24px; }
+    .modal-divider { height: 1px; background: rgba(201,168,76,0.15); margin-bottom: 24px; }
+    .modal-content { font-size: 15px; line-height: 2.2; color: rgba(245,240,232,0.8); white-space: pre-wrap; }
+
+    /* ===== ADMIN ===== */
+    #admin-panel {
+      position: fixed; inset: 0; z-index: 3000;
+      background: #080c18; display: none; flex-direction: column;
+    }
+    #admin-panel.show { display: flex; }
+    .admin-header {
+      height: 60px; background: #0d1525; border-bottom: 1px solid rgba(201,168,76,0.15);
+      display: flex; align-items: center; padding: 0 24px; gap: 16px;
+    }
+    .admin-title { font-family: 'Shippori Mincho', serif; color: var(--kin); font-size: 16px; letter-spacing: 0.15em; }
+    .admin-body { display: flex; flex: 1; overflow: hidden; }
+    .admin-sidebar {
+      width: 220px; background: #0a0f1e; border-right: 1px solid rgba(201,168,76,0.1);
+      padding: 24px 0; flex-shrink: 0; overflow-y: auto;
+    }
+    .admin-nav-item {
+      padding: 12px 24px; font-size: 12px; letter-spacing: 0.15em;
+      color: rgba(245,240,232,0.5); cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .admin-nav-item:hover { color: var(--kin); background: rgba(201,168,76,0.05); }
+    .admin-nav-item.active { color: var(--kin); background: rgba(201,168,76,0.08); border-left: 2px solid var(--kin); }
+    .admin-content { flex: 1; overflow-y: auto; padding: 32px; }
+    .admin-section { display: none; }
+    .admin-section.active { display: block; }
+    .admin-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(201,168,76,0.1);
+      padding: 24px; margin-bottom: 16px;
+    }
+    .admin-input, .admin-textarea, .admin-select {
+      width: 100%; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.2); padding: 10px 14px;
+      color: var(--washi); font-size: 13px; font-family: inherit;
+      margin-bottom: 12px; outline: none; transition: border-color 0.3s;
+    }
+    .admin-input:focus, .admin-textarea:focus, .admin-select:focus { border-color: var(--kin); }
+    .admin-textarea { height: 120px; resize: vertical; }
+    .admin-select { background: #0d1525; }
+    .admin-btn {
+      padding: 10px 24px; font-size: 11px; letter-spacing: 0.2em;
+      cursor: pointer; border: none; transition: all 0.2s;
+    }
+    .admin-btn-primary { background: var(--kin); color: var(--sumi); font-weight: 600; }
+    .admin-btn-primary:hover { background: var(--kin-light); }
+    .admin-btn-danger { background: rgba(180,40,40,0.3); color: #ff8888; border: 1px solid rgba(180,40,40,0.3); }
+    .admin-btn-danger:hover { background: rgba(180,40,40,0.5); }
+    .admin-btn-secondary { background: rgba(255,255,255,0.08); color: var(--washi); }
+    .admin-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .admin-table th { padding: 10px 16px; text-align: left; border-bottom: 1px solid rgba(201,168,76,0.2); color: var(--kin); letter-spacing: 0.1em; font-weight: 400; }
+    .admin-table td { padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); color: rgba(245,240,232,0.7); }
+    .admin-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .toggle-switch {
+      position: relative; width: 44px; height: 24px; cursor: pointer;
+    }
+    .toggle-switch input { display: none; }
+    .toggle-slider {
+      position: absolute; inset: 0; background: rgba(255,255,255,0.1);
+      border-radius: 12px; transition: 0.3s;
+    }
+    .toggle-slider::before {
+      content: ''; position: absolute; width: 18px; height: 18px;
+      background: white; border-radius: 50%; left: 3px; top: 3px; transition: 0.3s;
+    }
+    .toggle-switch input:checked + .toggle-slider { background: var(--kin); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
+
+    /* ===== LOGIN ===== */
+    #login-screen {
+      position: fixed; inset: 0; z-index: 2500;
+      background: #080c18;
+      display: none; align-items: center; justify-content: center;
+    }
+    #login-screen.show { display: flex; }
+    .login-box {
+      background: linear-gradient(135deg, #0f1729, #0a0e1a);
+      border: 1px solid rgba(201,168,76,0.2);
+      padding: 48px 40px; width: 380px; max-width: 100%;
+    }
+    .login-logo {
+      font-family: 'Shippori Mincho', serif; font-size: 24px;
+      color: var(--kin); letter-spacing: 0.2em; text-align: center; margin-bottom: 8px;
+    }
+    .login-sub { font-size: 10px; letter-spacing: 0.3em; color: var(--gin); text-align: center; margin-bottom: 40px; }
+    .login-error { font-size: 12px; color: #ff8888; margin-top: 12px; text-align: center; display: none; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      border-top: 1px solid rgba(201,168,76,0.1);
+      padding: 60px 24px 40px; text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Shippori Mincho', serif; font-size: 28px;
+      color: var(--kin); letter-spacing: 0.3em; margin-bottom: 8px;
+    }
+    .footer-en { font-size: 10px; letter-spacing: 0.4em; color: var(--gin); }
+    .footer-nav {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 24px;
+      margin: 32px 0; list-style: none;
+    }
+    .footer-nav a { font-size: 11px; letter-spacing: 0.2em; color: var(--gin); text-decoration: none; transition: color 0.3s; }
+    .footer-nav a:hover { color: var(--kin); }
+    .footer-copy { font-size: 10px; color: rgba(136,153,170,0.5); letter-spacing: 0.2em; }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scaleX { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+    .reveal {
+      opacity: 0; transform: translateY(30px); transition: all 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      #hamburger { display: flex; }
+      .access-grid { grid-template-columns: 1fr; }
+      .articles-grid { grid-template-columns: 1fr; }
+      #weather-widget { top: 76px; right: 8px; min-width: 120px; }
+      .weather-days { flex-direction: column; gap: 6px; }
+      .weather-day { display: flex; align-items: center; gap: 8px; }
+      .weather-icon { font-size: 18px; }
+      .admin-sidebar { width: 180px; }
+      .admin-content { padding: 16px; }
+    }
+
+    @media (max-width: 480px) {
+      #weather-widget { display: none; }
+    }
+
+    /* ===== LOADING ===== */
+    #page-loader {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--sumi); display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 24px;
+      transition: opacity 0.8s;
+    }
+    #page-loader.fade-out { opacity: 0; pointer-events: none; }
+    .loader-castle { font-size: 48px; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:0.4;} 50%{opacity:1;} }
+    .loader-text { font-family: 'Shippori Mincho', serif; color: var(--kin); font-size: 16px; letter-spacing: 0.4em; }
+    .loader-bar { width: 120px; height: 1px; background: rgba(201,168,76,0.2); position: relative; overflow: hidden; }
+    .loader-bar::after { content: ''; position: absolute; left: -100%; top: 0; width: 100%; height: 100%; background: var(--kin); animation: load 1.5s infinite; }
+    @keyframes load { to { left: 100%; } }
+
+    /* ===== CASTLE DECORATION ===== */
+    .gold-ornament { color: var(--kin); font-size: 14px; letter-spacing: 0.1em; }
+    .ishigaki-pattern {
+      background-image: repeating-linear-gradient(
+        90deg, rgba(201,168,76,0.04) 0px, rgba(201,168,76,0.04) 1px, transparent 1px, transparent 40px
+      ), repeating-linear-gradient(
+        0deg, rgba(201,168,76,0.04) 0px, rgba(201,168,76,0.04) 1px, transparent 1px, transparent 40px
+      );
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== PAGE LOADER ===== -->
+<div id="page-loader">
+  <div class="loader-castle">🏯</div>
+  <div class="loader-text">洲 本 城</div>
+  <div class="loader-bar"></div>
+</div>
+
+<!-- ===== BREAKING NEWS BAR ===== -->
+<div id="breaking-bar" style="display:none;">
+  <div class="breaking-label" id="breaking-label">NEWS</div>
+  <div class="breaking-track">
+    <span class="breaking-text" id="breaking-text">洲本城からのお知らせ</span>
+  </div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<header id="main-header">
+  <div class="header-inner">
+    <a href="#hero" style="text-decoration:none;">
+      <div class="logo-mark">
+        <span class="logo-jp">洲本城</span>
+        <span class="logo-en">SUMOTO CASTLE</span>
+      </div>
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#about">城について</a></li>
+        <li><a href="#history">歴史</a></li>
+        <li><a href="#news">最新情報</a></li>
+        <li><a href="#events">イベント</a></li>
+        <li><a href="#access">アクセス</a></li>
+        <li><a href="#contact">お問い合わせ</a></li>
+      </ul>
+    </nav>
+    <button id="hamburger" onclick="toggleMenu()" aria-label="メニュー">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ===== MOBILE MENU ===== -->
+<div id="mobile-menu">
+  <a href="#about" onclick="toggleMenu()">城について</a>
+  <a href="#history" onclick="toggleMenu()">歴史</a>
+  <a href="#news" onclick="toggleMenu()">最新情報</a>
+  <a href="#events" onclick="toggleMenu()">イベント</a>
+  <a href="#access" onclick="toggleMenu()">アクセス</a>
+  <a href="#contact" onclick="toggleMenu()">お問い合わせ</a>
+  <a href="#" onclick="toggleMenu(); openAdmin();" style="color:rgba(201,168,76,0.4); font-size:14px; margin-top:20px;">管理画面</a>
+</div>
+
+<!-- ===== WEATHER WIDGET ===== -->
+<div id="weather-widget">
+  <div class="weather-title">洲本市の天気</div>
+  <div class="weather-days">
+    <div class="weather-day">
+      <div class="weather-day-label">今日</div>
+      <div class="weather-icon" id="w-icon-today">—</div>
+      <div class="weather-temp" id="w-temp-today">—°</div>
+      <div class="weather-rain" id="w-rain-today">—%</div>
+    </div>
+    <div class="weather-day">
+      <div class="weather-day-label">明日</div>
+      <div class="weather-icon" id="w-icon-tmr">—</div>
+      <div class="weather-temp" id="w-temp-tmr">—°</div>
+      <div class="weather-rain" id="w-rain-tmr">—%</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== POPUP MODAL ===== -->
+<div id="popup-modal">
+  <div class="popup-box">
+    <button class="popup-close" onclick="closePopup()">✕</button>
+    <div class="popup-title" id="popup-title">お知らせ</div>
+    <div class="popup-body" id="popup-body"></div>
+    <div class="popup-no-today" onclick="closePopupToday()">今日は表示しない</div>
+  </div>
+</div>
+
+<!-- ===== ARTICLE MODAL ===== -->
+<div id="article-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeArticleModal()">✕</button>
+    <div id="modal-thumb-wrap" class="modal-thumb"></div>
+    <div class="modal-body">
+      <div class="modal-category" id="modal-category"></div>
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-date" id="modal-date"></div>
+      <div class="modal-divider"></div>
+      <div class="modal-content" id="modal-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-stars"></div>
+    <div class="hero-glow"></div>
+
+    <!-- Castle SVG Silhouette -->
+    <svg class="castle-silhouette" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" fill="var(--kin)">
+      <!-- 石垣基部 -->
+      <polygon points="0,400 800,400 750,280 600,260 550,280 450,240 350,240 250,280 200,260 50,280" />
+      <!-- 城壁 -->
+      <rect x="200" y="200" width="400" height="80"/>
+      <rect x="220" y="180" width="360" height="30"/>
+      <!-- 狭間（銃眼） -->
+      <rect x="230" y="165" width="12" height="18"/>
+      <rect x="270" y="165" width="12" height="18"/>
+      <rect x="310" y="165" width="12" height="18"/>
+      <rect x="350" y="165" width="12" height="18"/>
+      <rect x="390" y="165" width="12" height="18"/>
+      <rect x="430" y="165" width="12" height="18"/>
+      <rect x="470" y="165" width="12" height="18"/>
+      <rect x="510" y="165" width="12" height="18"/>
+      <rect x="550" y="165" width="12" height="18"/>
+      <!-- 天守台 -->
+      <rect x="310" y="100" width="180" height="80"/>
+      <!-- 一層目 屋根 -->
+      <polygon points="290,100 510,100 490,70 310,70"/>
+      <!-- 二層 -->
+      <rect x="330" y="40" width="140" height="35"/>
+      <!-- 二層目 屋根 -->
+      <polygon points="310,40 490,40 470,15 330,15"/>
+      <!-- 天守（最上層） -->
+      <rect x="350" y="0" width="100" height="20"/>
+      <!-- 相輪 -->
+      <line x1="400" y1="0" x2="400" y2="-30" stroke="var(--kin)" stroke-width="3"/>
+    </svg>
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge">AWAJI ISLAND · HYOGO · JAPAN</div>
+      <h1 class="hero-title">
+        洲<span>本</span>城
+      </h1>
+      <p class="hero-sub">淡路島に聳える 天空の名城</p>
+      <p class="hero-en">SUMOTO CASTLE — BUILT IN 1526</p>
+      <div class="hero-divider"></div>
+      <p class="hero-desc">
+        標高133mの三熊山に築かれた洲本城。<br>
+        日本最古の模擬天守が今なお遺り、<br>
+        播磨灘と紀伊水道を望む絶景の地。
+      </p>
+      <div class="hero-cta">
+        <a href="#about" class="btn-primary">城を知る</a>
+        <a href="#access" class="btn-outline">アクセス</a>
+      </div>
+    </div>
+
+    <div class="scroll-indicator">
+      <span>SCROLL</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" style="background: linear-gradient(to bottom, var(--sumi), rgba(26,39,68,0.15));">
+    <div class="section">
+      <div class="reveal">
+        <span class="section-label">ABOUT THE CASTLE</span>
+        <h2 class="section-title">洲本城とは</h2>
+        <div class="section-divider"></div>
+        <p style="max-width:600px; font-size:14px; line-height:2.2; color:rgba(245,240,232,0.65);">
+          洲本城は、淡路島の洲本市三熊山に位置する山城で、1526年（大永6年）に由良成興によって築城されたと伝えられています。戦国時代から江戸時代にかけて、淡路島支配の要として機能した名城です。現在は国の史跡に指定されており、山頂部には日本最古の模擬天守（1928年建造）が現存しています。
+        </p>
+      </div>
+
+      <div class="features-grid" style="margin-top:64px;">
+        <div class="feature-card reveal">
+          <div class="feature-num">01</div>
+          <div class="feature-icon">🏯</div>
+          <div class="feature-title">日本最古の模擬天守</div>
+          <div class="feature-text">1928年（昭和3年）に建造された模擬天守は日本最古。昭和初期の浪漫を今に伝える歴史的建造物です。</div>
+        </div>
+        <div class="feature-card reveal" style="transition-delay:0.1s;">
+          <div class="feature-num">02</div>
+          <div class="feature-icon">🌊</div>
+          <div class="feature-title">絶景の展望</div>
+          <div class="feature-text">標高133mの三熊山から望む播磨灘・紀伊水道の絶景。晴天時には四国や和歌山まで一望できます。</div>
+        </div>
+        <div class="feature-card reveal" style="transition-delay:0.2s;">
+          <div class="feature-num">03</div>
+          <div class="feature-icon">🪨</div>
+          <div class="feature-title">壮大な石垣</div>
+          <div class="feature-text">戦国期の野面積みから近世の打込み接へと変化する石垣群。歴代城主の技術の変遷を石の積み方で読み解けます。</div>
+        </div>
+        <div class="feature-card reveal" style="transition-delay:0.3s;">
+          <div class="feature-num">04</div>
+          <div class="feature-icon">🌸</div>
+          <div class="feature-title">四季の美しさ</div>
+          <div class="feature-text">春は桜、夏は新緑、秋は紅葉、冬の夜景と、四季折々に異なる表情を見せる城跡公園は年中楽しめます。</div>
+        </div>
+      </div>
+
+      <!-- 入城情報 -->
+      <div class="reveal" style="margin-top:64px; display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:2px;">
+        <div style="background:var(--glass-light); border:1px solid rgba(201,168,76,0.1); padding:28px; text-align:center;">
+          <div style="font-size:9px; letter-spacing:0.3em; color:var(--kin); margin-bottom:12px;">開山時間</div>
+          <div style="font-family:'Shippori Mincho',serif; font-size:22px;">24時間</div>
+          <div style="font-size:11px; color:var(--gin); margin-top:6px;">山頂広場・石垣見学自由</div>
+        </div>
+        <div style="background:var(--glass-light); border:1px solid rgba(201,168,76,0.1); padding:28px; text-align:center;">
+          <div style="font-size:9px; letter-spacing:0.3em; color:var(--kin); margin-bottom:12px;">入城料</div>
+          <div style="font-family:'Shippori Mincho',serif; font-size:22px;">無 料</div>
+          <div style="font-size:11px; color:var(--gin); margin-top:6px;">山頂公園・見学無料</div>
+        </div>
+        <div style="background:var(--glass-light); border:1px solid rgba(201,168,76,0.1); padding:28px; text-align:center;">
+          <div style="font-size:9px; letter-spacing:0.3em; color:var(--kin); margin-bottom:12px;">所在地</div>
+          <div style="font-family:'Shippori Mincho',serif; font-size:22px;">洲本市</div>
+          <div style="font-size:11px; color:var(--gin); margin-top:6px;">三熊山 標高133m</div>
+        </div>
+        <div style="background:var(--glass-light); border:1px solid rgba(201,168,76,0.1); padding:28px; text-align:center;">
+          <div style="font-size:9px; letter-spacing:0.3em; color:var(--kin); margin-bottom:12px;">指定</div>
+          <div style="font-family:'Shippori Mincho',serif; font-size:22px;">国史跡</div>
+          <div style="font-size:11px; color:var(--gin); margin-top:6px;">兵庫県指定文化財</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTORY -->
+  <section id="history-section">
+    <div class="history-inner">
+      <div class="reveal">
+        <span class="section-label">HISTORY</span>
+        <h2 class="section-title">洲本城の歴史</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">1526年（大永6年）</div>
+          <div class="timeline-title">築城</div>
+          <div class="timeline-text">淡路守護代・由良成興により三熊山に築城。淡路島統治の拠点として整備される。海と山に守られた天然の要害。</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">1585年（天正13年）</div>
+          <div class="timeline-title">仙石秀久が城主に</div>
+          <div class="timeline-text">豊臣秀吉の四国攻め後、仙石秀久が淡路島を領有。城の近代化工事が進められ、城下町の整備が始まる。</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">1615年（元和元年）</div>
+          <div class="timeline-title">脇坂安治の治世</div>
+          <div class="timeline-text">脇坂安治が3万石で入封。石垣の大規模な改修が行われ、現在見られる高石垣の多くがこの時代に整備される。</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">1635年（寛永12年）</div>
+          <div class="timeline-title">城の移転と廃城</div>
+          <div class="timeline-text">稲田氏が城代として入り、のちに洲本城は廃城となる。藩庁は山上から山麓の洲本陣屋へ移転。石垣のみが残る。</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">1928年（昭和3年）</div>
+          <div class="timeline-title">模擬天守の建造</div>
+          <div class="timeline-text">昭和初期に観光振興を目的として模擬天守が建造される。これが日本最古の模擬天守として現在に至る。</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">現在</div>
+          <div class="timeline-title">国史跡・観光地として</div>
+          <div class="timeline-text">国の史跡に指定され、整備が続く洲本城跡。年間を通じて多くの観光客が訪れ、淡路島の歴史と文化を伝える。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWS / ARTICLES -->
+  <section id="news" style="padding: 100px 0;">
+    <div class="section">
+      <div class="reveal" style="display:flex; align-items:flex-end; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+        <div>
+          <span class="section-label">LATEST NEWS</span>
+          <h2 class="section-title">最新情報</h2>
+          <div class="section-divider"></div>
+        </div>
+      </div>
+      <div class="articles-grid" id="articles-grid">
+        <!-- Firestore から読み込み -->
+        <div style="grid-column:1/-1; text-align:center; padding:60px 0; color:var(--gin); font-size:13px; letter-spacing:0.2em;">
+          読み込み中...
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENTS -->
+  <section id="events" style="background: linear-gradient(to bottom, rgba(26,39,68,0.1), var(--sumi)); padding:100px 0;">
+    <div class="section">
+      <div class="reveal">
+        <span class="section-label">EVENTS</span>
+        <h2 class="section-title">イベント情報</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="events-list" id="events-list">
+        <div style="text-align:center; padding:60px 0; color:var(--gin); font-size:13px; letter-spacing:0.2em;">
+          読み込み中...
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACCESS -->
+  <section id="access" style="padding:100px 0;">
+    <div class="section">
+      <div class="reveal">
+        <span class="section-label">ACCESS</span>
+        <h2 class="section-title">アクセス</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="access-grid reveal" style="margin-top:48px;">
+        <div class="access-item">
+          <div class="access-method">🚗 お車の場合</div>
+          <div class="access-detail">
+            神戸淡路鳴門自動車道<br>
+            <strong>洲本IC</strong>から約15分
+          </div>
+          <div class="access-note">※城山公園無料駐車場あり</div>
+        </div>
+        <div class="access-item">
+          <div class="access-method">🚌 バスの場合</div>
+          <div class="access-detail">
+            三宮・神戸から高速バスで洲本バスセンターへ。<br>
+            下車後タクシーまたは徒歩約30分（登山道）
+          </div>
+          <div class="access-note">洲本バスセンター〜城山公園バス停下車すぐ</div>
+        </div>
+        <div class="access-item">
+          <div class="access-method">🚢 フェリーの場合</div>
+          <div class="access-detail">
+            高速船：明石港〜岩屋港（約13分）<br>
+            その後路線バスで洲本方面へ
+          </div>
+          <div class="access-note">淡路交通バス洲本行き乗車</div>
+        </div>
+        <div class="access-item">
+          <div class="access-method">🗺 所在地</div>
+          <div class="access-detail">
+            〒656-0023<br>
+            兵庫県洲本市小路谷1272-1<br>
+            洲本城（三熊山城山公園内）
+          </div>
+          <div class="access-note">Google Maps「洲本城跡」で検索</div>
+        </div>
+      </div>
+
+      <!-- Map placeholder -->
+      <div class="reveal" style="margin-top:2px;">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3284.!2d134.8945!3d34.3506!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x354f5b5a5e5a5a5b%3A0x0!2z5rWF5pys5Z-O!5e0!3m2!1sja!2sjp!4v1"
+          width="100%" height="320"
+          style="border:1px solid rgba(201,168,76,0.15); filter:grayscale(30%) invert(90%) hue-rotate(180deg);"
+          allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" style="background: linear-gradient(to bottom, rgba(26,39,68,0.1), var(--sumi)); padding:100px 0;">
+    <div class="section">
+      <div class="reveal" style="text-align:center;">
+        <span class="section-label">CONTACT</span>
+        <h2 class="section-title">お問い合わせ</h2>
+        <div class="section-divider" style="margin:20px auto;"></div>
+        <p style="font-size:13px; color:rgba(245,240,232,0.55); letter-spacing:0.1em; line-height:2;">
+          洲本城・観光に関するご質問はこちらからお気軽にどうぞ
+        </p>
+      </div>
+
+      <div class="contact-form reveal">
+        <div id="contact-form-wrap">
+          <div class="form-group">
+            <label class="form-label">お名前 *</label>
+            <input type="text" id="cf-name" class="form-input" placeholder="山田 太郎">
+          </div>
+          <div class="form-group">
+            <label class="form-label">メールアドレス *</label>
+            <input type="email" id="cf-email" class="form-input" placeholder="example@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">お問い合わせ内容 *</label>
+            <textarea id="cf-message" class="form-textarea" placeholder="ご質問・ご意見をご記入ください"></textarea>
+          </div>
+          <button class="form-submit" onclick="submitContact()" id="contact-submit">送 信 す る</button>
+          <p style="font-size:10px; color:var(--gin); margin-top:12px; text-align:center; letter-spacing:0.1em;">
+            ※ EmailJSを設定後にメール送信が有効になります
+          </p>
+        </div>
+        <div class="form-success" id="contact-success">
+          <div style="font-size:32px; margin-bottom:16px;">✉️</div>
+          <div style="font-family:'Shippori Mincho',serif; font-size:22px; color:var(--kin); margin-bottom:12px;">送信完了</div>
+          <div style="font-size:13px; color:rgba(245,240,232,0.65); line-height:2;">
+            お問い合わせありがとうございます。<br>
+            担当者よりご連絡いたします。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-logo">洲本城</div>
+  <div class="footer-en">SUMOTO CASTLE OFFICIAL</div>
+  <ul class="footer-nav">
+    <li><a href="#about">城について</a></li>
+    <li><a href="#history">歴史</a></li>
+    <li><a href="#news">最新情報</a></li>
+    <li><a href="#events">イベント</a></li>
+    <li><a href="#access">アクセス</a></li>
+    <li><a href="#contact">お問い合わせ</a></li>
+    <li><a href="#" onclick="openAdmin(); return false;" style="color:rgba(136,153,170,0.3);">管理</a></li>
+  </ul>
+  <div class="footer-copy">© 2025 洲本城観光協会 All Rights Reserved.</div>
+</footer>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">洲本城</div>
+    <div class="login-sub">ADMIN PORTAL</div>
+    <div class="form-group">
+      <label class="form-label">メールアドレス</label>
+      <input type="email" id="login-email" class="form-input" placeholder="admin@example.com">
+    </div>
+    <div class="form-group">
+      <label class="form-label">パスワード</label>
+      <input type="password" id="login-password" class="form-input" placeholder="••••••••" onkeypress="if(event.key==='Enter') doLogin()">
+    </div>
+    <button class="form-submit" onclick="doLogin()">ログイン</button>
+    <div class="login-error" id="login-error">メールアドレスまたはパスワードが正しくありません</div>
+    <div style="margin-top:24px; text-align:center;">
+      <button onclick="closeAdmin()" style="background:none; border:none; color:var(--gin); font-size:11px; cursor:pointer; letter-spacing:0.2em;">← サイトに戻る</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div id="admin-panel">
+  <div class="admin-header">
+    <span class="admin-title">🏯 洲本城 管理画面</span>
+    <div style="margin-left:auto; display:flex; gap:12px; align-items:center;">
+      <span id="admin-user-email" style="font-size:11px; color:var(--gin);"></span>
+      <button class="admin-btn admin-btn-secondary" onclick="doLogout()" style="font-size:10px; padding:6px 16px;">ログアウト</button>
+      <button class="admin-btn admin-btn-secondary" onclick="closeAdminPanel()" style="font-size:10px; padding:6px 16px;">← サイトへ</button>
+    </div>
+  </div>
+  <div class="admin-body">
+    <div class="admin-sidebar">
+      <div class="admin-nav-item active" onclick="showAdminSection('dashboard')" data-section="dashboard">
+        📊 ダッシュボード
+      </div>
+      <div class="admin-nav-item" onclick="showAdminSection('articles')" data-section="articles">
+        📰 記事管理
+      </div>
+      <div class="admin-nav-item" onclick="showAdminSection('events-admin')" data-section="events-admin">
+        📅 イベント管理
+      </div>
+      <div class="admin-nav-item" onclick="showAdminSection('breaking')" data-section="breaking">
+        📡 速報管理
+      </div>
+      <div class="admin-nav-item" onclick="showAdminSection('popup-admin')" data-section="popup-admin">
+        💬 ポップアップ
+      </div>
+    </div>
+    <div class="admin-content">
+
+      <!-- DASHBOARD -->
+      <div id="admin-dashboard" class="admin-section active">
+        <h2 style="font-family:'Shippori Mincho',serif; font-size:22px; color:var(--kin); margin-bottom:24px;">ダッシュボード</h2>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:16px; margin-bottom:32px;">
+          <div class="admin-card" style="text-align:center;">
+            <div style="font-size:32px; margin-bottom:8px;">📰</div>
+            <div style="font-size:24px; font-family:'Shippori Mincho',serif;" id="dash-articles">—</div>
+            <div style="font-size:11px; color:var(--gin); margin-top:4px;">記事数</div>
+          </div>
+          <div class="admin-card" style="text-align:center;">
+            <div style="font-size:32px; margin-bottom:8px;">📅</div>
+            <div style="font-size:24px; font-family:'Shippori Mincho',serif;" id="dash-events">—</div>
+            <div style="font-size:11px; color:var(--gin); margin-top:4px;">イベント数</div>
+          </div>
+        </div>
+        <div class="admin-card">
+          <div style="font-size:13px; color:var(--gin); line-height:2;">
+            <strong style="color:var(--kin);">洲本城 管理システム</strong><br>
+            左メニューから各コンテンツを管理できます。<br>
+            記事・イベント・速報・ポップアップをFirestoreで一元管理します。
+          </div>
+        </div>
+      </div>
+
+      <!-- ARTICLES ADMIN -->
+      <div id="admin-articles" class="admin-section">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+          <h2 style="font-family:'Shippori Mincho',serif; font-size:22px; color:var(--kin);">記事管理</h2>
+          <button class="admin-btn admin-btn-primary" onclick="openArticleForm()">＋ 新規作成</button>
+        </div>
+
+        <!-- Article Form -->
+        <div id="article-form-area" style="display:none; margin-bottom:24px;">
+          <div class="admin-card">
+            <h3 style="font-size:14px; color:var(--kin); margin-bottom:16px;" id="article-form-title">記事を作成</h3>
+            <input type="hidden" id="af-id">
+            <label style="font-size:11px; color:var(--gin); letter-spacing:0.15em;">タイトル *</label>
+            <input type="text" id="af-title" class="admin-input" placeholder="記事タイトル">
+            <label style="font-size:11px; color:var(--gin); letter-spacing:0.15em;">カテゴリ</label>
+            <select id="af-category" class="admin-select">
+              <option value="お知らせ">お知らせ</option>
+              <option value="歴史">歴史</option>
+              <option value="イベント">イベント</option>
+              <option value="観光情報">観光情報</option>
+              <option value="グルメ">グルメ</option>
+            </select>
+            <label style="font-size:11px; color:var(--gin); letter-spacing:0.15em;">本文 *</label>
+            <textarea id="af-content" class="admin-textarea" style="height:180px;" placeholder="記事本文を入力..."></textarea>
+            <label style="font-size:11px; color:var(--gin); letter-spacing:0.15em;">画像URL（外部URL）</label>
+            <input type="text" id="af-imageUrl" class="admin-input" placeholder="https://example.com/image.jpg">
+            <label style="display:flex; align-items:center; gap:10px; margin-bottom:16px; cursor:pointer;">
+              <label class="toggle-switch">
+                <input type="checkbox" id="af-published" checked>
+                <div class="toggle-slider"></div>
+              </label>
+              <span style="font-size:12px; color:var(--gin);">公開する</span>
+            </label>
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+              <button class="admin-btn admin-btn-primary" onclick="saveArticle()">保存する</button>
+              <button class="admin-btn admin-btn-secondary" onclick="closeArticleForm()">キャンセル</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Articles Table -->
+        <div class="admin-card" style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>タイトル</th>
+                <th>カテゴリ</th>
+                <th>公開</th>
+                <th>日付</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="admin-articles-list">
+              <tr><td colspan="5" style="text-align:center; padding:32px; color:var(--gin);">読み込み中...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- EVENTS ADMIN -->
+      <div id="admin-events-admin" class="admin-section">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+          <h2 style="font-family:'Shippori Mincho',serif; font-size:22px; color:var(--kin);">イベント管理</h2>
+          <button class="admin-btn admin-btn-primary" onclick="openEventForm()">＋ 新規作成</button>
+        </div>
+
+        <div id="event-form-area" style="display:none; margin-bottom:24px;">
+          <div class="admin-card">
+            <h3 style="font-size:14px; color:var(--kin); margin-bottom:16px;" id="event-form-title">イベントを作成</h3>
+            <input type="hidden" id="ef-id">
+            <label style="font-size:11px; color:var(--gin); letter-spacing:0.15em;">イベント名 *</label>
+            <input type="text" id="ef-title" class="admin-input" placeholder="イベント名">
+            <label style="font-size:11px; color:var(--gin); letter-spacing:0.15em;">説明</label>
+            <textarea id="ef-description" class="admin-textarea" placeholder="イベントの詳細"></textarea>
+            <label style="font-size:11px; color:var(--gin); letter-spacing:0.15em;">開催日 *</label>
+            <input type="date" id="ef-date" class="admin-input">
+            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+              <button class="admin-btn admin-btn-primary" onclick="saveEvent()">保存する</button>
+              <button class="admin-btn admin-btn-secondary" onclick="closeEventForm()">キャンセル</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-card" style="overflow-x:auto;">
+          <table class="admin-table">
+            <thead>
+              <tr><th>イベント名</th><th>開催日</th><th>操作</th></tr>
+            </thead>
+            <tbody id="admin-events-list">
+              <tr><td colspan="3" style="text-align:center; padding:32px; color:var(--gin);">読み込み中...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BREAKING NEWS ADMIN -->
+      <div id="admin-breaking" class="admin-section">
+        <h2 style="font-family:'Shippori Mincho',serif; font-size:22px; color:var(--kin); margin-bottom:24px;">速報バー管理</h2>
+        <div class="admin-card">
+          <div style="margin-bottom:20px;">
+            <label style="display:flex; align-items:center; gap:10px; margin-bottom:8px; cursor:pointer;">
+              <label class="toggle-switch">
+                <input type="checkbox" id="bn-enabled">
+                <div class="toggle-slider"></div>
+              </label>
+              <span style="font-size:13px; color:var(--washi);">速報バーを表示する</span>
+            </label>
+          </div>
+          <label style="font-size:11px; color:var(--gin); letter-spacing:0.15em;">速報テキスト</label>
+          <input type="text" id="bn-text" class="admin-input" placeholder="速報テキストを入力">
+          <label style="font-size:11px; color:var(--gin); letter-spacing:0.15em;">バーの色</label>
+          <div style="display:flex; gap:12px; align-items:center; margin-bottom:16px;">
+            <input type="color" id="bn-color" value="#c9a84c" style="width:48px; height:36px; border:1px solid rgba(201,168,76,0.3); background:transparent; cursor:pointer;">
+            <span style="font-size:12px; color:var(--gin);">バーの背景色</span>
+          </div>
+          <button class="admin-btn admin-btn-primary" onclick="saveBreaking()">保存する</button>
+        </div>
+      </div>
+
+      <!-- POPUP ADMIN -->
+      <div id="admin-popup-admin" class="admin-section">
+        <h2 style="font-family:'Shippori Mincho',serif; font-size:22px; color:var(--kin); margin-bottom:24px;">ポップアップ管理</h2>
+        <div class="admin-card">
+          <div style="margin-bottom:20px;">
+            <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+              <label class="toggle-switch">
+                <input type="checkbox" id="pu-enabled">
+                <div class="toggle-slider"></div>
+              </label>
+              <span style="font-size:13px; color:var(--washi);">ポップアップを表示する</span>
+            </label>
+          </div>
+          <label style="font-size:11px; color:var(--gin); letter-spacing:0.15em;">タイトル</label>
+          <input type="text" id="pu-title" class="admin-input" placeholder="ポップアップタイトル">
+          <label style="font-size:11px; color:var(--gin); letter-spacing:0.15em;">本文</label>
+          <textarea id="pu-body" class="admin-textarea" placeholder="ポップアップの本文"></textarea>
+          <button class="admin-btn admin-btn-primary" onclick="savePopup()">保存する</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== FIREBASE + APP SCRIPT ===== -->
+<script type="module">
+  // =============================================
+  // Firebase Configuration
+  // ⚠️ 本番環境では自分のFirebase設定に置き換えてください
+  // =============================================
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import {
+    getFirestore, collection, getDocs, getDoc, doc,
+    addDoc, updateDoc, deleteDoc, setDoc,
+    query, orderBy, where, serverTimestamp
+  } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+  import {
+    getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
+  } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA7kshE6i4GPxzPzXC4TfUFPp7EbGuiVdU",
+    authDomain: "bussinesscardmae.firebaseapp.com",
+    projectId: "bussinesscardmae",
+    storageBucket: "bussinesscardmae.firebasestorage.app",
+    messagingSenderId: "142830820792",
+    appId: "1:142830820792:web:ddfeeec8f22010fd2b434d",
+    measurementId: "G-X5TV5CE69W"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  // =============================================
+  // グローバル関数を window に登録
+  // =============================================
+
+  // --- Auth ---
+  window.doLogin = async function() {
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    const errEl = document.getElementById('login-error');
+    errEl.style.display = 'none';
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch(e) {
+      errEl.style.display = 'block';
+    }
+  };
+
+  window.doLogout = async function() {
+    await signOut(auth);
+  };
+
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      document.getElementById('login-screen').classList.remove('show');
+      document.getElementById('admin-panel').classList.add('show');
+      document.getElementById('admin-user-email').textContent = user.email;
+      loadAdminData();
+    } else {
+      document.getElementById('admin-panel').classList.remove('show');
+    }
+  });
+
+  // --- Admin Nav ---
+  window.showAdminSection = function(name) {
+    document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.admin-nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('admin-' + name).classList.add('active');
+    document.querySelector(`[data-section="${name}"]`).classList.add('active');
+  };
+
+  window.closeAdminPanel = function() {
+    document.getElementById('admin-panel').classList.remove('show');
+  };
+
+  // --- Articles ---
+  let articlesCache = [];
+
+  async function loadArticles() {
+    try {
+      const q = query(collection(db, 'articles'), orderBy('createdAt', 'desc'));
+      const snap = await getDocs(q);
+      articlesCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderArticlesFront();
+      renderArticlesAdmin();
+      document.getElementById('dash-articles').textContent = articlesCache.length;
+    } catch(e) {
+      // Firebase未設定の場合はデモデータ表示
+      articlesCache = getDemoArticles();
+      renderArticlesFront();
+      renderArticlesAdmin();
+      document.getElementById('dash-articles').textContent = articlesCache.length;
+    }
+  }
+
+  function getDemoArticles() {
+    return [
+      { id: 'demo1', title: '洲本城 春の特別ライトアップ開催', category: 'お知らせ', content: '今年も洲本城の春の夜桜ライトアップを開催します。\n\n点灯期間：3月下旬〜4月上旬\n点灯時間：日没〜21:00\n\n石垣と桜のコントラストが幻想的な夜景をお楽しみください。地元の食材を使ったキッチンカーも出店予定です。', imageUrl: '', createdAt: { toDate: () => new Date('2025-03-01') }, published: true },
+      { id: 'demo2', title: '石垣修復工事の完了について', category: '歴史', content: '令和7年3月より実施しておりました北側石垣の修復工事が完了しました。\n\n今回の修復では、江戸時代初期に積まれた野面積みの石垣を丁寧に修復。往時の姿を取り戻した石垣をぜひご覧ください。', imageUrl: '', createdAt: { toDate: () => new Date('2025-03-15') }, published: true },
+      { id: 'demo3', title: '洲本城周辺グルメマップを公開', category: 'グルメ', content: '洲本城周辺の飲食店・土産物店をまとめたグルメマップを公開しました。\n\n淡路島の新鮮な海産物を使った料理や、淡路牛のステーキなど、島の美食をご堪能ください。', imageUrl: '', createdAt: { toDate: () => new Date('2025-02-20') }, published: true },
+    ];
+  }
+
+  function renderArticlesFront() {
+    const grid = document.getElementById('articles-grid');
+    const published = articlesCache.filter(a => a.published);
+    if (published.length === 0) {
+      grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:60px 0; color:var(--gin); font-size:13px; letter-spacing:0.2em;">記事はありません</div>';
+      return;
+    }
+    grid.innerHTML = published.map((a, i) => {
+      const dateStr = a.createdAt?.toDate ? a.createdAt.toDate().toLocaleDateString('ja-JP') : '—';
+      const thumb = a.imageUrl
+        ? `<div class="article-thumb" style="overflow:hidden;"><img src="${a.imageUrl}" alt="${a.title}" loading="lazy" onerror="this.parentNode.innerHTML='🏯'"></div>`
+        : `<div class="article-thumb">🏯</div>`;
+      return `
+        <div class="article-card reveal" style="transition-delay:${i*0.08}s;" onclick="openArticleModal('${a.id}')">
+          ${thumb}
+          <div class="article-body">
+            <div class="article-category">${a.category || 'お知らせ'}</div>
+            <div class="article-title">${a.title}</div>
+            <div class="article-date">${dateStr}</div>
+          </div>
+        </div>`;
+    }).join('');
+    observeReveal();
+  }
+
+  function renderArticlesAdmin() {
+    const tbody = document.getElementById('admin-articles-list');
+    if (!tbody) return;
+    if (articlesCache.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--gin);">記事がありません</td></tr>';
+      return;
+    }
+    tbody.innerHTML = articlesCache.map(a => {
+      const dateStr = a.createdAt?.toDate ? a.createdAt.toDate().toLocaleDateString('ja-JP') : '—';
+      return `<tr>
+        <td>${a.title}</td>
+        <td>${a.category || '—'}</td>
+        <td>${a.published ? '<span style="color:#6dba8a;">●公開</span>' : '<span style="color:var(--gin);">○非公開</span>'}</td>
+        <td>${dateStr}</td>
+        <td style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="admin-btn admin-btn-secondary" style="padding:6px 12px; font-size:10px;" onclick="editArticle('${a.id}')">編集</button>
+          <button class="admin-btn admin-btn-danger" style="padding:6px 12px; font-size:10px;" onclick="deleteArticleById('${a.id}')">削除</button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  window.openArticleModal = function(id) {
+    const a = articlesCache.find(x => x.id === id);
+    if (!a) return;
+    document.getElementById('modal-category').textContent = a.category || '';
+    document.getElementById('modal-title').textContent = a.title;
+    document.getElementById('modal-date').textContent = a.createdAt?.toDate ? a.createdAt.toDate().toLocaleDateString('ja-JP') : '';
+    document.getElementById('modal-content').textContent = a.content;
+    const thumbWrap = document.getElementById('modal-thumb-wrap');
+    if (a.imageUrl) {
+      thumbWrap.innerHTML = `<img src="${a.imageUrl}" alt="${a.title}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentNode.innerHTML='🏯'">`;
+    } else {
+      thumbWrap.textContent = '🏯';
+    }
+    const modal = document.getElementById('article-modal');
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closeArticleModal = function() {
+    document.getElementById('article-modal').classList.remove('show');
+    document.body.style.overflow = '';
+  };
+
+  window.openArticleForm = function() {
+    document.getElementById('article-form-area').style.display = 'block';
+    document.getElementById('article-form-title').textContent = '記事を作成';
+    document.getElementById('af-id').value = '';
+    document.getElementById('af-title').value = '';
+    document.getElementById('af-content').value = '';
+    document.getElementById('af-imageUrl').value = '';
+    document.getElementById('af-category').value = 'お知らせ';
+    document.getElementById('af-published').checked = true;
+    document.getElementById('article-form-area').scrollIntoView({ behavior: 'smooth' });
+  };
+
+  window.closeArticleForm = function() {
+    document.getElementById('article-form-area').style.display = 'none';
+  };
+
+  window.editArticle = function(id) {
+    const a = articlesCache.find(x => x.id === id);
+    if (!a) return;
+    document.getElementById('article-form-area').style.display = 'block';
+    document.getElementById('article-form-title').textContent = '記事を編集';
+    document.getElementById('af-id').value = a.id;
+    document.getElementById('af-title').value = a.title;
+    document.getElementById('af-content').value = a.content;
+    document.getElementById('af-imageUrl').value = a.imageUrl || '';
+    document.getElementById('af-category').value = a.category || 'お知らせ';
+    document.getElementById('af-published').checked = !!a.published;
+    document.getElementById('article-form-area').scrollIntoView({ behavior: 'smooth' });
+  };
+
+  window.saveArticle = async function() {
+    const id = document.getElementById('af-id').value;
+    const data = {
+      title: document.getElementById('af-title').value,
+      content: document.getElementById('af-content').value,
+      imageUrl: document.getElementById('af-imageUrl').value,
+      category: document.getElementById('af-category').value,
+      published: document.getElementById('af-published').checked,
+    };
+    if (!data.title) { alert('タイトルを入力してください'); return; }
+    try {
+      if (id) {
+        data.updatedAt = serverTimestamp();
+        await updateDoc(doc(db, 'articles', id), data);
+      } else {
+        data.createdAt = serverTimestamp();
+        await addDoc(collection(db, 'articles'), data);
+      }
+      closeArticleForm();
+      await loadArticles();
+      alert('保存しました');
+    } catch(e) {
+      alert('保存に失敗しました: ' + e.message);
+    }
+  };
+
+  window.deleteArticleById = async function(id) {
+    if (!confirm('この記事を削除しますか？')) return;
+    try {
+      await deleteDoc(doc(db, 'articles', id));
+      await loadArticles();
+    } catch(e) {
+      alert('削除に失敗しました: ' + e.message);
+    }
+  };
+
+  // --- Events ---
+  let eventsCache = [];
+
+  async function loadEvents() {
+    try {
+      const q = query(collection(db, 'events'), orderBy('date'));
+      const snap = await getDocs(q);
+      eventsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderEventsFront();
+      renderEventsAdmin();
+      document.getElementById('dash-events').textContent = eventsCache.length;
+    } catch(e) {
+      eventsCache = getDemoEvents();
+      renderEventsFront();
+      renderEventsAdmin();
+      document.getElementById('dash-events').textContent = eventsCache.length;
+    }
+  }
+
+  function getDemoEvents() {
+    return [
+      { id: 'ev1', title: '洲本城 春の夜桜ライトアップ', description: '石垣と桜のコントラストが美しい夜桜ライトアップ。日没〜21:00まで点灯。', date: '2025-04-05' },
+      { id: 'ev2', title: '洲本城 歴史講座「戦国淡路の武将たち」', description: '地元歴史家による特別講座。洲本城と戦国時代の歴史を深く学べます。', date: '2025-05-18' },
+      { id: 'ev3', title: '城下町マルシェ in 洲本', description: '洲本城周辺で開催される地元産品マルシェ。淡路島の食と文化が一堂に集まります。', date: '2025-06-07' },
+      { id: 'ev4', title: '洲本城 夏の星空観察会', description: '三熊山山頂で楽しむ夏の星空観察。城跡から見上げる天の川は格別です。', date: '2025-08-12' },
+    ];
+  }
+
+  function renderEventsFront() {
+    const list = document.getElementById('events-list');
+    if (eventsCache.length === 0) {
+      list.innerHTML = '<div style="text-align:center; padding:60px 0; color:var(--gin); font-size:13px;">イベント情報はありません</div>';
+      return;
+    }
+    list.innerHTML = eventsCache.map((e, i) => {
+      const d = new Date(e.date);
+      const month = d.toLocaleDateString('ja-JP', { month: 'short' }).replace('月', '');
+      const day = d.getDate();
+      return `
+        <div class="event-item reveal" style="transition-delay:${i*0.1}s;">
+          <div class="event-date-box">
+            <div class="event-month">${month}月</div>
+            <div class="event-day">${day}</div>
+          </div>
+          <div class="event-body">
+            <div class="event-title">${e.title}</div>
+            <div class="event-desc">${e.description || ''}</div>
+          </div>
+        </div>`;
+    }).join('');
+    observeReveal();
+  }
+
+  function renderEventsAdmin() {
+    const tbody = document.getElementById('admin-events-list');
+    if (!tbody) return;
+    if (eventsCache.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;padding:32px;color:var(--gin);">イベントがありません</td></tr>';
+      return;
+    }
+    tbody.innerHTML = eventsCache.map(e => `<tr>
+      <td>${e.title}</td>
+      <td>${e.date}</td>
+      <td style="display:flex; gap:8px;">
+        <button class="admin-btn admin-btn-secondary" style="padding:6px 12px; font-size:10px;" onclick="editEvent('${e.id}')">編集</button>
+        <button class="admin-btn admin-btn-danger" style="padding:6px 12px; font-size:10px;" onclick="deleteEventById('${e.id}')">削除</button>
+      </td>
+    </tr>`).join('');
+  }
+
+  window.openEventForm = function() {
+    document.getElementById('event-form-area').style.display = 'block';
+    document.getElementById('event-form-title').textContent = 'イベントを作成';
+    document.getElementById('ef-id').value = '';
+    document.getElementById('ef-title').value = '';
+    document.getElementById('ef-description').value = '';
+    document.getElementById('ef-date').value = '';
+  };
+
+  window.closeEventForm = function() {
+    document.getElementById('event-form-area').style.display = 'none';
+  };
+
+  window.editEvent = function(id) {
+    const e = eventsCache.find(x => x.id === id);
+    if (!e) return;
+    document.getElementById('event-form-area').style.display = 'block';
+    document.getElementById('event-form-title').textContent = 'イベントを編集';
+    document.getElementById('ef-id').value = e.id;
+    document.getElementById('ef-title').value = e.title;
+    document.getElementById('ef-description').value = e.description || '';
+    document.getElementById('ef-date').value = e.date;
+  };
+
+  window.saveEvent = async function() {
+    const id = document.getElementById('ef-id').value;
+    const data = {
+      title: document.getElementById('ef-title').value,
+      description: document.getElementById('ef-description').value,
+      date: document.getElementById('ef-date').value,
+    };
+    if (!data.title || !data.date) { alert('タイトルと日付を入力してください'); return; }
+    try {
+      if (id) {
+        await updateDoc(doc(db, 'events', id), data);
+      } else {
+        await addDoc(collection(db, 'events'), data);
+      }
+      closeEventForm();
+      await loadEvents();
+      alert('保存しました');
+    } catch(e) {
+      alert('保存に失敗しました: ' + e.message);
+    }
+  };
+
+  window.deleteEventById = async function(id) {
+    if (!confirm('このイベントを削除しますか？')) return;
+    try {
+      await deleteDoc(doc(db, 'events', id));
+      await loadEvents();
+    } catch(e) {
+      alert('削除に失敗しました: ' + e.message);
+    }
+  };
+
+  // --- Breaking News ---
+  async function loadBreaking() {
+    try {
+      const snap = await getDoc(doc(db, 'breakingNews', 'main'));
+      if (snap.exists()) {
+        const d = snap.data();
+        if (d.enabled) {
+          showBreakingBar(d.text, d.color || '#1a2744');
+        }
+        // Admin form
+        const enEl = document.getElementById('bn-enabled');
+        const txtEl = document.getElementById('bn-text');
+        const colEl = document.getElementById('bn-color');
+        if (enEl) enEl.checked = !!d.enabled;
+        if (txtEl) txtEl.value = d.text || '';
+        if (colEl) colEl.value = d.color || '#1a2744';
+      }
+    } catch(e) { /* Firebase未設定 */ }
+  }
+
+  function showBreakingBar(text, color) {
+    const bar = document.getElementById('breaking-bar');
+    const label = document.getElementById('breaking-label');
+    const textEl = document.getElementById('breaking-text');
+    bar.style.display = 'flex';
+    bar.style.background = color;
+    label.style.background = 'rgba(0,0,0,0.3)';
+    textEl.textContent = text + '　　　' + text; // 重複でループ感
+    // header & weather の top を調整
+    document.getElementById('main-header').style.top = '36px';
+    document.getElementById('weather-widget').style.top = '116px';
+  }
+
+  window.saveBreaking = async function() {
+    const data = {
+      enabled: document.getElementById('bn-enabled').checked,
+      text: document.getElementById('bn-text').value,
+      color: document.getElementById('bn-color').value,
+    };
+    try {
+      await setDoc(doc(db, 'breakingNews', 'main'), data);
+      alert('保存しました');
+      if (data.enabled) showBreakingBar(data.text, data.color);
+      else document.getElementById('breaking-bar').style.display = 'none';
+    } catch(e) {
+      alert('保存に失敗しました: ' + e.message);
+    }
+  };
+
+  // --- Popup ---
+  async function loadPopup() {
+    try {
+      const snap = await getDoc(doc(db, 'popup', 'main'));
+      if (snap.exists()) {
+        const d = snap.data();
+        const puEnEl = document.getElementById('pu-enabled');
+        const puTitleEl = document.getElementById('pu-title');
+        const puBodyEl = document.getElementById('pu-body');
+        if (puEnEl) puEnEl.checked = !!d.enabled;
+        if (puTitleEl) puTitleEl.value = d.title || '';
+        if (puBodyEl) puBodyEl.value = d.body || '';
+        if (d.enabled) showPopup(d.title, d.body);
+      }
+    } catch(e) { /* Firebase未設定 */ }
+  }
+
+  function showPopup(title, body) {
+    const today = new Date().toDateString();
+    const dismissed = localStorage.getItem('popup-dismissed');
+    if (dismissed === today) return;
+    document.getElementById('popup-title').textContent = title;
+    document.getElementById('popup-body').textContent = body;
+    setTimeout(() => {
+      document.getElementById('popup-modal').classList.add('show');
+    }, 1500);
+  }
+
+  window.closePopup = function() {
+    document.getElementById('popup-modal').classList.remove('show');
+  };
+
+  window.closePopupToday = function() {
+    localStorage.setItem('popup-dismissed', new Date().toDateString());
+    closePopup();
+  };
+
+  window.savePopup = async function() {
+    const data = {
+      enabled: document.getElementById('pu-enabled').checked,
+      title: document.getElementById('pu-title').value,
+      body: document.getElementById('pu-body').value,
+    };
+    try {
+      await setDoc(doc(db, 'popup', 'main'), data);
+      alert('保存しました');
+    } catch(e) {
+      alert('保存に失敗しました: ' + e.message);
+    }
+  };
+
+  // --- Admin Panel open/close ---
+  window.openAdmin = function() {
+    const user = auth.currentUser;
+    if (user) {
+      document.getElementById('admin-panel').classList.add('show');
+    } else {
+      document.getElementById('login-screen').classList.add('show');
+    }
+  };
+
+  window.closeAdmin = function() {
+    document.getElementById('login-screen').classList.remove('show');
+    document.getElementById('admin-panel').classList.remove('show');
+  };
+
+  async function loadAdminData() {
+    await Promise.all([loadArticles(), loadEvents(), loadBreaking(), loadPopup()]);
+  }
+
+  // =============================================
+  // INIT
+  // =============================================
+  document.addEventListener('DOMContentLoaded', async () => {
+    await Promise.all([loadArticles(), loadEvents(), loadBreaking(), loadPopup()]);
+  });
+
+</script>
+
+<script>
+  // =============================================
+  // NON-MODULE SCRIPTS
+  // =============================================
+
+  // --- Page Loader ---
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const loader = document.getElementById('page-loader');
+      loader.classList.add('fade-out');
+      setTimeout(() => loader.remove(), 800);
+    }, 1200);
+  });
+
+  // --- Header scroll effect ---
+  window.addEventListener('scroll', () => {
+    const header = document.getElementById('main-header');
+    if (window.scrollY > 80) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  });
+
+  // --- Mobile menu ---
+  window.toggleMenu = function() {
+    const btn = document.getElementById('hamburger');
+    const menu = document.getElementById('mobile-menu');
+    btn.classList.toggle('open');
+    menu.classList.toggle('open');
+    document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+  };
+
+  // --- Reveal on scroll ---
+  function observeReveal() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal, .article-card, .event-item, .timeline-item').forEach(el => {
+      observer.observe(el);
+    });
+  }
+  observeReveal();
+
+  // --- Contact form ---
+  window.submitContact = function() {
+    const name = document.getElementById('cf-name').value;
+    const email = document.getElementById('cf-email').value;
+    const message = document.getElementById('cf-message').value;
+    if (!name || !email || !message) {
+      alert('すべての項目を入力してください');
+      return;
+    }
+    const btn = document.getElementById('contact-submit');
+    btn.disabled = true;
+    btn.textContent = '送 信 中...';
+
+    // EmailJS設定がある場合はここで送信
+    // emailjs.send('SERVICE_ID', 'TEMPLATE_ID', { name, email, message })
+    
+    setTimeout(() => {
+      document.getElementById('contact-form-wrap').style.display = 'none';
+      document.getElementById('contact-success').style.display = 'block';
+    }, 1000);
+  };
+
+  // --- Weather (Open-Meteo) ---
+  async function loadWeather() {
+    try {
+      // 洲本市: lat=34.3506, lon=134.8945
+      const url = 'https://api.open-meteo.com/v1/forecast?latitude=34.3506&longitude=134.8945&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FTokyo&forecast_days=2';
+      const res = await fetch(url);
+      const data = await res.json();
+      const daily = data.daily;
+
+      function wmoToEmoji(code) {
+        if (code === 0) return '☀️';
+        if (code <= 2) return '🌤️';
+        if (code <= 3) return '☁️';
+        if (code <= 48) return '🌫️';
+        if (code <= 57) return '🌧️';
+        if (code <= 67) return '🌧️';
+        if (code <= 77) return '❄️';
+        if (code <= 82) return '🌦️';
+        if (code <= 99) return '⛈️';
+        return '🌡️';
+      }
+
+      for (let i = 0; i < 2; i++) {
+        const suffix = i === 0 ? 'today' : 'tmr';
+        const max = Math.round(daily.temperature_2m_max[i]);
+        const min = Math.round(daily.temperature_2m_min[i]);
+        const rain = daily.precipitation_probability_max[i];
+        document.getElementById(`w-icon-${suffix}`).textContent = wmoToEmoji(daily.weathercode[i]);
+        document.getElementById(`w-temp-${suffix}`).textContent = `${max}°/${min}°`;
+        document.getElementById(`w-rain-${suffix}`).textContent = `☔ ${rain}%`;
+      }
+    } catch(e) {
+      console.log('Weather load failed:', e);
+    }
+  }
+  loadWeather();
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        const offset = 100;
+        const top = target.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // Close modals on overlay click
+  document.getElementById('article-modal').addEventListener('click', function(e) {
+    if (e.target === this) window.closeArticleModal();
+  });
+  document.getElementById('popup-modal').addEventListener('click', function(e) {
+    if (e.target === this) window.closePopup();
+  });
+
+  // Re-observe on dynamic content
+  const mutationObserver = new MutationObserver(() => observeReveal());
+  mutationObserver.observe(document.getElementById('articles-grid'), { childList: true });
+  mutationObserver.observe(document.getElementById('events-list'), { childList: true });
+</script>
+
+</body>
+</html>

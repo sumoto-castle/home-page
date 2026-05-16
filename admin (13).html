@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理画面 | 洲本城</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:      #070b15;
+      --surface: #0d1525;
+      --surface2:#111d30;
+      --border:  rgba(201,168,76,0.15);
+      --kin:     #c9a84c;
+      --kin-l:   #e0c170;
+      --washi:   #f0ece4;
+      --gin:     #7a8fa8;
+      --danger:  rgba(220,60,60,0.85);
+      --success: #4caf82;
+      --sidebar: 220px;
+      --header:  56px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    ::-webkit-scrollbar { width: 4px; height: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.35); border-radius: 2px; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--bg);
+      color: var(--washi);
+      min-height: 100vh;
+      font-size: 13px;
+    }
+
+    /* ===== LOGIN ===== */
+    #login-wrap {
+      position: fixed; inset: 0; z-index: 999;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg);
+    }
+    #login-wrap.hidden { display: none; }
+    .login-card {
+      width: 380px; max-width: calc(100vw - 32px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 48px 40px;
+    }
+    .login-crest {
+      text-align: center; margin-bottom: 32px;
+    }
+    .login-crest-icon {
+      font-size: 36px; margin-bottom: 10px;
+    }
+    .login-crest-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 22px; color: var(--kin); letter-spacing: 0.25em;
+    }
+    .login-crest-sub {
+      font-size: 10px; letter-spacing: 0.35em; color: var(--gin); margin-top: 4px;
+    }
+    .field-label {
+      display: block; font-size: 10px; letter-spacing: 0.25em;
+      color: var(--kin); margin-bottom: 6px;
+    }
+    .field-input {
+      width: 100%; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.2);
+      padding: 11px 14px; color: var(--washi);
+      font-size: 13px; font-family: inherit;
+      outline: none; transition: border-color .25s;
+      margin-bottom: 16px;
+    }
+    .field-input:focus { border-color: var(--kin); }
+    .btn-login {
+      width: 100%; padding: 14px; background: var(--kin);
+      color: #07100d; font-size: 12px; letter-spacing: 0.25em;
+      font-weight: 700; cursor: pointer; border: none; transition: background .2s;
+    }
+    .btn-login:hover { background: var(--kin-l); }
+    .btn-login:disabled { opacity: .5; cursor: not-allowed; }
+    #login-err {
+      font-size: 11px; color: #f08080; text-align: center;
+      margin-top: 12px; display: none;
+    }
+
+    /* ===== SHELL ===== */
+    #shell { display: none; height: 100vh; flex-direction: column; }
+    #shell.visible { display: flex; }
+
+    /* header */
+    #adm-header {
+      height: var(--header); flex-shrink: 0;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+      padding: 0 20px; gap: 16px; position: sticky; top: 0; z-index: 100;
+    }
+    .adm-logo {
+      font-family: 'Shippori Mincho', serif;
+      color: var(--kin); font-size: 17px; letter-spacing: 0.2em;
+      flex-shrink: 0;
+    }
+    .adm-logo-sub { font-size: 9px; letter-spacing: 0.3em; color: var(--gin); margin-left: 8px; }
+    .header-spacer { flex: 1; }
+    #adm-user { font-size: 11px; color: var(--gin); }
+    .btn-sm {
+      padding: 6px 14px; font-size: 10px; letter-spacing: 0.15em;
+      cursor: pointer; border: 1px solid var(--border); background: transparent;
+      color: var(--gin); transition: all .2s; white-space: nowrap;
+    }
+    .btn-sm:hover { border-color: var(--kin); color: var(--kin); }
+    .btn-site {
+      padding: 6px 14px; font-size: 10px; letter-spacing: 0.15em;
+      cursor: pointer; border: 1px solid rgba(201,168,76,0.35); background: transparent;
+      color: var(--kin); transition: all .2s; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-site:hover { background: rgba(201,168,76,0.08); }
+
+    /* hamburger (mobile) */
+    #ham {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; background: none; border: none; padding: 6px;
+    }
+    #ham span { display: block; width: 20px; height: 1px; background: var(--washi); transition: all .3s; }
+    #ham.open span:nth-child(1) { transform: rotate(45deg) translate(4px,4px); }
+    #ham.open span:nth-child(2) { opacity: 0; }
+    #ham.open span:nth-child(3) { transform: rotate(-45deg) translate(4px,-4px); }
+
+    /* body */
+    #adm-body { display: flex; flex: 1; overflow: hidden; }
+
+    /* sidebar */
+    #sidebar {
+      width: var(--sidebar); flex-shrink: 0;
+      background: var(--surface); border-right: 1px solid var(--border);
+      overflow-y: auto; display: flex; flex-direction: column;
+      transition: transform .3s;
+    }
+    .sidebar-section-label {
+      font-size: 9px; letter-spacing: 0.35em; color: var(--gin);
+      padding: 20px 20px 6px; text-transform: uppercase;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 20px; font-size: 12px; letter-spacing: 0.1em;
+      color: rgba(240,236,228,0.5); cursor: pointer; transition: all .2s;
+      border-left: 2px solid transparent; user-select: none;
+    }
+    .nav-item .nav-icon { font-size: 15px; width: 20px; text-align: center; flex-shrink: 0; }
+    .nav-item:hover { color: var(--washi); background: rgba(255,255,255,0.03); }
+    .nav-item.active { color: var(--kin); background: rgba(201,168,76,0.07); border-left-color: var(--kin); }
+    .sidebar-footer { margin-top: auto; padding: 16px 20px; }
+
+    /* main */
+    #main-area { flex: 1; overflow-y: auto; padding: 28px 32px; }
+
+    /* ===== COMPONENTS ===== */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .page-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+    }
+    .page-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 20px; color: var(--kin); letter-spacing: 0.1em;
+    }
+
+    /* Buttons */
+    .btn { padding: 9px 20px; font-size: 11px; letter-spacing: 0.18em; cursor: pointer; border: none; transition: all .2s; font-family: inherit; }
+    .btn-primary { background: var(--kin); color: #070b15; font-weight: 700; }
+    .btn-primary:hover { background: var(--kin-l); }
+    .btn-primary:disabled { opacity: .45; cursor: not-allowed; }
+    .btn-secondary { background: rgba(255,255,255,0.07); color: var(--washi); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.12); }
+    .btn-danger { background: rgba(200,50,50,0.2); color: #f08080; border: 1px solid rgba(200,50,50,0.3); }
+    .btn-danger:hover { background: rgba(200,50,50,0.35); }
+    .btn-success { background: rgba(76,175,130,0.2); color: #6dba8a; border: 1px solid rgba(76,175,130,0.3); }
+    .btn-success:hover { background: rgba(76,175,130,0.35); }
+
+    /* Cards */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 24px; margin-bottom: 16px;
+    }
+    .card-title { font-size: 12px; color: var(--kin); letter-spacing: 0.2em; margin-bottom: 16px; }
+
+    /* Stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 20px 16px; text-align: center; position: relative; overflow: hidden;
+    }
+    .stat-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px; background: linear-gradient(to right, transparent, var(--kin), transparent);
+    }
+    .stat-icon { font-size: 22px; margin-bottom: 8px; }
+    .stat-val { font-family: 'Shippori Mincho', serif; font-size: 28px; color: var(--washi); line-height: 1; }
+    .stat-lbl { font-size: 10px; color: var(--gin); margin-top: 4px; letter-spacing: 0.1em; }
+
+    /* Table */
+    .tbl-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      padding: 10px 16px; text-align: left; font-size: 10px;
+      letter-spacing: 0.2em; color: var(--kin); font-weight: 400;
+      border-bottom: 1px solid var(--border); white-space: nowrap;
+    }
+    tbody td { padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+    tbody tr:hover td { background: rgba(255,255,255,0.02); }
+    .badge-pub { font-size: 10px; color: #6dba8a; }
+    .badge-unp { font-size: 10px; color: var(--gin); }
+
+    /* Form */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 10px; letter-spacing: 0.22em; color: var(--kin); }
+    input[type=text], input[type=email], input[type=date], input[type=url], input[type=color],
+    textarea, select {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(201,168,76,0.2);
+      padding: 10px 13px; color: var(--washi); font-size: 13px;
+      font-family: inherit; outline: none; transition: border-color .25s; width: 100%;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--kin); }
+    select { background: var(--surface2); }
+    textarea { resize: vertical; min-height: 110px; }
+    input[type=color] { width: 48px; height: 38px; padding: 4px; cursor: pointer; }
+
+    /* Toggle */
+    .toggle-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .toggle { position: relative; width: 42px; height: 22px; cursor: pointer; flex-shrink: 0; }
+    .toggle input { display: none; }
+    .toggle-track {
+      position: absolute; inset: 0; background: rgba(255,255,255,0.1);
+      border-radius: 11px; transition: .3s;
+    }
+    .toggle-thumb {
+      position: absolute; width: 16px; height: 16px; background: #fff;
+      border-radius: 50%; left: 3px; top: 3px; transition: .3s;
+    }
+    .toggle input:checked ~ .toggle-track { background: var(--kin); }
+    .toggle input:checked ~ .toggle-thumb { transform: translateX(20px); }
+    .toggle-label { font-size: 12px; color: var(--washi); }
+
+    /* Drawer (form slide-in) */
+    .drawer-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 200;
+      opacity: 0; pointer-events: none; transition: opacity .3s;
+    }
+    .drawer-overlay.open { opacity: 1; pointer-events: all; }
+    .drawer {
+      position: fixed; top: 0; right: 0; bottom: 0; width: 520px; max-width: 100vw;
+      background: var(--surface); border-left: 1px solid var(--border);
+      z-index: 201; display: flex; flex-direction: column;
+      transform: translateX(100%); transition: transform .35s cubic-bezier(.4,0,.2,1);
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      padding: 20px 24px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+    }
+    .drawer-title { font-family: 'Shippori Mincho', serif; font-size: 17px; color: var(--kin); letter-spacing: 0.12em; }
+    .drawer-close {
+      background: none; border: 1px solid var(--border); color: var(--gin);
+      width: 32px; height: 32px; cursor: pointer; font-size: 15px;
+      display: flex; align-items: center; justify-content: center; transition: all .2s;
+    }
+    .drawer-close:hover { border-color: var(--kin); color: var(--kin); }
+    .drawer-body { flex: 1; overflow-y: auto; padding: 24px; }
+    .drawer-footer {
+      padding: 16px 24px; border-top: 1px solid var(--border);
+      display: flex; gap: 10px; flex-shrink: 0;
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+      padding: 14px 20px; font-size: 12px; letter-spacing: 0.1em;
+      border-left: 3px solid var(--kin);
+      background: var(--surface2); border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      opacity: 0; transform: translateY(10px);
+      transition: all .3s; pointer-events: none; max-width: 300px;
+    }
+    #toast.show { opacity: 1; transform: translateY(0); }
+    #toast.toast-err { border-left-color: #f08080; }
+
+    /* Confirm dialog */
+    #confirm-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .25s;
+    }
+    #confirm-overlay.open { opacity: 1; pointer-events: all; }
+    .confirm-box {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 32px 28px; max-width: 340px; width: 90%;
+    }
+    .confirm-msg { font-size: 14px; line-height: 1.8; margin-bottom: 24px; }
+    .confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+    /* Activity log */
+    .log-list { list-style: none; }
+    .log-item {
+      padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+      display: flex; gap: 12px; align-items: flex-start; font-size: 12px;
+    }
+    .log-time { color: var(--gin); white-space: nowrap; flex-shrink: 0; font-size: 11px; }
+    .log-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--kin); margin-top: 5px; flex-shrink: 0; }
+
+    /* Empty state */
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--gin); }
+    .empty-icon { font-size: 40px; margin-bottom: 12px; opacity: .4; }
+    .empty-text { font-size: 13px; letter-spacing: 0.1em; }
+
+    /* Divider */
+    .hdivider { height: 1px; background: var(--border); margin: 20px 0; }
+
+    /* Color dot */
+    .color-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; vertical-align: middle; margin-right: 6px; }
+
+    /* Mobile overlay sidebar */
+    #sidebar-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 50;
+    }
+
+    @media (max-width: 768px) {
+      :root { --sidebar: 240px; }
+      #ham { display: flex; }
+      #sidebar {
+        position: fixed; top: var(--header); bottom: 0; left: 0; z-index: 60;
+        transform: translateX(-100%);
+      }
+      #sidebar.mobile-open { transform: translateX(0); }
+      #sidebar-overlay.open { display: block; }
+      #main-area { padding: 20px 16px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .drawer { width: 100vw; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="login-wrap">
+  <div class="login-card">
+    <div class="login-crest">
+      <div class="login-crest-icon">🏯</div>
+      <div class="login-crest-title">洲本城</div>
+      <div class="login-crest-sub">ADMIN PORTAL</div>
+    </div>
+    <div class="form-group">
+      <label class="field-label">メールアドレス</label>
+      <input type="email" id="l-email" class="field-input" placeholder="admin@example.com" autocomplete="email">
+    </div>
+    <div class="form-group">
+      <label class="field-label">パスワード</label>
+      <input type="password" id="l-pass" class="field-input" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn-login" id="l-btn" onclick="doLogin()">ログ イ ン</button>
+    <div id="login-err">メールアドレスまたはパスワードが正しくありません</div>
+    <div style="text-align:center; margin-top:20px;">
+      <a href="index.html" style="font-size:11px; color:var(--gin); letter-spacing:0.15em;">← サイトへ戻る</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SHELL ===== -->
+<div id="shell">
+
+  <!-- Header -->
+  <header id="adm-header">
+    <button id="ham" onclick="toggleSidebar()" aria-label="メニュー">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="adm-logo">洲本城 <span class="adm-logo-sub">ADMIN</span></div>
+    <div class="header-spacer"></div>
+    <a href="index.html" class="btn-site" target="_blank">🏯 サイトを見る</a>
+    <span id="adm-user"></span>
+    <button class="btn-sm" onclick="doLogout()">ログアウト</button>
+  </header>
+
+  <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <div id="adm-body">
+
+    <!-- Sidebar -->
+    <nav id="sidebar">
+      <div>
+        <div class="sidebar-section-label">メイン</div>
+        <div class="nav-item active" data-page="dashboard" onclick="goPage('dashboard')">
+          <span class="nav-icon">📊</span> ダッシュボード
+        </div>
+        <div class="sidebar-section-label">コンテンツ</div>
+        <div class="nav-item" data-page="articles" onclick="goPage('articles')">
+          <span class="nav-icon">📰</span> 記事管理
+        </div>
+        <div class="nav-item" data-page="events" onclick="goPage('events')">
+          <span class="nav-icon">📅</span> イベント管理
+        </div>
+        <div class="sidebar-section-label">設定</div>
+        <div class="nav-item" data-page="breaking" onclick="goPage('breaking')">
+          <span class="nav-icon">📡</span> 速報バー
+        </div>
+        <div class="nav-item" data-page="popup" onclick="goPage('popup')">
+          <span class="nav-icon">💬</span> ポップアップ
+        </div>
+      </div>
+      <div class="sidebar-footer">
+        <div style="font-size:10px; color:var(--gin); letter-spacing:0.15em; line-height:1.8;">
+          洲本城 管理システム<br>
+          <span style="opacity:.5;">v1.0.0</span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main -->
+    <main id="main-area">
+
+      <!-- ===== DASHBOARD ===== -->
+      <div id="page-dashboard" class="page active">
+        <div class="page-header">
+          <h1 class="page-title">ダッシュボード</h1>
+          <span id="dash-datetime" style="font-size:11px; color:var(--gin);"></span>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">📰</div>
+            <div class="stat-val" id="st-articles">—</div>
+            <div class="stat-lbl">総記事数</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-val" id="st-pub">—</div>
+            <div class="stat-lbl">公開中</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📅</div>
+            <div class="stat-val" id="st-events">—</div>
+            <div class="stat-lbl">イベント数</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📡</div>
+            <div class="stat-val" id="st-breaking">—</div>
+            <div class="stat-lbl">速報バー</div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+          <div class="card">
+            <div class="card-title">最近の記事</div>
+            <div id="dash-recent-articles">
+              <div class="empty-state"><div class="empty-icon">📰</div><div class="empty-text">読み込み中...</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">直近のイベント</div>
+            <div id="dash-recent-events">
+              <div class="empty-state"><div class="empty-icon">📅</div><div class="empty-text">読み込み中...</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">クイックアクション</div>
+          <div style="display:flex; flex-wrap:wrap; gap:10px;">
+            <button class="btn btn-primary" onclick="goPage('articles'); openArticleDrawer()">＋ 新規記事作成</button>
+            <button class="btn btn-secondary" onclick="goPage('events'); openEventDrawer()">＋ 新規イベント追加</button>
+            <button class="btn btn-secondary" onclick="goPage('breaking')">速報バーを編集</button>
+            <button class="btn btn-secondary" onclick="goPage('popup')">ポップアップを編集</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:0;">
+          <div class="card-title">操作ログ</div>
+          <ul class="log-list" id="activity-log">
+            <li class="log-item"><div class="log-dot"></div><div class="log-time">—</div><div>管理画面にログインしました</div></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ===== ARTICLES ===== -->
+      <div id="page-articles" class="page">
+        <div class="page-header">
+          <h1 class="page-title">記事管理</h1>
+          <button class="btn btn-primary" onclick="openArticleDrawer()">＋ 新規作成</button>
+        </div>
+
+        <!-- Filter bar -->
+        <div style="display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; align-items:center;">
+          <select id="art-filter-cat" onchange="filterArticles()" style="width:auto; padding:8px 12px; font-size:12px;">
+            <option value="">すべてのカテゴリ</option>
+            <option>お知らせ</option><option>歴史</option><option>イベント</option>
+            <option>観光情報</option><option>グルメ</option>
+          </select>
+          <select id="art-filter-pub" onchange="filterArticles()" style="width:auto; padding:8px 12px; font-size:12px;">
+            <option value="">すべて</option>
+            <option value="1">公開中</option>
+            <option value="0">非公開</option>
+          </select>
+          <span id="art-count" style="font-size:11px; color:var(--gin); margin-left:auto;"></span>
+        </div>
+
+        <div class="card" style="padding:0;">
+          <div class="tbl-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>タイトル</th>
+                  <th>カテゴリ</th>
+                  <th>公開</th>
+                  <th>作成日</th>
+                  <th style="width:120px;">操作</th>
+                </tr>
+              </thead>
+              <tbody id="art-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== EVENTS ===== -->
+      <div id="page-events" class="page">
+        <div class="page-header">
+          <h1 class="page-title">イベント管理</h1>
+          <button class="btn btn-primary" onclick="openEventDrawer()">＋ 新規追加</button>
+        </div>
+        <div class="card" style="padding:0;">
+          <div class="tbl-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>イベント名</th>
+                  <th>開催日</th>
+                  <th>説明</th>
+                  <th style="width:120px;">操作</th>
+                </tr>
+              </thead>
+              <tbody id="ev-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== BREAKING ===== -->
+      <div id="page-breaking" class="page">
+        <div class="page-header">
+          <h1 class="page-title">速報バー設定</h1>
+        </div>
+        <div class="card" style="max-width:600px;">
+          <div class="card-title">表示設定</div>
+          <label class="toggle" style="display:inline-flex;">
+            <input type="checkbox" id="bn-enabled">
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+          <div class="toggle-row" style="margin-top:10px;">
+            <label class="toggle">
+              <input type="checkbox" id="bn-enabled2" style="display:none;">
+              <div class="toggle-track"></div>
+              <div class="toggle-thumb"></div>
+            </label>
+            <span class="toggle-label">速報バーを表示する</span>
+          </div>
+
+          <div class="hdivider"></div>
+          <div class="form-group">
+            <label>速報テキスト</label>
+            <input type="text" id="bn-text" placeholder="例）令和7年 春の夜桜ライトアップ開催中 — 期間：3/25〜4/10 毎日18:00〜21:00">
+          </div>
+
+          <div class="form-group">
+            <label>バーの背景色</label>
+            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+              <input type="color" id="bn-color" value="#1a2744">
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="btn btn-secondary" style="font-size:10px; padding:6px 10px;" onclick="setBnColor('#c9a84c')">金</button>
+                <button class="btn btn-secondary" style="font-size:10px; padding:6px 10px;" onclick="setBnColor('#1a2744')">藍</button>
+                <button class="btn btn-secondary" style="font-size:10px; padding:6px 10px;" onclick="setBnColor('#8b0000')">紅</button>
+                <button class="btn btn-secondary" style="font-size:10px; padding:6px 10px;" onclick="setBnColor('#1a4a1a')">緑</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview -->
+          <div id="bn-preview" style="margin-bottom:20px; height:36px; display:flex; align-items:center; overflow:hidden; border:1px solid var(--border);">
+            <div style="padding:0 16px; font-size:11px; font-weight:600; letter-spacing:0.15em; background:rgba(0,0,0,0.3); height:100%; display:flex; align-items:center; white-space:nowrap; color:#fff;">NEWS</div>
+            <div style="overflow:hidden; flex:1;">
+              <span id="bn-preview-text" style="display:inline-block; font-size:12px; letter-spacing:0.08em; white-space:nowrap; color:#fff; animation:marquee 20s linear infinite;">プレビュー</span>
+            </div>
+          </div>
+          <style>@keyframes marquee { from{transform:translateX(100%)} to{transform:translateX(-100%)} }</style>
+
+          <button class="btn btn-primary" onclick="saveBreaking()">保 存 す る</button>
+        </div>
+      </div>
+
+      <!-- ===== POPUP ===== -->
+      <div id="page-popup" class="page">
+        <div class="page-header">
+          <h1 class="page-title">ポップアップ設定</h1>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:900px;">
+          <div class="card">
+            <div class="card-title">設定</div>
+            <div class="toggle-row">
+              <label class="toggle">
+                <input type="checkbox" id="pu-enabled">
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </label>
+              <span class="toggle-label">ポップアップを表示する</span>
+            </div>
+            <div class="hdivider"></div>
+            <div class="form-group">
+              <label>タイトル</label>
+              <input type="text" id="pu-title" placeholder="お知らせ" oninput="updatePopupPreview()">
+            </div>
+            <div class="form-group">
+              <label>本文</label>
+              <textarea id="pu-body" placeholder="ポップアップに表示する内容を入力してください。" oninput="updatePopupPreview()"></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="savePopup()">保 存 す る</button>
+          </div>
+
+          <!-- Preview -->
+          <div class="card" style="background:rgba(0,0,0,0.3);">
+            <div class="card-title">プレビュー</div>
+            <div style="background:linear-gradient(135deg,#0f1729,#1a2744); border:1px solid rgba(201,168,76,0.3); padding:28px 24px; position:relative;">
+              <div style="position:absolute;top:10px;right:10px; color:var(--gin); font-size:16px; cursor:default;">✕</div>
+              <div id="pu-prev-title" style="font-family:'Shippori Mincho',serif; font-size:18px; color:var(--kin); margin-bottom:12px; letter-spacing:0.1em;">お知らせ</div>
+              <div id="pu-prev-body" style="font-size:13px; line-height:1.9; color:rgba(240,236,228,0.75);"></div>
+              <div style="margin-top:16px; font-size:10px; color:var(--gin); text-decoration:underline; cursor:default;">今日は表示しない</div>
+            </div>
+            <div style="margin-top:12px; font-size:11px; color:var(--gin); line-height:1.7;">
+              ※ 初回アクセス時に表示されます。<br>
+              「今日は表示しない」を押すと当日は再表示されません（localStorage管理）。
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ===== ARTICLE DRAWER ===== -->
+<div class="drawer-overlay" id="art-overlay" onclick="closeArticleDrawer()"></div>
+<div class="drawer" id="art-drawer">
+  <div class="drawer-header">
+    <span class="drawer-title" id="art-drawer-title">記事を作成</span>
+    <button class="drawer-close" onclick="closeArticleDrawer()">✕</button>
+  </div>
+  <div class="drawer-body">
+    <input type="hidden" id="af-id">
+    <div class="form-group">
+      <label>タイトル *</label>
+      <input type="text" id="af-title" placeholder="記事タイトルを入力">
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>カテゴリ</label>
+        <select id="af-category">
+          <option>お知らせ</option><option>歴史</option><option>イベント</option>
+          <option>観光情報</option><option>グルメ</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>公開設定</label>
+        <div class="toggle-row" style="margin-bottom:0; margin-top:6px;">
+          <label class="toggle">
+            <input type="checkbox" id="af-published" checked>
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+          <span class="toggle-label">公開する</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>本文 *</label>
+      <textarea id="af-content" style="min-height:180px;" placeholder="記事の本文を入力してください..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>サムネイル画像URL（外部URL）</label>
+      <input type="url" id="af-imageUrl" placeholder="https://example.com/image.jpg">
+    </div>
+    <!-- Image preview -->
+    <div id="af-img-preview" style="display:none; margin-top:4px;">
+      <img id="af-img-preview-el" src="" alt="" style="width:100%; max-height:160px; object-fit:cover; border:1px solid var(--border);">
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('af-imageUrl').addEventListener('input', function() {
+          const v = this.value.trim();
+          const wrap = document.getElementById('af-img-preview');
+          const img = document.getElementById('af-img-preview-el');
+          if (v) { img.src = v; wrap.style.display = 'block'; }
+          else { wrap.style.display = 'none'; }
+        });
+      });
+    </script>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-primary" id="af-save-btn" onclick="saveArticle()">保 存 す る</button>
+    <button class="btn btn-secondary" onclick="closeArticleDrawer()">キャンセル</button>
+    <button class="btn btn-danger" id="af-delete-btn" style="display:none; margin-left:auto;" onclick="deleteCurrentArticle()">削 除</button>
+  </div>
+</div>
+
+<!-- ===== EVENT DRAWER ===== -->
+<div class="drawer-overlay" id="ev-overlay" onclick="closeEventDrawer()"></div>
+<div class="drawer" id="ev-drawer">
+  <div class="drawer-header">
+    <span class="drawer-title" id="ev-drawer-title">イベントを追加</span>
+    <button class="drawer-close" onclick="closeEventDrawer()">✕</button>
+  </div>
+  <div class="drawer-body">
+    <input type="hidden" id="ef-id">
+    <div class="form-group">
+      <label>イベント名 *</label>
+      <input type="text" id="ef-title" placeholder="イベント名を入力">
+    </div>
+    <div class="form-group">
+      <label>開催日 *</label>
+      <input type="date" id="ef-date">
+    </div>
+    <div class="form-group">
+      <label>説明・詳細</label>
+      <textarea id="ef-description" placeholder="イベントの詳細を入力してください..."></textarea>
+    </div>
+  </div>
+  <div class="drawer-footer">
+    <button class="btn btn-primary" onclick="saveEvent()">保 存 す る</button>
+    <button class="btn btn-secondary" onclick="closeEventDrawer()">キャンセル</button>
+    <button class="btn btn-danger" id="ef-delete-btn" style="display:none; margin-left:auto;" onclick="deleteCurrentEvent()">削 除</button>
+  </div>
+</div>
+
+<!-- ===== CONFIRM DIALOG ===== -->
+<div id="confirm-overlay">
+  <div class="confirm-box">
+    <div class="confirm-msg" id="confirm-msg">本当に削除しますか？</div>
+    <div class="confirm-actions">
+      <button class="btn btn-secondary" onclick="confirmCancel()">キャンセル</button>
+      <button class="btn btn-danger" onclick="confirmOk()">削 除</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOAST ===== -->
+<div id="toast"></div>
+
+<!-- ===== FIREBASE ===== -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import {
+    getFirestore, collection, getDocs, getDoc, doc,
+    addDoc, updateDoc, deleteDoc, setDoc,
+    query, orderBy, serverTimestamp
+  } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+  import {
+    getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
+  } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA7kshE6i4GPxzPzXC4TfUFPp7EbGuiVdU",
+    authDomain: "bussinesscardmae.firebaseapp.com",
+    projectId: "bussinesscardmae",
+    storageBucket: "bussinesscardmae.firebasestorage.app",
+    messagingSenderId: "142830820792",
+    appId: "1:142830820792:web:ddfeeec8f22010fd2b434d",
+    measurementId: "G-X5TV5CE69W"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+  const auth = getAuth(app);
+
+  // ── 状態 ──────────────────────────────────────
+  let articlesCache = [];
+  let eventsCache   = [];
+  let confirmResolve = null;
+
+  // ── Utils ──────────────────────────────────────
+  function toast(msg, err = false) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = 'show' + (err ? ' toast-err' : '');
+    clearTimeout(el._t);
+    el._t = setTimeout(() => el.className = '', 3000);
+  }
+
+  function addLog(msg) {
+    const ul = document.getElementById('activity-log');
+    const now = new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+    const li = document.createElement('li');
+    li.className = 'log-item';
+    li.innerHTML = `<div class="log-dot"></div><div class="log-time">${now}</div><div>${msg}</div>`;
+    ul.insertBefore(li, ul.firstChild);
+    if (ul.children.length > 20) ul.removeChild(ul.lastChild);
+  }
+
+  window._confirm = function(msg) {
+    return new Promise(res => {
+      confirmResolve = res;
+      document.getElementById('confirm-msg').textContent = msg;
+      document.getElementById('confirm-overlay').classList.add('open');
+    });
+  };
+  window.confirmOk = () => { document.getElementById('confirm-overlay').classList.remove('open'); confirmResolve && confirmResolve(true); };
+  window.confirmCancel = () => { document.getElementById('confirm-overlay').classList.remove('open'); confirmResolve && confirmResolve(false); };
+
+  // ── Auth ───────────────────────────────────────
+  window.doLogin = async function() {
+    const btn = document.getElementById('l-btn');
+    btn.disabled = true; btn.textContent = '認証中...';
+    document.getElementById('login-err').style.display = 'none';
+    try {
+      await signInWithEmailAndPassword(auth,
+        document.getElementById('l-email').value,
+        document.getElementById('l-pass').value
+      );
+    } catch {
+      document.getElementById('login-err').style.display = 'block';
+    } finally {
+      btn.disabled = false; btn.textContent = 'ログ イ ン';
+    }
+  };
+
+  document.getElementById('l-pass').addEventListener('keypress', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  window.doLogout = async function() {
+    await signOut(auth);
+    document.getElementById('shell').classList.remove('visible');
+    document.getElementById('login-wrap').classList.remove('hidden');
+  };
+
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      document.getElementById('login-wrap').classList.add('hidden');
+      document.getElementById('shell').classList.add('visible');
+      document.getElementById('adm-user').textContent = user.email;
+      addLog('ログインしました');
+      loadAll();
+    } else {
+      document.getElementById('shell').classList.remove('visible');
+      document.getElementById('login-wrap').classList.remove('hidden');
+    }
+  });
+
+  // ── Navigation ────────────────────────────────
+  window.goPage = function(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.querySelector(`[data-page="${name}"]`).classList.add('active');
+    closeSidebar();
+  };
+
+  window.toggleSidebar = function() {
+    const s = document.getElementById('sidebar');
+    const o = document.getElementById('sidebar-overlay');
+    const h = document.getElementById('ham');
+    s.classList.toggle('mobile-open');
+    o.classList.toggle('open');
+    h.classList.toggle('open');
+  };
+  window.closeSidebar = function() {
+    document.getElementById('sidebar').classList.remove('mobile-open');
+    document.getElementById('sidebar-overlay').classList.remove('open');
+    document.getElementById('ham').classList.remove('open');
+  };
+
+  // ── Dashboard clock ───────────────────────────
+  function updateClock() {
+    document.getElementById('dash-datetime').textContent =
+      new Date().toLocaleString('ja-JP', { year:'numeric', month:'2-digit', day:'2-digit', weekday:'short', hour:'2-digit', minute:'2-digit' });
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // ══════════════════════════════════════════════
+  // ARTICLES
+  // ══════════════════════════════════════════════
+  async function loadArticles() {
+    try {
+      const q = query(collection(db, 'articles'), orderBy('createdAt', 'desc'));
+      const snap = await getDocs(q);
+      articlesCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch {
+      articlesCache = [];
+    }
+    renderArticlesTable();
+    updateStats();
+    renderDashRecent();
+  }
+
+  function renderArticlesTable(list = null) {
+    const rows = list ?? articlesCache;
+    const tbody = document.getElementById('art-tbody');
+    document.getElementById('art-count').textContent = `${rows.length} 件`;
+    if (rows.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">📰</div><div class="empty-text">記事がありません</div></div></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = rows.map(a => {
+      const date = a.createdAt?.toDate ? a.createdAt.toDate().toLocaleDateString('ja-JP') : '—';
+      return `<tr>
+        <td style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escHtml(a.title)}</td>
+        <td><span style="font-size:10px; border:1px solid var(--border); padding:2px 8px; letter-spacing:0.1em;">${escHtml(a.category||'—')}</span></td>
+        <td>${a.published ? '<span class="badge-pub">● 公開</span>' : '<span class="badge-unp">○ 非公開</span>'}</td>
+        <td style="white-space:nowrap; color:var(--gin);">${date}</td>
+        <td>
+          <div style="display:flex; gap:6px;">
+            <button class="btn btn-secondary" style="padding:5px 10px; font-size:10px;" onclick="editArticle('${a.id}')">編集</button>
+            <button class="btn btn-danger" style="padding:5px 10px; font-size:10px;" onclick="deleteArticle('${a.id}')">削除</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  window.filterArticles = function() {
+    const cat = document.getElementById('art-filter-cat').value;
+    const pub = document.getElementById('art-filter-pub').value;
+    let filtered = articlesCache;
+    if (cat) filtered = filtered.filter(a => a.category === cat);
+    if (pub === '1') filtered = filtered.filter(a => a.published);
+    if (pub === '0') filtered = filtered.filter(a => !a.published);
+    renderArticlesTable(filtered);
+  };
+
+  window.openArticleDrawer = function() {
+    document.getElementById('art-drawer-title').textContent = '記事を作成';
+    document.getElementById('af-id').value = '';
+    document.getElementById('af-title').value = '';
+    document.getElementById('af-content').value = '';
+    document.getElementById('af-imageUrl').value = '';
+    document.getElementById('af-category').value = 'お知らせ';
+    document.getElementById('af-published').checked = true;
+    document.getElementById('af-delete-btn').style.display = 'none';
+    document.getElementById('af-img-preview').style.display = 'none';
+    document.getElementById('art-drawer').classList.add('open');
+    document.getElementById('art-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closeArticleDrawer = function() {
+    document.getElementById('art-drawer').classList.remove('open');
+    document.getElementById('art-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  window.editArticle = function(id) {
+    const a = articlesCache.find(x => x.id === id);
+    if (!a) return;
+    document.getElementById('art-drawer-title').textContent = '記事を編集';
+    document.getElementById('af-id').value = a.id;
+    document.getElementById('af-title').value = a.title;
+    document.getElementById('af-content').value = a.content || '';
+    document.getElementById('af-imageUrl').value = a.imageUrl || '';
+    document.getElementById('af-category').value = a.category || 'お知らせ';
+    document.getElementById('af-published').checked = !!a.published;
+    document.getElementById('af-delete-btn').style.display = 'block';
+    const wrap = document.getElementById('af-img-preview');
+    const img  = document.getElementById('af-img-preview-el');
+    if (a.imageUrl) { img.src = a.imageUrl; wrap.style.display = 'block'; }
+    else { wrap.style.display = 'none'; }
+    document.getElementById('art-drawer').classList.add('open');
+    document.getElementById('art-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.saveArticle = async function() {
+    const id = document.getElementById('af-id').value;
+    const data = {
+      title:     document.getElementById('af-title').value.trim(),
+      content:   document.getElementById('af-content').value.trim(),
+      imageUrl:  document.getElementById('af-imageUrl').value.trim(),
+      category:  document.getElementById('af-category').value,
+      published: document.getElementById('af-published').checked,
+    };
+    if (!data.title) { toast('タイトルを入力してください', true); return; }
+    const btn = document.getElementById('af-save-btn');
+    btn.disabled = true; btn.textContent = '保存中...';
+    try {
+      if (id) {
+        data.updatedAt = serverTimestamp();
+        await updateDoc(doc(db, 'articles', id), data);
+        addLog(`記事「${data.title}」を更新しました`);
+        toast('記事を更新しました');
+      } else {
+        data.createdAt = serverTimestamp();
+        await addDoc(collection(db, 'articles'), data);
+        addLog(`記事「${data.title}」を作成しました`);
+        toast('記事を作成しました');
+      }
+      closeArticleDrawer();
+      await loadArticles();
+    } catch(e) {
+      toast('保存に失敗しました: ' + e.message, true);
+    } finally {
+      btn.disabled = false; btn.textContent = '保 存 す る';
+    }
+  };
+
+  window.deleteArticle = async function(id) {
+    const a = articlesCache.find(x => x.id === id);
+    const ok = await window._confirm(`「${a?.title}」を削除しますか？\nこの操作は取り消せません。`);
+    if (!ok) return;
+    try {
+      await deleteDoc(doc(db, 'articles', id));
+      addLog(`記事「${a?.title}」を削除しました`);
+      toast('記事を削除しました');
+      await loadArticles();
+    } catch(e) {
+      toast('削除に失敗しました', true);
+    }
+  };
+
+  window.deleteCurrentArticle = function() {
+    deleteArticle(document.getElementById('af-id').value);
+    closeArticleDrawer();
+  };
+
+  // ══════════════════════════════════════════════
+  // EVENTS
+  // ══════════════════════════════════════════════
+  async function loadEvents() {
+    try {
+      const q = query(collection(db, 'events'), orderBy('date'));
+      const snap = await getDocs(q);
+      eventsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } catch {
+      eventsCache = [];
+    }
+    renderEventsTable();
+    updateStats();
+    renderDashRecent();
+  }
+
+  function renderEventsTable() {
+    const tbody = document.getElementById('ev-tbody');
+    if (eventsCache.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state"><div class="empty-icon">📅</div><div class="empty-text">イベントがありません</div></div></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = eventsCache.map(e => {
+      const d = new Date(e.date);
+      const dateStr = d.toLocaleDateString('ja-JP', { year:'numeric', month:'long', day:'numeric', weekday:'short' });
+      const isPast = d < new Date();
+      return `<tr style="${isPast ? 'opacity:.5;' : ''}">
+        <td style="font-weight:500;">${escHtml(e.title)} ${isPast ? '<span style="font-size:9px;color:var(--gin);">終了</span>' : ''}</td>
+        <td style="white-space:nowrap;">${dateStr}</td>
+        <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--gin);">${escHtml(e.description||'—')}</td>
+        <td>
+          <div style="display:flex; gap:6px;">
+            <button class="btn btn-secondary" style="padding:5px 10px; font-size:10px;" onclick="editEvent('${e.id}')">編集</button>
+            <button class="btn btn-danger" style="padding:5px 10px; font-size:10px;" onclick="deleteEvent('${e.id}')">削除</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  window.openEventDrawer = function() {
+    document.getElementById('ev-drawer-title').textContent = 'イベントを追加';
+    document.getElementById('ef-id').value = '';
+    document.getElementById('ef-title').value = '';
+    document.getElementById('ef-date').value = '';
+    document.getElementById('ef-description').value = '';
+    document.getElementById('ef-delete-btn').style.display = 'none';
+    document.getElementById('ev-drawer').classList.add('open');
+    document.getElementById('ev-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closeEventDrawer = function() {
+    document.getElementById('ev-drawer').classList.remove('open');
+    document.getElementById('ev-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  window.editEvent = function(id) {
+    const e = eventsCache.find(x => x.id === id);
+    if (!e) return;
+    document.getElementById('ev-drawer-title').textContent = 'イベントを編集';
+    document.getElementById('ef-id').value = e.id;
+    document.getElementById('ef-title').value = e.title;
+    document.getElementById('ef-date').value = e.date;
+    document.getElementById('ef-description').value = e.description || '';
+    document.getElementById('ef-delete-btn').style.display = 'block';
+    document.getElementById('ev-drawer').classList.add('open');
+    document.getElementById('ev-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.saveEvent = async function() {
+    const id = document.getElementById('ef-id').value;
+    const data = {
+      title:       document.getElementById('ef-title').value.trim(),
+      date:        document.getElementById('ef-date').value,
+      description: document.getElementById('ef-description').value.trim(),
+    };
+    if (!data.title || !data.date) { toast('イベント名と日付を入力してください', true); return; }
+    try {
+      if (id) {
+        await updateDoc(doc(db, 'events', id), data);
+        addLog(`イベント「${data.title}」を更新しました`);
+        toast('イベントを更新しました');
+      } else {
+        await addDoc(collection(db, 'events'), data);
+        addLog(`イベント「${data.title}」を追加しました`);
+        toast('イベントを追加しました');
+      }
+      closeEventDrawer();
+      await loadEvents();
+    } catch(e) {
+      toast('保存に失敗しました: ' + e.message, true);
+    }
+  };
+
+  window.deleteEvent = async function(id) {
+    const e = eventsCache.find(x => x.id === id);
+    const ok = await window._confirm(`「${e?.title}」を削除しますか？`);
+    if (!ok) return;
+    try {
+      await deleteDoc(doc(db, 'events', id));
+      addLog(`イベント「${e?.title}」を削除しました`);
+      toast('イベントを削除しました');
+      await loadEvents();
+    } catch(e) {
+      toast('削除に失敗しました', true);
+    }
+  };
+
+  window.deleteCurrentEvent = function() {
+    deleteEvent(document.getElementById('ef-id').value);
+    closeEventDrawer();
+  };
+
+  // ══════════════════════════════════════════════
+  // BREAKING NEWS
+  // ══════════════════════════════════════════════
+  async function loadBreaking() {
+    try {
+      const snap = await getDoc(doc(db, 'breakingNews', 'main'));
+      if (snap.exists()) {
+        const d = snap.data();
+        setBreakingForm(d);
+      }
+    } catch { /* Firebase未設定 */ }
+  }
+
+  function setBreakingForm(d) {
+    document.getElementById('bn-enabled2').checked = !!d.enabled;
+    document.getElementById('bn-text').value = d.text || '';
+    const color = d.color || '#1a2744';
+    document.getElementById('bn-color').value = color;
+    updateBnPreview();
+  }
+
+  // sync two toggle checkboxes
+  document.addEventListener('DOMContentLoaded', () => {
+    const t1 = document.getElementById('bn-enabled');
+    const t2 = document.getElementById('bn-enabled2');
+    t2.addEventListener('change', () => t1.checked = t2.checked);
+    t1.addEventListener('change', () => t2.checked = t1.checked);
+
+    document.getElementById('bn-text').addEventListener('input', updateBnPreview);
+    document.getElementById('bn-color').addEventListener('input', updateBnPreview);
+  });
+
+  function updateBnPreview() {
+    const text = document.getElementById('bn-text').value || 'プレビュー';
+    const color = document.getElementById('bn-color').value;
+    const prev = document.getElementById('bn-preview');
+    const prevText = document.getElementById('bn-preview-text');
+    prev.style.background = color;
+    prevText.textContent = text + '　　　' + text;
+  }
+
+  window.setBnColor = function(c) {
+    document.getElementById('bn-color').value = c;
+    updateBnPreview();
+  };
+
+  window.saveBreaking = async function() {
+    const data = {
+      enabled: document.getElementById('bn-enabled2').checked,
+      text:    document.getElementById('bn-text').value,
+      color:   document.getElementById('bn-color').value,
+    };
+    try {
+      await setDoc(doc(db, 'breakingNews', 'main'), data);
+      addLog('速報バーを更新しました');
+      toast('速報バーを保存しました');
+      document.getElementById('st-breaking').textContent = data.enabled ? 'ON' : 'OFF';
+    } catch(e) {
+      toast('保存に失敗しました: ' + e.message, true);
+    }
+  };
+
+  // ══════════════════════════════════════════════
+  // POPUP
+  // ══════════════════════════════════════════════
+  async function loadPopup() {
+    try {
+      const snap = await getDoc(doc(db, 'popup', 'main'));
+      if (snap.exists()) {
+        const d = snap.data();
+        document.getElementById('pu-enabled').checked = !!d.enabled;
+        document.getElementById('pu-title').value = d.title || '';
+        document.getElementById('pu-body').value = d.body || '';
+        updatePopupPreview();
+      }
+    } catch { /* Firebase未設定 */ }
+  }
+
+  window.updatePopupPreview = function() {
+    document.getElementById('pu-prev-title').textContent = document.getElementById('pu-title').value || 'お知らせ';
+    document.getElementById('pu-prev-body').textContent  = document.getElementById('pu-body').value;
+  };
+
+  window.savePopup = async function() {
+    const data = {
+      enabled: document.getElementById('pu-enabled').checked,
+      title:   document.getElementById('pu-title').value,
+      body:    document.getElementById('pu-body').value,
+    };
+    try {
+      await setDoc(doc(db, 'popup', 'main'), data);
+      addLog('ポップアップを更新しました');
+      toast('ポップアップを保存しました');
+    } catch(e) {
+      toast('保存に失敗しました: ' + e.message, true);
+    }
+  };
+
+  // ══════════════════════════════════════════════
+  // STATS / DASHBOARD
+  // ══════════════════════════════════════════════
+  function updateStats() {
+    document.getElementById('st-articles').textContent = articlesCache.length;
+    document.getElementById('st-pub').textContent = articlesCache.filter(a => a.published).length;
+    document.getElementById('st-events').textContent = eventsCache.length;
+  }
+
+  function renderDashRecent() {
+    // Recent articles
+    const ra = document.getElementById('dash-recent-articles');
+    const recent = articlesCache.slice(0, 5);
+    if (recent.length === 0) {
+      ra.innerHTML = '<div class="empty-state" style="padding:20px 0;"><div class="empty-icon">📰</div><div class="empty-text">記事がありません</div></div>';
+    } else {
+      ra.innerHTML = recent.map(a => `
+        <div style="padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); display:flex; align-items:center; gap:10px; cursor:pointer;" onclick="goPage('articles'); editArticle('${a.id}')">
+          <span style="font-size:10px; border:1px solid var(--border); padding:2px 6px; letter-spacing:0.08em; white-space:nowrap; flex-shrink:0;">${escHtml(a.category||'—')}</span>
+          <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:12px;">${escHtml(a.title)}</span>
+          <span style="font-size:10px; color:var(--gin); flex-shrink:0;">${a.published ? '公開' : '非公開'}</span>
+        </div>`).join('');
+    }
+
+    // Recent events
+    const re = document.getElementById('dash-recent-events');
+    const upcoming = eventsCache.filter(e => new Date(e.date) >= new Date()).slice(0, 5);
+    if (upcoming.length === 0) {
+      re.innerHTML = '<div class="empty-state" style="padding:20px 0;"><div class="empty-icon">📅</div><div class="empty-text">予定なし</div></div>';
+    } else {
+      re.innerHTML = upcoming.map(e => {
+        const d = new Date(e.date);
+        const dateStr = d.toLocaleDateString('ja-JP', { month:'long', day:'numeric', weekday:'short' });
+        return `<div style="padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); display:flex; align-items:center; gap:10px; cursor:pointer;" onclick="goPage('events'); editEvent('${e.id}')">
+          <span style="font-size:11px; color:var(--kin); white-space:nowrap; flex-shrink:0;">${dateStr}</span>
+          <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:12px;">${escHtml(e.title)}</span>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  // ── Helpers ───────────────────────────────────
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  async function loadAll() {
+    await Promise.all([loadArticles(), loadEvents(), loadBreaking(), loadPopup()]);
+    try {
+      const snap = await getDoc(doc(db, 'breakingNews', 'main'));
+      if (snap.exists()) {
+        document.getElementById('st-breaking').textContent = snap.data().enabled ? 'ON' : 'OFF';
+      } else {
+        document.getElementById('st-breaking').textContent = 'OFF';
+      }
+    } catch {
+      document.getElementById('st-breaking').textContent = '—';
+    }
+  }
+
+  // initial preview update
+  document.addEventListener('DOMContentLoaded', () => {
+    updateBnPreview();
+    updatePopupPreview();
+  });
+</script>
+
+</body>
+</html>
