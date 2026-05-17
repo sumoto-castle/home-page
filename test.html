@@ -81,6 +81,7 @@
     }
 
     @media(max-width:600px){
+
       .form-box{
         padding:25px;
       }
@@ -88,6 +89,7 @@
       h1{
         font-size:26px;
       }
+
     }
   </style>
 </head>
@@ -100,15 +102,28 @@
     <form id="contact-form">
 
       <label>お名前</label>
-      <input type="text" name="name" required>
+      <input
+        type="text"
+        name="name"
+        required
+      >
 
       <label>メールアドレス</label>
-      <input type="email" name="email" required>
+      <input
+        type="email"
+        name="email"
+        required
+      >
 
       <label>お問い合わせ内容</label>
-      <textarea name="message" required></textarea>
+      <textarea
+        name="message"
+        required
+      ></textarea>
 
-      <button type="submit">送信する</button>
+      <button type="submit">
+        送信する
+      </button>
 
     </form>
 
@@ -117,37 +132,64 @@
   </div>
 
   <script>
+
     // EmailJS 初期化
     emailjs.init("FL19fjwr013lEjI6X");
 
-    const form = document.getElementById("contact-form");
-    const result = document.getElementById("result");
+    const form =
+      document.getElementById("contact-form");
 
-    form.addEventListener("submit", function(e) {
+    const result =
+      document.getElementById("result");
 
-      e.preventDefault();
+    form.addEventListener(
+      "submit",
+      function(e) {
 
-      result.innerText = "送信中...";
+        e.preventDefault();
 
-      emailjs.sendForm(
-        "service_09phqe4",
-        "template_4i1y3vj",
-        this
-      )
-      .then(() => {
+        result.innerText =
+          "送信中...";
 
-        result.innerText = "送信成功しました！";
-        form.reset();
+        // 管理者へ通知メール
+        emailjs.sendForm(
+          "service_09phqe4",
+          "template_4i1y3vj",
+          form
+        )
 
-      })
-      .catch((error) => {
+        .then(() => {
 
-        console.error(error);
-        result.innerText = "送信失敗しました";
+          // 自動返信メール
+          return emailjs.sendForm(
+            "service_09phqe4",
+            "template_xe7xl7e",
+            form
+          );
 
-      });
+        })
 
-    });
+        .then(() => {
+
+          result.innerText =
+            "お問い合わせを受け付けました。";
+
+          form.reset();
+
+        })
+
+        .catch((error) => {
+
+          console.error(error);
+
+          result.innerText =
+            "送信に失敗しました。";
+
+        });
+
+      }
+    );
+
   </script>
 
 </body>
