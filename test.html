@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お問い合わせフォーム</title>
+
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <style>
+    *{
+      box-sizing:border-box;
+    }
+
+    body{
+      margin:0;
+      padding:40px 20px;
+      background:#f5f5f5;
+      font-family:"Yu Gothic", sans-serif;
+    }
+
+    .form-box{
+      max-width:600px;
+      margin:auto;
+      background:white;
+      padding:40px;
+      border-radius:16px;
+      box-shadow:0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    h1{
+      text-align:center;
+      margin-bottom:35px;
+      font-size:32px;
+      letter-spacing:2px;
+    }
+
+    label{
+      display:block;
+      margin-bottom:8px;
+      font-weight:bold;
+    }
+
+    input,
+    textarea{
+      width:100%;
+      padding:14px;
+      margin-bottom:24px;
+      border:1px solid #ccc;
+      border-radius:10px;
+      font-size:16px;
+      background:#fff;
+    }
+
+    textarea{
+      min-height:180px;
+      resize:vertical;
+    }
+
+    button{
+      width:100%;
+      padding:16px;
+      border:none;
+      border-radius:10px;
+      background:#222;
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+      transition:0.2s;
+    }
+
+    button:hover{
+      opacity:0.9;
+    }
+
+    #result{
+      margin-top:20px;
+      text-align:center;
+      font-weight:bold;
+    }
+
+    @media(max-width:600px){
+      .form-box{
+        padding:25px;
+      }
+
+      h1{
+        font-size:26px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-box">
+
+    <h1>お問い合わせ</h1>
+
+    <form id="contact-form">
+
+      <label>お名前</label>
+      <input type="text" name="name" required>
+
+      <label>メールアドレス</label>
+      <input type="email" name="email" required>
+
+      <label>お問い合わせ内容</label>
+      <textarea name="message" required></textarea>
+
+      <button type="submit">送信する</button>
+
+    </form>
+
+    <p id="result"></p>
+
+  </div>
+
+  <script>
+    // EmailJS 初期化
+    emailjs.init("FL19fjwr013lEjI6X");
+
+    const form = document.getElementById("contact-form");
+    const result = document.getElementById("result");
+
+    form.addEventListener("submit", function(e) {
+
+      e.preventDefault();
+
+      result.innerText = "送信中...";
+
+      emailjs.sendForm(
+        "service_09phqe4",
+        "template_4i1y3vj",
+        this
+      )
+      .then(() => {
+
+        result.innerText = "送信成功しました！";
+        form.reset();
+
+      })
+      .catch((error) => {
+
+        console.error(error);
+        result.innerText = "送信失敗しました";
+
+      });
+
+    });
+  </script>
+
+</body>
+</html>
