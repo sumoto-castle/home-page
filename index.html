@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>洲本城 | 淡路島の名城 - 公式観光サイト</title>
+<meta name="description" content="淡路島に聳える洲本城。1526年築城の歴史ある山城で、日本最古の模擬天守が残ります。">
+<meta property="og:title" content="洲本城 | 淡路島の名城">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0a0e1a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+/* ══ RESET & TOKENS ══ */
+:root{
+  --sumi:#0a0e1a;--ai:#1a2744;--kin:#c9a84c;--kinL:#e0c170;
+  --washi:#f5f0e8;--gin:#8899aa;--gL:rgba(255,255,255,.06);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--sumi);color:var(--washi);font-family:'Noto Sans JP',sans-serif;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--sumi)}::-webkit-scrollbar-thumb{background:var(--kin);border-radius:2px}
+
+/* ── SITE-ICO（絵文字→画像 対応）── */
+/* adminから各アイコン画像URLを設定すると自動反映される */
+.site-ico{display:inline-block;vertical-align:middle;object-fit:contain}
+.site-ico-fallback{display:inline-block;vertical-align:middle}/* 画像未設定時の絵文字 */
+
+/* ══ LOADER ══ */
+#ld{
+  position:fixed;inset:0;z-index:9999;background:var(--sumi);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:20px;transition:opacity .8s
+}
+#ld.out{opacity:0;pointer-events:none}
+/* ローディング画像（adminで設定） */
+#ld-img-wrap{width:120px;height:120px;position:relative;display:flex;align-items:center;justify-content:center}
+#ld-img{width:100%;height:100%;object-fit:contain;animation:pulse 1.5s infinite}
+#ld-img-fallback{
+  font-size:80px;animation:pulse 1.5s infinite;
+  /* 画像未設定時にCSS城シルエットを表示 */
+}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+.ld-t{font-family:'Shippori Mincho',serif;color:var(--kin);font-size:14px;letter-spacing:.4em}
+.ld-b{width:100px;height:1px;background:rgba(201,168,76,.2);position:relative;overflow:hidden}
+.ld-b::after{content:'';position:absolute;left:-100%;top:0;width:100%;height:100%;background:var(--kin);animation:lda 1.5s infinite}
+@keyframes lda{to{left:100%}}
+
+/* ══ WEATHER BAR ══ */
+#wb{
+  position:fixed;top:0;left:0;right:0;z-index:1100;height:48px;
+  background:rgba(10,14,26,.94);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(201,168,76,.18);
+  display:flex;align-items:center;padding:0 16px;
+}
+.wb-loc{font-size:10px;letter-spacing:.2em;color:var(--kin);padding-right:12px;border-right:1px solid rgba(201,168,76,.2);white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:6px}
+.wb-days{display:flex;flex:1;padding-left:12px;overflow:hidden}
+.wb-day{display:flex;align-items:center;gap:8px;padding-right:14px;margin-right:14px;border-right:1px solid rgba(255,255,255,.06);flex-shrink:0}
+.wb-day:last-child{border-right:none}
+.wb-lbl{font-size:10px;color:var(--gin);min-width:22px}
+.wb-ico{font-size:16px;line-height:1;width:20px;text-align:center}
+.wb-tmp{font-size:13px;font-family:'Shippori Mincho',serif;white-space:nowrap}
+.wb-rain{font-size:10px;color:#7ab3d4;white-space:nowrap}
+.wb-adm{margin-left:auto;font-size:10px;color:rgba(136,153,170,.3);text-decoration:none;letter-spacing:.12em;flex-shrink:0;transition:color .3s}
+.wb-adm:hover{color:var(--kin)}
+
+/* ══ BREAKING BAR ══ */
+#bnbar{position:fixed;left:0;right:0;z-index:1050;top:48px;height:34px;display:none;align-items:center;overflow:hidden;}
+.bn-lbl{padding:0 14px;white-space:nowrap;font-size:10px;font-weight:700;letter-spacing:.2em;height:100%;display:flex;align-items:center;background:rgba(0,0,0,.3);flex-shrink:0;color:#fff}
+.bn-trk{flex:1;overflow:hidden}
+.bn-txt{display:inline-block;white-space:nowrap;font-size:12px;letter-spacing:.08em;animation:mq 30s linear infinite}
+@keyframes mq{from{transform:translateX(100vw)}to{transform:translateX(-100%)}}
+
+/* ══ HEADER ══ */
+#hdr{position:fixed;left:0;right:0;z-index:900;padding:0 20px;transition:background .5s,box-shadow .5s;}
+#hdr.scrolled{background:rgba(10,14,26,.93);backdrop-filter:blur(20px);box-shadow:0 1px 0 rgba(201,168,76,.2)}
+.hdr-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{text-decoration:none;display:flex;flex-direction:column;line-height:1;opacity:0;transition:opacity .4s;pointer-events:none;cursor:pointer}
+.logo.visible{opacity:1;pointer-events:all}
+.logo-jp{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:600;color:var(--kin);letter-spacing:.2em}
+.logo-en{font-size:8px;letter-spacing:.28em;color:var(--gin);margin-top:2px}
+.nav-lnks{display:flex;gap:18px;list-style:none}
+.nav-lnks a{font-size:11px;letter-spacing:.1em;color:rgba(245,240,232,.75);text-decoration:none;position:relative;transition:color .3s;cursor:pointer}
+.nav-lnks a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--kin);transform:scaleX(0);transition:transform .3s}
+.nav-lnks a:hover{color:var(--kin)}.nav-lnks a:hover::after{transform:scaleX(1)}
+#ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;background:none;border:none}
+#ham span{display:block;width:22px;height:1px;background:var(--washi);transition:all .3s}
+#ham.open span:nth-child(1){transform:rotate(45deg) translate(4px,4px)}
+#ham.open span:nth-child(2){opacity:0}
+#ham.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px)}
+
+/* ══ MOBILE MENU ══ */
+#mmenu{position:fixed;inset:0;background:rgba(10,14,26,.97);backdrop-filter:blur(20px);z-index:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;opacity:0;pointer-events:none;transition:opacity .4s;}
+#mmenu.open{opacity:1;pointer-events:all}
+#mmenu a{font-family:'Shippori Mincho',serif;font-size:22px;color:var(--washi);text-decoration:none;letter-spacing:.2em;transition:color .3s;cursor:pointer}
+#mmenu a:hover{color:var(--kin)}
+
+/* ══ SPA VIEW SYSTEM ══ */
+.spa-view{display:none;min-height:100vh;padding-top:82px}
+.spa-view.active{display:block}
+#view-home{padding-top:0}
+
+/* ══ HERO ══ */
+#hero{position:relative;height:100svh;min-height:580px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.h-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.4s ease}
+.h-slide.active{opacity:1}
+.h-fall{position:absolute;inset:0;background:linear-gradient(160deg,#0a0e1a 0%,#1a2744 40%,#0d1829 100%)}
+.h-stars{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(1px 1px at 15% 20%,rgba(201,168,76,.6) 0%,transparent 100%),radial-gradient(1px 1px at 85% 10%,rgba(255,255,255,.4) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 70% 30%,rgba(201,168,76,.4) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 55% 70%,rgba(201,168,76,.3) 0%,transparent 100%)}
+.h-ov{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,14,26,.5) 0%,rgba(10,14,26,.15) 45%,rgba(10,14,26,.8) 100%)}
+.castle-svg{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:min(640px,95vw);opacity:.13;pointer-events:none}
+.h-dots{position:absolute;bottom:68px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10}
+.h-dot{width:20px;height:2px;background:rgba(255,255,255,.3);cursor:pointer;transition:all .3s}.h-dot.active{background:var(--kin);width:32px}
+.h-cnt{position:relative;z-index:10;text-align:center;padding:0 20px;max-width:680px;width:100%}
+.h-badge{display:inline-block;border:1px solid rgba(201,168,76,.5);padding:5px 16px;font-size:9px;letter-spacing:.4em;color:var(--kin);margin-bottom:20px;animation:fiU 1s ease both}
+.h-ttl{font-family:'Shippori Mincho',serif;font-size:clamp(42px,10vw,86px);font-weight:600;line-height:1.1;letter-spacing:.15em;color:#fff;text-shadow:0 0 60px rgba(201,168,76,.3);animation:fiU 1s .2s ease both}
+.h-ttl span{color:var(--kin)}
+.h-sub{margin-top:14px;font-size:clamp(11px,2.2vw,14px);letter-spacing:.16em;color:rgba(245,240,232,.65);font-weight:300;animation:fiU 1s .4s ease both}
+.h-en{margin-top:6px;font-size:9px;letter-spacing:.4em;color:rgba(201,168,76,.45);animation:fiU 1s .5s ease both}
+.h-div{width:44px;height:1px;background:linear-gradient(to right,transparent,var(--kin),transparent);margin:18px auto;animation:scX 1s .6s ease both}
+.h-desc{font-size:clamp(11px,1.8vw,13px);line-height:1.9;color:rgba(245,240,232,.6);max-width:400px;margin:0 auto;animation:fiU 1s .7s ease both}
+.h-cta{margin-top:26px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;animation:fiU 1s .9s ease both}
+.btn-p{padding:11px 26px;background:var(--kin);color:var(--sumi);font-size:11px;letter-spacing:.16em;font-weight:600;cursor:pointer;border:none;transition:all .3s;text-decoration:none;display:inline-block;font-family:inherit}
+.btn-p:hover{background:var(--kinL);transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,168,76,.3)}
+.btn-o{padding:11px 26px;border:1px solid rgba(201,168,76,.5);color:var(--kin);font-size:11px;letter-spacing:.16em;cursor:pointer;background:transparent;transition:all .3s;text-decoration:none;display:inline-block;font-family:inherit}
+.btn-o:hover{border-color:var(--kin);background:rgba(201,168,76,.08);transform:translateY(-2px)}
+.scroll-ind{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;animation:fi 1s 1.5s ease both;z-index:10}
+.scroll-ind span{font-size:8px;letter-spacing:.38em;color:rgba(201,168,76,.6)}
+.scroll-ln{width:1px;height:34px;background:linear-gradient(to bottom,var(--kin),transparent);animation:sp 2s infinite}
+@keyframes sp{0%,100%{opacity:.3;transform:scaleY(.5);transform-origin:top}50%{opacity:1;transform:scaleY(1)}}
+
+/* ══ SECTION COMMONS ══ */
+.sec{padding:72px 20px;max-width:1200px;margin:0 auto}
+.sl{font-size:9px;letter-spacing:.48em;color:var(--kin);margin-bottom:12px;display:block}
+.st{font-family:'Shippori Mincho',serif;font-size:clamp(22px,4vw,38px);font-weight:500;letter-spacing:.1em;line-height:1.3}
+.sd{width:38px;height:1px;background:linear-gradient(to right,var(--kin),transparent);margin:14px 0}
+.more-btn{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.18em;color:var(--kin);text-decoration:none;border-bottom:1px solid rgba(201,168,76,.3);padding-bottom:2px;transition:all .3s;margin-top:28px;cursor:pointer;background:none;border-left:none;border-right:none;border-top:none;font-family:inherit}
+.more-btn:hover{border-bottom-color:var(--kin);gap:12px}
+.more-btn::after{content:'→'}
+.block-slot{width:100%}.block-slot:empty{display:none}
+
+/* ══ ICON IMAGE WRAPPER ══ */
+/* adminで各種アイコン画像URLを設定することで絵文字から画像に切り替わる */
+.ico-wrap{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.ico-img{width:100%;height:100%;object-fit:contain}
+/* サイズバリアント */
+.ico-sm{width:20px;height:20px}
+.ico-md{width:32px;height:32px}
+.ico-lg{width:48px;height:48px}
+.ico-xl{width:64px;height:64px}
+
+/* ══ ARTICLE GRID ══ */
+.art-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin-top:36px}
+.art-card{background:var(--gL);border:1px solid rgba(201,168,76,.1);overflow:hidden;cursor:pointer;transition:all .4s;opacity:0;transform:translateY(18px)}
+.art-card.visible{opacity:1;transform:translateY(0)}
+.art-card:hover{border-color:rgba(201,168,76,.3);transform:translateY(-5px);box-shadow:0 14px 40px rgba(0,0,0,.4)}
+.art-thumb{width:100%;height:165px;overflow:hidden;background:linear-gradient(135deg,#1a2744,#0d1829);display:flex;align-items:center;justify-content:center;}
+.art-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.art-card:hover .art-thumb img{transform:scale(1.05)}
+.art-thumb-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
+.art-thumb-placeholder img{width:64px;height:64px;object-fit:contain;opacity:.4}
+.art-body{padding:18px}
+.art-cat{font-size:9px;letter-spacing:.28em;color:var(--kin);margin-bottom:6px}
+.art-ttl{font-family:'Shippori Mincho',serif;font-size:15px;line-height:1.6;margin-bottom:8px}
+.art-date{font-size:10px;color:var(--gin)}
+.art-more{font-size:9px;color:var(--kin);letter-spacing:.12em;margin-top:8px;display:flex;align-items:center;gap:4px}
+.art-more::after{content:'→'}
+
+/* ══ EVENTS LIST ══ */
+.ev-list{margin-top:36px;display:flex;flex-direction:column;gap:2px}
+.ev-item{display:grid;grid-template-columns:64px 1fr auto;background:var(--gL);border:1px solid rgba(201,168,76,.08);overflow:hidden;transition:all .3s;cursor:pointer;opacity:0;transform:translateX(-10px)}
+.ev-item.visible{opacity:1;transform:translateX(0)}
+.ev-item:hover{border-color:rgba(201,168,76,.28);background:rgba(201,168,76,.04)}
+.ev-dt{background:rgba(201,168,76,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 8px;border-right:1px solid rgba(201,168,76,.1)}
+.ev-mo{font-size:9px;letter-spacing:.08em;color:var(--kin)}
+.ev-day{font-family:'Shippori Mincho',serif;font-size:22px;line-height:1}
+.ev-body{padding:12px 16px}
+.ev-ttl{font-family:'Shippori Mincho',serif;font-size:14px;margin-bottom:4px}
+.ev-desc-short{font-size:11px;color:rgba(245,240,232,.5);line-height:1.6}
+.ev-past-badge{font-size:9px;color:var(--gin);border:1px solid rgba(136,153,170,.2);padding:2px 8px;margin-left:8px;vertical-align:middle}
+.ev-arrow{display:flex;align-items:center;padding:0 14px;color:rgba(201,168,76,.35);font-size:14px;transition:all .3s}
+.ev-item:hover .ev-arrow{color:var(--kin);transform:translateX(3px)}
+
+/* ══ FEATURES ══ */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:2px;margin-top:44px}
+.feat-card{background:var(--gL);border:1px solid rgba(201,168,76,.1);padding:26px 20px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;cursor:pointer}
+.feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--kin),transparent);transform:scaleX(0);transition:transform .5s}
+.feat-card:hover{border-color:rgba(201,168,76,.3);transform:translateY(-4px)}.feat-card:hover::before{transform:scaleX(1)}
+.feat-num{font-family:'Shippori Mincho',serif;font-size:38px;color:rgba(201,168,76,.1);line-height:1;margin-bottom:8px}
+.feat-ico-wrap{width:48px;height:48px;margin-bottom:10px;display:flex;align-items:center;justify-content:center}
+.feat-ico-wrap img{width:100%;height:100%;object-fit:contain}
+.feat-ttl{font-family:'Shippori Mincho',serif;font-size:16px;color:var(--kin);margin-bottom:8px;letter-spacing:.08em}
+.feat-txt{font-size:12px;line-height:1.9;color:rgba(245,240,232,.6)}
+.feat-more{margin-top:8px;font-size:9px;color:var(--kin);letter-spacing:.16em;display:flex;align-items:center;gap:4px}
+.feat-more::after{content:'→'}
+
+/* ══ TIMELINE ══ */
+.timeline{margin-top:44px;position:relative}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--kin),transparent)}
+.tl-item{padding:0 0 32px 26px;position:relative;opacity:0;transform:translateX(-14px);transition:all .6s}
+.tl-item.visible{opacity:1;transform:translateX(0)}
+.tl-dot{position:absolute;left:-4px;top:4px;width:9px;height:9px;background:var(--kin);border-radius:50%;box-shadow:0 0 10px rgba(201,168,76,.5)}
+.tl-era{display:inline-block;font-size:8px;letter-spacing:.18em;color:var(--gin);border:1px solid rgba(136,153,170,.2);padding:2px 8px;margin-bottom:6px}
+.tl-year{font-family:'Shippori Mincho',serif;font-size:12px;color:var(--kin);letter-spacing:.16em;margin-bottom:4px}
+.tl-ttl{font-family:'Shippori Mincho',serif;font-size:17px;margin-bottom:6px}
+.tl-txt{font-size:12px;line-height:1.9;color:rgba(245,240,232,.6)}
+.tl-detail{font-size:12px;line-height:1.9;color:rgba(245,240,232,.5);margin-top:6px;padding-top:6px;border-top:1px solid rgba(201,168,76,.08)}
+
+/* ══ HOME MAP TEASER ══ */
+.map-teaser-box{
+  position:relative;margin-top:20px;
+  border:1px solid rgba(201,168,76,.2);overflow:hidden;cursor:pointer;
+  transition:border-color .3s;
+}
+.map-teaser-box:hover{border-color:rgba(201,168,76,.5)}
+/* ホーム地図画像（adminで設定） */
+#home-map-img{
+  width:100%;height:auto;max-height:360px;object-fit:cover;
+  background:linear-gradient(160deg,#0f1f3d,#0a0e1a);
+  display:block;transition:transform .5s;
+}
+.map-teaser-box:hover #home-map-img{transform:scale(1.02)}
+#home-map-placeholder{
+  width:100%;height:280px;
+  background:linear-gradient(160deg,#0f1f3d,#0a0e1a);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:12px;
+}
+#home-map-placeholder .map-ph-img{width:80px;height:80px;object-fit:contain;opacity:.4}
+.map-teaser-ov{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(10,14,26,.1),rgba(10,14,26,.65));
+  display:flex;align-items:flex-end;padding:24px;
+  transition:background .3s;
+}
+.map-teaser-box:hover .map-teaser-ov{background:linear-gradient(to bottom,rgba(10,14,26,.05),rgba(10,14,26,.75))}
+.map-teaser-inner{width:100%}
+.map-teaser-ttl{font-family:'Shippori Mincho',serif;font-size:20px;color:var(--washi);letter-spacing:.14em;margin-bottom:4px}
+.map-teaser-sub{font-size:11px;color:rgba(245,240,232,.6);letter-spacing:.1em;margin-bottom:12px}
+.map-teaser-cta{display:inline-flex;align-items:center;gap:8px;padding:9px 20px;background:var(--kin);color:var(--sumi);font-size:11px;letter-spacing:.16em;font-weight:600;transition:background .3s}
+.map-teaser-box:hover .map-teaser-cta{background:var(--kinL)}
+
+/* ══ MAP DETAIL PAGE ══ */
+.map-detail-container{
+  position:relative;max-width:960px;margin:24px auto 0;
+  user-select:none;
+}
+/* 地図画像 */
+#map-detail-img-wrap{position:relative;width:100%;overflow:hidden;border:1px solid rgba(201,168,76,.15);}
+#map-detail-img{width:100%;height:auto;display:block;}
+#map-detail-placeholder{width:100%;min-height:400px;background:linear-gradient(160deg,#0f1f3d,#0a0e1a);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+#map-detail-placeholder .ph-img{width:100px;height:100px;object-fit:contain;opacity:.3}
+#map-detail-placeholder .ph-txt{font-family:'Shippori Mincho',serif;font-size:14px;color:rgba(201,168,76,.4);letter-spacing:.2em}
+/* 番号マーカー（SVG overlay） */
+#map-markers-layer{position:absolute;inset:0;pointer-events:none;}
+.map-marker{
+  position:absolute;transform:translate(-50%,-50%);
+  pointer-events:all;cursor:pointer;z-index:5;transition:transform .2s;
+}
+.map-marker:hover{transform:translate(-50%,-50%) scale(1.2)}
+.map-marker-pin{
+  width:30px;height:30px;background:var(--kin);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:var(--sumi);
+  border:2px solid rgba(255,255,255,.4);
+  box-shadow:0 3px 10px rgba(0,0,0,.5);
+  transition:background .2s;
+}
+.map-marker:hover .map-marker-pin{background:var(--kinL)}
+.map-marker.active .map-marker-pin{background:#fff;color:var(--sumi);border-color:var(--kin);}
+
+/* ══ MAP POPUP ══ */
+#map-popup{
+  position:fixed;z-index:2000;
+  background:linear-gradient(160deg,#0f1729,#0a0e1a);
+  border:1px solid rgba(201,168,76,.35);
+  width:min(360px,calc(100vw - 32px));
+  box-shadow:0 16px 48px rgba(0,0,0,.7);
+  opacity:0;pointer-events:none;
+  transition:opacity .25s,transform .25s;
+  transform:scale(.94);
+  max-height:80vh;overflow-y:auto;
+}
+#map-popup.show{opacity:1;pointer-events:all;transform:scale(1)}
+.mp-img-wrap{width:100%;height:160px;overflow:hidden;background:linear-gradient(135deg,#1a2744,#0d1829);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mp-img-wrap img{width:100%;height:100%;object-fit:cover}
+.mp-img-placeholder{display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+.mp-img-placeholder img{width:56px;height:56px;object-fit:contain;opacity:.35}
+.mp-body{padding:16px}
+.mp-num{font-size:9px;letter-spacing:.2em;color:var(--kin);margin-bottom:5px}
+.mp-name{font-family:'Shippori Mincho',serif;font-size:17px;margin-bottom:10px}
+.mp-hr{height:1px;background:rgba(201,168,76,.12);margin-bottom:10px}
+.mp-desc{font-size:12px;line-height:1.85;color:rgba(245,240,232,.78)}
+.mp-meta{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px}
+.mp-meta-item{font-size:10px;color:var(--gin);display:flex;align-items:center;gap:5px}
+.mp-meta-item img{width:14px;height:14px;object-fit:contain;opacity:.6}
+.mp-close{
+  position:absolute;top:8px;right:8px;
+  background:rgba(0,0,0,.5);border:1px solid rgba(201,168,76,.2);
+  color:var(--washi);width:28px;height:28px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:13px;transition:all .3s;
+}
+.mp-close:hover{border-color:var(--kin);color:var(--kin)}
+
+/* スポットリスト（地図ページ下） */
+.spot-list-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:20px}
+.spot-list-item{
+  background:var(--gL);border:1px solid rgba(201,168,76,.1);
+  padding:12px 14px;cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;gap:10px;
+}
+.spot-list-item:hover,.spot-list-item.active{border-color:rgba(201,168,76,.4);background:rgba(201,168,76,.06)}
+.spot-list-num{width:26px;height:26px;background:var(--kin);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--sumi);flex-shrink:0}
+.spot-list-name{font-size:12px;letter-spacing:.06em}
+
+/* ══ INFO BOXES ══ */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:2px;margin-top:40px}
+.info-box{background:var(--gL);border:1px solid rgba(201,168,76,.1);padding:20px;text-align:center}
+.info-box-lbl{font-size:8px;letter-spacing:.26em;color:var(--kin);margin-bottom:8px}
+.info-box-val{font-family:'Shippori Mincho',serif;font-size:17px;margin-bottom:3px}
+.info-box-sub{font-size:10px;color:var(--gin)}
+
+/* ══ ABOUT DETAIL ══ */
+.about-section{padding:48px 0;border-bottom:1px solid rgba(201,168,76,.08)}
+.about-section:last-child{border-bottom:none}
+.about-section-inner{max-width:880px;margin:0 auto;padding:0 20px}
+.about-img-wrap{width:100%;aspect-ratio:16/9;overflow:hidden;margin:20px 0;border:1px solid rgba(201,168,76,.1);background:linear-gradient(135deg,#1a2744,#0d1829);display:flex;align-items:center;justify-content:center;}
+.about-img-wrap img.main-img{width:100%;height:100%;object-fit:cover}
+.about-img-wrap .ph-img{width:80px;height:80px;object-fit:contain;opacity:.3}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-top:16px}
+.gallery-img{aspect-ratio:4/3;object-fit:cover;cursor:pointer;border:1px solid rgba(201,168,76,.1);transition:all .3s;width:100%}
+.gallery-img:hover{border-color:rgba(201,168,76,.4);transform:scale(1.02)}
+
+/* ══ TOURISM ══ */
+.tourism-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:32px}
+.tourism-card{background:var(--gL);border:1px solid rgba(201,168,76,.1);overflow:hidden;transition:all .3s}
+.tourism-card:hover{border-color:rgba(201,168,76,.3);transform:translateY(-3px)}
+.tc-img{width:100%;height:140px;overflow:hidden;background:linear-gradient(135deg,#1a2744,#0d1829);display:flex;align-items:center;justify-content:center;}
+.tc-img img.tc-photo{width:100%;height:100%;object-fit:cover}
+.tc-img .tc-ph{width:48px;height:48px;object-fit:contain;opacity:.3}
+.tc-body{padding:16px}
+.tc-cat{font-size:9px;letter-spacing:.25em;color:var(--kin);margin-bottom:6px}
+.tc-name{font-family:'Shippori Mincho',serif;font-size:15px;margin-bottom:6px}
+.tc-desc{font-size:11px;line-height:1.7;color:rgba(245,240,232,.6)}
+.tc-meta{font-size:10px;color:var(--gin);margin-top:8px}
+
+/* ══ GUIDE PAGE ══ */
+.guide-info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2px;margin-top:28px}
+.guide-info-item{background:var(--gL);border:1px solid rgba(201,168,76,.08);padding:20px}
+.guide-info-lbl{font-size:9px;letter-spacing:.22em;color:var(--kin);margin-bottom:8px}
+.guide-info-val{font-size:13px;line-height:1.8;color:rgba(245,240,232,.8)}
+.guide-flow{margin-top:32px}
+.guide-flow-item{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid rgba(201,168,76,.08)}
+.guide-flow-num{font-family:'Shippori Mincho',serif;font-size:28px;color:rgba(201,168,76,.3);flex-shrink:0;width:36px;text-align:right}
+.guide-flow-body{flex:1}
+.guide-flow-ttl{font-family:'Shippori Mincho',serif;font-size:15px;color:var(--kin);margin-bottom:4px}
+.guide-flow-txt{font-size:12px;line-height:1.8;color:rgba(245,240,232,.65)}
+
+/* ガイド・広告専用フォーム */
+.special-form-box{background:linear-gradient(135deg,rgba(26,39,68,.5),rgba(10,14,26,.5));border:1px solid rgba(201,168,76,.2);padding:32px;margin-top:28px}
+.special-form-ttl{font-family:'Shippori Mincho',serif;font-size:18px;color:var(--kin);margin-bottom:6px;letter-spacing:.1em}
+.special-form-sub{font-size:12px;color:rgba(245,240,232,.55);margin-bottom:22px;line-height:1.8}
+
+/* ══ ADVERTISE ══ */
+.adv-plan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px;margin-top:32px}
+.adv-plan{background:var(--gL);border:1px solid rgba(201,168,76,.12);padding:28px 22px;position:relative;overflow:hidden}
+.adv-plan.recommended{border-color:rgba(201,168,76,.4)}
+.adv-plan.recommended::before{content:'おすすめ';position:absolute;top:12px;right:12px;font-size:9px;letter-spacing:.18em;color:var(--sumi);background:var(--kin);padding:2px 10px}
+.adv-plan-name{font-family:'Shippori Mincho',serif;font-size:18px;color:var(--kin);margin-bottom:8px}
+.adv-plan-price{font-family:'Shippori Mincho',serif;font-size:28px;color:var(--washi);margin-bottom:4px}
+.adv-plan-period{font-size:10px;color:var(--gin);margin-bottom:16px}
+.adv-plan-features{list-style:none}
+.adv-plan-features li{font-size:12px;color:rgba(245,240,232,.7);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:8px}
+.adv-plan-features li::before{content:'✓';color:var(--kin);flex-shrink:0}
+
+/* ══ ACCESS ══ */
+.ac-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:36px}
+.ac-item{background:var(--gL);border:1px solid rgba(201,168,76,.1);padding:22px}
+.ac-meth{font-size:9px;letter-spacing:.22em;color:var(--kin);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.ac-meth img{width:16px;height:16px;object-fit:contain;opacity:.7}
+.ac-det{font-size:13px;line-height:1.9;color:rgba(245,240,232,.75)}
+.ac-note{font-size:10px;color:var(--gin);margin-top:4px}
+
+/* ══ CONTACT ══ */
+.cf-wrap{max-width:540px;margin:36px auto 0}
+.cf-fld{margin-bottom:16px}
+.cf-lbl{font-size:9px;letter-spacing:.2em;color:var(--kin);display:block;margin-bottom:6px}
+.cf-lbl .req{color:#f08080;margin-left:4px;font-size:8px}
+.cf-input,.cf-ta,.cf-sel{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.2);padding:11px 13px;color:var(--washi);font-size:13px;font-family:inherit;transition:border-color .3s;outline:none}
+.cf-input:focus,.cf-ta:focus,.cf-sel:focus{border-color:var(--kin)}
+.cf-sel{background:rgba(10,14,26,.8)}.cf-ta{height:120px;resize:vertical}
+.cf-rg,.cf-cg{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.cf-ri,.cf-ci{display:flex;align-items:center;gap:7px;cursor:pointer}
+.cf-ri input,.cf-ci input{accent-color:var(--kin);width:15px;height:15px;cursor:pointer}
+.cf-ri label,.cf-ci label{font-size:12px;cursor:pointer;color:rgba(245,240,232,.8)}
+.cf-sub{width:100%;padding:13px;background:var(--kin);color:var(--sumi);font-size:12px;letter-spacing:.22em;font-weight:600;cursor:pointer;border:none;transition:all .3s;font-family:inherit}
+.cf-sub:hover{background:var(--kinL)}.cf-sub:disabled{opacity:.5;cursor:not-allowed}
+.cf-ok{text-align:center;padding:32px;border:1px solid rgba(201,168,76,.3);display:none}
+
+/* ══ AD BANNERS ══ */
+.ad-wrap{max-width:1200px;margin:0 auto;padding:36px 20px}
+.ad-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ad-banner{position:relative;aspect-ratio:16/9;overflow:hidden;border:1px solid rgba(201,168,76,.1);transition:border-color .3s}
+.ad-banner:hover{border-color:rgba(201,168,76,.3)}
+.ad-banner a,.ad-banner-link{display:block;width:100%;height:100%;text-decoration:none;cursor:pointer}
+.ad-banner img.ad-photo{width:100%;height:100%;object-fit:cover}
+.ad-ph{width:100%;height:100%;background:linear-gradient(135deg,rgba(26,39,68,.8),rgba(10,14,26,.8));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;transition:background .3s}
+.ad-ph:hover{background:linear-gradient(135deg,rgba(26,39,68,.9),rgba(10,14,26,.9))}
+.ad-ph img.ad-ph-ico{width:40px;height:40px;object-fit:contain;opacity:.6}
+.ad-ph-ttl{font-family:'Shippori Mincho',serif;font-size:15px;color:var(--kin);letter-spacing:.14em}
+.ad-ph-sub{font-size:10px;color:var(--gin);letter-spacing:.12em}
+.ad-lbl{position:absolute;top:5px;left:5px;font-size:8px;color:rgba(136,153,170,.4);letter-spacing:.14em;background:rgba(10,14,26,.6);padding:2px 6px}
+
+/* ══ GUIDE BOX ══ */
+.guide-box{background:linear-gradient(135deg,rgba(26,39,68,.6),rgba(10,14,26,.6));border:1px solid rgba(201,168,76,.2);padding:32px;margin-top:32px}
+.guide-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:20px 0}
+.guide-item{display:flex;gap:10px}
+.guide-ico-wrap{width:24px;height:24px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center}
+.guide-ico-wrap img{width:100%;height:100%;object-fit:contain}
+.guide-txt{font-size:12px;line-height:1.8;color:rgba(245,240,232,.75)}
+.guide-label{font-size:9px;letter-spacing:.18em;color:var(--kin);margin-bottom:3px}
+
+/* ══ PAGE HEADER ══ */
+.page-hero{width:100%;height:200px;background:linear-gradient(160deg,#0f1f3d,#0a0e1a);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border-bottom:1px solid rgba(201,168,76,.1)}
+.page-hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(1.5px 1.5px at 20% 30%,rgba(201,168,76,.4) 0%,transparent 100%),radial-gradient(1px 1px at 80% 20%,rgba(255,255,255,.3) 0%,transparent 100%)}
+.page-hero-content{position:relative;z-index:1;text-align:center;padding:0 20px}
+.page-hero-title{font-family:'Shippori Mincho',serif;font-size:clamp(26px,5vw,42px);font-weight:600;color:var(--washi);letter-spacing:.15em;margin-bottom:6px}
+.page-hero-sub{font-size:10px;letter-spacing:.35em;color:rgba(201,168,76,.6)}
+
+/* ══ BLOCK TYPES ══ */
+.blk-ann{padding:16px 20px;border-left:4px solid var(--kin);background:rgba(201,168,76,.07);display:flex;align-items:flex-start;gap:12px}
+.blk-ann-ico-wrap{width:28px;height:28px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center}
+.blk-ann-ico-wrap img{width:100%;height:100%;object-fit:contain}
+.blk-ann-body{flex:1}
+.blk-ann-title{font-family:'Shippori Mincho',serif;font-size:15px;color:var(--kin);margin-bottom:4px}
+.blk-ann-text{font-size:12px;line-height:1.9;color:rgba(245,240,232,.8)}
+.blk-ann-link{display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:10px;color:var(--kin);text-decoration:none;border-bottom:1px solid rgba(201,168,76,.3);transition:border-color .3s}
+.blk-ann-link:hover{border-color:var(--kin)}
+.blk-img-art{display:grid;grid-template-columns:1fr 1fr;overflow:hidden;border:1px solid rgba(201,168,76,.1);margin:0 20px}
+.blk-img-art.full{grid-template-columns:1fr}
+.blk-img-art-img{width:100%;aspect-ratio:16/9;overflow:hidden;background:linear-gradient(135deg,#1a2744,#0d1829);display:flex;align-items:center;justify-content:center;}
+.blk-img-art-img img{width:100%;height:100%;object-fit:cover}
+.blk-img-art-img .ph-img{width:60px;height:60px;object-fit:contain;opacity:.3}
+.blk-img-art-body{padding:24px}
+.blk-img-art-cat{font-size:9px;letter-spacing:.26em;color:var(--kin);margin-bottom:6px}
+.blk-img-art-ttl{font-family:'Shippori Mincho',serif;font-size:17px;line-height:1.5;margin-bottom:10px}
+.blk-img-art-txt{font-size:12px;line-height:1.9;color:rgba(245,240,232,.7)}
+.blk-img-art-link{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:8px 16px;border:1px solid rgba(201,168,76,.4);color:var(--kin);font-size:10px;letter-spacing:.16em;text-decoration:none;transition:all .3s}
+.blk-img-art-link:hover{background:rgba(201,168,76,.08)}
+.blk-cd{text-align:center;padding:36px 20px;background:linear-gradient(135deg,rgba(26,39,68,.5),rgba(10,14,26,.5));border:1px solid rgba(201,168,76,.15)}
+.blk-cd-title{font-family:'Shippori Mincho',serif;font-size:17px;color:var(--kin);margin-bottom:4px}
+.blk-cd-sub{font-size:10px;color:var(--gin);margin-bottom:20px}
+.blk-cd-nums{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;align-items:center}
+.blk-cd-unit{text-align:center;min-width:56px}
+.blk-cd-n{font-family:'Shippori Mincho',serif;font-size:38px;color:var(--washi);line-height:1;display:block}
+.blk-cd-l{font-size:9px;color:var(--gin);letter-spacing:.16em;margin-top:3px}
+.blk-cd-sep{font-family:'Shippori Mincho',serif;font-size:32px;color:rgba(201,168,76,.4);padding-bottom:6px}
+.blk-html{width:100%}
+.blk-ad{text-align:center;padding:12px 20px;position:relative;background:rgba(255,255,255,.015);border-top:1px solid rgba(201,168,76,.07);border-bottom:1px solid rgba(201,168,76,.07)}
+.blk-ad-lbl{position:absolute;top:3px;left:12px;font-size:8px;color:rgba(136,153,170,.3);letter-spacing:.16em}
+.blk-form{padding:32px 20px;background:var(--gL);border:1px solid rgba(201,168,76,.1)}
+.blk-form-title{font-family:'Shippori Mincho',serif;font-size:18px;color:var(--kin);margin-bottom:4px;text-align:center}
+.blk-form-sub{font-size:12px;color:rgba(245,240,232,.5);text-align:center;margin-bottom:24px}
+.blk-form-inner{max-width:540px;margin:0 auto}
+.blk-img-mt{cursor:pointer;position:relative;overflow:hidden}
+.blk-img-mt img{width:100%;display:block;transition:transform .5s}
+.blk-img-mt:hover img{transform:scale(1.03)}
+.blk-img-mt-ov{position:absolute;inset:0;background:rgba(10,14,26,.4);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s}
+.blk-img-mt:hover .blk-img-mt-ov{opacity:1}
+.blk-img-mt-ov span{border:1px solid rgba(201,168,76,.6);color:var(--kin);padding:6px 16px;font-size:10px;letter-spacing:.16em}
+.blk-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;padding:4px 0}
+.blk-card-item{background:var(--gL);border:1px solid rgba(201,168,76,.1);padding:20px 16px;transition:all .3s;cursor:pointer}
+.blk-card-item:hover{border-color:rgba(201,168,76,.3);transform:translateY(-3px)}
+.blk-card-ico-wrap{width:36px;height:36px;margin-bottom:10px;display:flex;align-items:center;justify-content:center}
+.blk-card-ico-wrap img{width:100%;height:100%;object-fit:contain}
+.blk-card-ttl{font-family:'Shippori Mincho',serif;font-size:14px;color:var(--kin);margin-bottom:5px}
+.blk-card-txt{font-size:11px;line-height:1.8;color:rgba(245,240,232,.6)}
+
+/* ══ POPUPS ══ */
+#popm{position:fixed;inset:0;z-index:1700;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .4s;overflow-y:auto}
+#popm.show{opacity:1;pointer-events:all}
+.popm-box{background:linear-gradient(135deg,#0f1729,#1a2744);border:1px solid rgba(201,168,76,.3);padding:32px 26px;max-width:440px;width:100%;position:relative;transform:scale(.95);transition:transform .4s;max-height:90vh;overflow-y:auto}
+#popm.show .popm-box{transform:scale(1)}
+.popm-close{position:absolute;top:11px;right:11px;background:none;border:none;color:var(--gin);font-size:19px;cursor:pointer;transition:color .3s}
+.popm-close:hover{color:var(--kin)}
+.popm-img{width:100%;height:170px;object-fit:cover;margin-bottom:16px;border:1px solid rgba(201,168,76,.1);display:none}
+.popm-ttl{font-family:'Shippori Mincho',serif;font-size:18px;color:var(--kin);margin-bottom:10px;letter-spacing:.1em}
+.popm-body{font-size:12px;line-height:2;color:rgba(245,240,232,.75)}
+.popm-body a{color:var(--kin);text-decoration:underline}
+.popm-lnk{display:none;align-items:center;gap:7px;margin-top:13px;padding:8px 16px;border:1px solid rgba(201,168,76,.4);color:var(--kin);font-size:10px;letter-spacing:.16em;text-decoration:none;transition:all .3s}
+.popm-lnk:hover{background:rgba(201,168,76,.08)}
+.popm-nd{margin-top:14px;font-size:10px;color:var(--gin);cursor:pointer;text-decoration:underline}
+#imgm{position:fixed;inset:0;z-index:2100;background:rgba(0,0,0,.93);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+#imgm.show{opacity:1;pointer-events:all}
+.imgm-close{position:absolute;top:14px;right:14px;background:none;border:1px solid rgba(255,255,255,.2);color:#fff;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;transition:all .3s}
+.imgm-close:hover{border-color:var(--kin);color:var(--kin)}
+.imgm-img{max-width:90vw;max-height:85vh;object-fit:contain}
+.imgm-cap{position:absolute;bottom:18px;left:0;right:0;text-align:center;font-size:11px;color:rgba(255,255,255,.6);letter-spacing:.1em}
+
+/* ══ FOOTER ══ */
+footer{border-top:1px solid rgba(201,168,76,.1);padding:44px 20px 28px;text-align:center}
+.ft-logo{font-family:'Shippori Mincho',serif;font-size:22px;color:var(--kin);letter-spacing:.28em;margin-bottom:5px}
+.ft-en{font-size:9px;letter-spacing:.32em;color:var(--gin)}
+.ft-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin:22px 0;list-style:none}
+.ft-nav button{font-size:10px;letter-spacing:.16em;color:var(--gin);transition:color .3s;cursor:pointer;background:none;border:none;font-family:inherit}
+.ft-nav button:hover{color:var(--kin)}
+.ft-copy{font-size:9px;color:rgba(136,153,170,.4);letter-spacing:.16em}
+
+/* ══ ANIMATIONS ══ */
+@keyframes fiU{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@keyframes scX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.reveal{opacity:0;transform:translateY(22px);transition:all .65s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:768px){
+  .nav-lnks{display:none}#ham{display:flex}
+  .ac-grid,.guide-grid{grid-template-columns:1fr}
+  .art-grid{grid-template-columns:1fr}
+  .blk-img-art{grid-template-columns:1fr;margin:0}
+  .ad-grid{grid-template-columns:1fr}
+  .wb-day:nth-child(n+3){display:none}
+  .feat-grid{grid-template-columns:1fr 1fr}
+  .h-cta .btn-p,.h-cta .btn-o{padding:10px 18px;font-size:10px}
+  .map-detail-container{padding:0}
+  #map-popup{width:calc(100vw - 24px)}
+  .ev-item{grid-template-columns:56px 1fr auto}
+}
+@media(max-width:480px){
+  .wb-loc{display:none}.wb-days{padding-left:6px}
+  .wb-day:nth-child(n+2){display:none}
+  .feat-grid,.info-grid,.adv-plan-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="ld">
+  <div id="ld-img-wrap">
+    <!-- adminで設定したローディング画像 or フォールバック -->
+    <img id="ld-img" src="" alt="洲本城" style="display:none;">
+    <div id="ld-img-fallback">
+      <!-- フォールバック: CSS城シルエット SVG -->
+      <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation:pulse 1.5s infinite">
+        <polygon points="5,95 95,95 90,72 70,68 65,72 52,62 48,62 35,72 30,68 10,72" fill="rgba(201,168,76,.3)"/>
+        <rect x="30" y="52" width="40" height="20" fill="rgba(201,168,76,.4)"/>
+        <rect x="34" y="46" width="32" height="8" fill="rgba(201,168,76,.35)"/>
+        <rect x="38" y="28" width="24" height="20" fill="rgba(201,168,76,.5)"/>
+        <polygon points="34,28 66,28 62,18 38,18" fill="rgba(201,168,76,.45)"/>
+        <rect x="42" y="8" width="16" height="12" fill="rgba(201,168,76,.55)"/>
+        <polygon points="38,8 62,8 58,0 42,0" fill="rgba(201,168,76,.5)"/>
+      </svg>
+    </div>
+  </div>
+  <div class="ld-t">洲 本 城</div>
+  <div class="ld-b"></div>
+</div>
+
+<!-- WEATHER BAR -->
+<div id="wb">
+  <div class="wb-loc">
+    <img id="ico-castle-wb" src="" alt="" style="width:18px;height:18px;object-fit:contain;display:none;">
+    <span id="ico-castle-wb-fb" style="font-size:14px;">🏯</span>
+    洲本市の天気
+  </div>
+  <div class="wb-days" id="wb-days"><span style="font-size:10px;color:var(--gin);padding-left:6px;">取得中...</span></div>
+  <a href="admin.html" class="wb-adm">管理</a>
+</div>
+
+<!-- BREAKING BAR -->
+<div id="bnbar"><div class="bn-lbl">NEWS</div><div class="bn-trk"><span class="bn-txt" id="bn-txt2"></span></div></div>
+
+<!-- HEADER -->
+<header id="hdr">
+  <div class="hdr-in">
+    <a class="logo" id="site-logo" onclick="nav('home')">
+      <span class="logo-jp">洲本城</span>
+      <span class="logo-en">SUMOTO CASTLE</span>
+    </a>
+    <nav><ul class="nav-lnks">
+      <li><a onclick="nav('about')">城について</a></li>
+      <li><a onclick="nav('timeline')">歴史</a></li>
+      <li><a onclick="nav('news')">最新情報</a></li>
+      <li><a onclick="nav('events')">イベント</a></li>
+      <li><a onclick="nav('tourism')">観光情報</a></li>
+      <li><a onclick="nav('map')">マップ</a></li>
+    </ul></nav>
+    <button id="ham" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- MOBILE MENU -->
+<div id="mmenu">
+  <a onclick="nav('home');toggleMenu()">ホーム</a>
+  <a onclick="nav('about');toggleMenu()">城について</a>
+  <a onclick="nav('timeline');toggleMenu()">歴史年表</a>
+  <a onclick="nav('news');toggleMenu()">最新情報</a>
+  <a onclick="nav('events');toggleMenu()">イベント</a>
+  <a onclick="nav('tourism');toggleMenu()">観光情報</a>
+  <a onclick="nav('map');toggleMenu()">城内マップ</a>
+  <a onclick="nav('guide');toggleMenu()">ガイド案内</a>
+  <a onclick="nav('advertise');toggleMenu()">広告掲載</a>
+  <a onclick="nav('access');toggleMenu()">アクセス</a>
+  <a onclick="nav('contact');toggleMenu()">お問い合わせ</a>
+</div>
+
+<!-- POPUP -->
+<div id="popm" onclick="if(event.target===this)closePopup()">
+  <div class="popm-box">
+    <button class="popm-close" onclick="closePopup()">✕</button>
+    <img id="popm-img" class="popm-img" src="" alt="">
+    <div class="popm-ttl" id="popm-ttl">お知らせ</div>
+    <div class="popm-body" id="popm-body"></div>
+    <a id="popm-lnk" class="popm-lnk" href="#" target="_blank">詳しく見る</a>
+    <div class="popm-nd" onclick="closePopupToday()">今日は表示しない</div>
+  </div>
+</div>
+
+<!-- IMAGE MODAL -->
+<div id="imgm" onclick="if(event.target===this)closeImgM()">
+  <button class="imgm-close" onclick="closeImgM()">✕</button>
+  <img class="imgm-img" id="imgm-img" src="" alt="">
+  <div class="imgm-cap" id="imgm-cap"></div>
+</div>
+
+<!-- MAP POPUP（ページ変更で消える） -->
+<div id="map-popup">
+  <button class="mp-close" onclick="closeMapPopup()">✕</button>
+  <div class="mp-img-wrap" id="mp-img-wrap">
+    <div class="mp-img-placeholder" id="mp-img-ph">
+      <img id="ico-map-ph" src="" alt="" style="display:none;">
+    </div>
+  </div>
+  <div class="mp-body">
+    <div class="mp-num" id="mp-num"></div>
+    <div class="mp-name" id="mp-name"></div>
+    <div class="mp-hr"></div>
+    <div class="mp-desc" id="mp-desc"></div>
+    <div class="mp-meta" id="mp-meta"></div>
+  </div>
+</div>
+
+<!-- ══════════ SPA VIEWS ══════════ -->
+
+<!-- ① HOME -->
+<div class="spa-view active" id="view-home">
+  <section id="hero">
+    <div id="hero-slides"><div class="h-fall"></div></div>
+    <div class="h-stars"></div>
+    <svg class="castle-svg" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" fill="var(--kin)" opacity=".13">
+      <polygon points="0,400 800,400 750,280 600,260 550,280 450,240 350,240 250,280 200,260 50,280"/>
+      <rect x="200" y="200" width="400" height="80"/><rect x="220" y="180" width="360" height="30"/>
+      <rect x="230" y="165" width="12" height="18"/><rect x="270" y="165" width="12" height="18"/>
+      <rect x="310" y="165" width="12" height="18"/><rect x="350" y="165" width="12" height="18"/>
+      <rect x="390" y="165" width="12" height="18"/><rect x="430" y="165" width="12" height="18"/>
+      <rect x="470" y="165" width="12" height="18"/><rect x="510" y="165" width="12" height="18"/>
+      <rect x="550" y="165" width="12" height="18"/>
+      <rect x="310" y="100" width="180" height="80"/><polygon points="290,100 510,100 490,70 310,70"/>
+      <rect x="330" y="40" width="140" height="35"/><polygon points="310,40 490,40 470,15 330,15"/>
+      <rect x="350" y="0" width="100" height="20"/>
+    </svg>
+    <div class="h-ov"></div>
+    <div class="h-dots" id="h-dots"></div>
+    <div class="h-cnt">
+      <div class="h-badge">AWAJI ISLAND · HYOGO · JAPAN</div>
+      <h1 class="h-ttl">洲<span>本</span>城</h1>
+      <p class="h-sub">淡路島に聳える 天空の名城</p>
+      <p class="h-en">SUMOTO CASTLE — BUILT IN 1526</p>
+      <div class="h-div"></div>
+      <p class="h-desc" id="h-desc">標高133mの三熊山に築かれた洲本城。<br>日本最古の模擬天守が今なお遺り、<br>播磨灘と紀伊水道を望む絶景の地。</p>
+      <div class="h-cta">
+        <button class="btn-p" onclick="nav('about')">城を知る</button>
+        <button class="btn-o" onclick="nav('access')">アクセス</button>
+      </div>
+    </div>
+    <div class="scroll-ind"><span>SCROLL</span><div class="scroll-ln"></div></div>
+  </section>
+  <div class="block-slot" id="slot-hero-below"></div>
+
+  <!-- 城について概要 -->
+  <section style="background:linear-gradient(to bottom,var(--sumi),rgba(26,39,68,.1));">
+    <div class="block-slot" id="slot-about-above"></div>
+    <div class="sec">
+      <div class="reveal">
+        <span class="sl">ABOUT THE CASTLE</span>
+        <h2 class="st" id="home-about-title">洲本城とは</h2>
+        <div class="sd"></div>
+        <p id="home-about-desc" style="max-width:560px;font-size:13px;line-height:2.1;color:rgba(245,240,232,.65);">洲本城は、淡路島の洲本市三熊山に位置する山城で、1526年（大永6年）に由良成興によって築城されたと伝えられています。現在は国の史跡に指定されており、山頂部には日本最古の模擬天守（1928年建造）が現存しています。</p>
+      </div>
+      <div class="feat-grid" id="feat-grid">
+        <div class="feat-card reveal" onclick="nav('about')" style="transition-delay:0s">
+          <div class="feat-num">01</div>
+          <div class="feat-ico-wrap"><img id="feat-ico-1" src="" alt="" style="display:none;width:100%;height:100%;object-fit:contain;"><span id="feat-ico-1-fb" style="font-size:28px;">🏯</span></div>
+          <div class="feat-ttl">日本最古の模擬天守</div>
+          <div class="feat-txt">1928年建造。昭和初期の浪漫を今に伝える日本最古の模擬天守です。</div>
+          <div class="feat-more">詳しく見る</div>
+        </div>
+        <div class="feat-card reveal" onclick="nav('about')" style="transition-delay:.1s">
+          <div class="feat-num">02</div>
+          <div class="feat-ico-wrap"><img id="feat-ico-2" src="" alt="" style="display:none;width:100%;height:100%;object-fit:contain;"><span id="feat-ico-2-fb" style="font-size:28px;">🌊</span></div>
+          <div class="feat-ttl">絶景の展望</div>
+          <div class="feat-txt">標高133mから望む播磨灘。晴天時には四国まで一望できます。</div>
+          <div class="feat-more">詳しく見る</div>
+        </div>
+        <div class="feat-card reveal" onclick="nav('about')" style="transition-delay:.2s">
+          <div class="feat-num">03</div>
+          <div class="feat-ico-wrap"><img id="feat-ico-3" src="" alt="" style="display:none;width:100%;height:100%;object-fit:contain;"><span id="feat-ico-3-fb" style="font-size:28px;">🪨</span></div>
+          <div class="feat-ttl">壮大な石垣</div>
+          <div class="feat-txt">「石垣の博物館」と称される石垣群。登り石垣は国内最長クラス。</div>
+          <div class="feat-more">詳しく見る</div>
+        </div>
+        <div class="feat-card reveal" onclick="nav('about')" style="transition-delay:.3s">
+          <div class="feat-num">04</div>
+          <div class="feat-ico-wrap"><img id="feat-ico-4" src="" alt="" style="display:none;width:100%;height:100%;object-fit:contain;"><span id="feat-ico-4-fb" style="font-size:28px;">🌸</span></div>
+          <div class="feat-ttl">四季の美しさ</div>
+          <div class="feat-txt">春の桜ライトアップから冬の夜景まで、四季折々の絶景が楽しめます。</div>
+          <div class="feat-more">詳しく見る</div>
+        </div>
+      </div>
+      <div class="info-grid reveal">
+        <div class="info-box"><div class="info-box-lbl">開山時間</div><div class="info-box-val">24時間</div><div class="info-box-sub">石垣見学自由</div></div>
+        <div class="info-box"><div class="info-box-lbl">入城料</div><div class="info-box-val">無 料</div><div class="info-box-sub">山頂公園無料</div></div>
+        <div class="info-box"><div class="info-box-lbl">所在地</div><div class="info-box-val">洲本市</div><div class="info-box-sub">三熊山 標高133m</div></div>
+        <div class="info-box"><div class="info-box-lbl">指定</div><div class="info-box-val">国史跡</div><div class="info-box-sub">兵庫県指定文化財</div></div>
+      </div>
+    </div>
+    <div class="block-slot" id="slot-about-below"></div>
+  </section>
+
+  <!-- 城内マップ テーザー（地図画像＋名所名） -->
+  <section style="padding:56px 20px;background:var(--sumi);">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div class="reveal">
+        <span class="sl">CASTLE MAP</span>
+        <h2 class="st">城内マップ</h2>
+        <div class="sd"></div>
+        <p style="font-size:12px;color:rgba(245,240,232,.55);line-height:1.8;margin-bottom:16px;">各スポットの位置がわかる城内地図。「詳しく見る」でインタラクティブマップを開けます。</p>
+      </div>
+      <div class="map-teaser-box reveal" onclick="nav('map')">
+        <!-- adminで設定したホーム用地図画像（名所名入り） -->
+        <img id="home-map-img" src="" alt="洲本城 城内マップ" style="display:none;">
+        <!-- 未設定時のプレースホルダー -->
+        <div id="home-map-placeholder">
+          <div class="ph-img" style="font-size:48px;opacity:.3;">🗺️</div>
+          <div style="font-family:'Shippori Mincho',serif;font-size:13px;color:rgba(201,168,76,.35);letter-spacing:.2em;">地図画像を設定してください</div>
+          <div style="font-size:10px;color:rgba(136,153,170,.3);margin-top:4px;">admin → マップ設定 → ホーム地図画像URL</div>
+        </div>
+        <div class="map-teaser-ov">
+          <div class="map-teaser-inner">
+            <div class="map-teaser-ttl">城内を詳しく探索する</div>
+            <div class="map-teaser-sub">番号スポットをタップすると詳細情報・写真が表示されます</div>
+            <div class="map-teaser-cta">詳しく見る →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 歴史（概要） -->
+  <section style="background:linear-gradient(to bottom,var(--sumi),rgba(26,39,68,.2),var(--sumi));padding:72px 0;">
+    <div class="block-slot" id="slot-history-above"></div>
+    <div style="max-width:860px;margin:0 auto;padding:0 20px;">
+      <div class="reveal"><span class="sl">HISTORY</span><h2 class="st">洲本城の歴史</h2><div class="sd"></div></div>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">1526年（大永6年）</div><div class="tl-ttl">築城</div><div class="tl-txt">淡路守護代・由良成興により三熊山に築城。淡路島統治の拠点として整備される。</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">1585年（天正13年）</div><div class="tl-ttl">仙石秀久が城主に</div><div class="tl-txt">豊臣秀吉の四国攻め後、仙石秀久が淡路島を領有。城の近代化と城下町整備が進む。</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">1615年（元和元年）</div><div class="tl-ttl">脇坂安治の治世</div><div class="tl-txt">脇坂安治が3万石で入封。現在見られる高石垣の多くがこの時代に整備された。</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">1928年（昭和3年）</div><div class="tl-ttl">模擬天守の建造</div><div class="tl-txt">観光振興を目的として模擬天守が建造。日本最古の模擬天守として現在に至る。</div></div>
+      </div>
+      <button class="more-btn reveal" onclick="nav('timeline')">詳細年表を見る</button>
+    </div>
+    <div class="block-slot" id="slot-history-below"></div>
+  </section>
+
+  <!-- 最新情報 3件 -->
+  <section style="padding:72px 0;">
+    <div class="block-slot" id="slot-news-above"></div>
+    <div class="sec">
+      <div class="reveal" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+        <div><span class="sl">LATEST NEWS</span><h2 class="st">最新情報</h2><div class="sd"></div></div>
+        <button class="more-btn" onclick="nav('news')" style="margin-top:0;">すべて見る</button>
+      </div>
+      <div class="art-grid" id="home-art-grid"><div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--gin);font-size:12px;">読み込み中...</div></div>
+    </div>
+    <div class="block-slot" id="slot-news-below"></div>
+  </section>
+
+  <!-- イベント 3件 -->
+  <section style="background:linear-gradient(to bottom,rgba(26,39,68,.1),var(--sumi));padding:72px 0;">
+    <div class="block-slot" id="slot-events-above"></div>
+    <div class="sec">
+      <div class="reveal" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+        <div><span class="sl">EVENTS</span><h2 class="st">イベント情報</h2><div class="sd"></div></div>
+        <button class="more-btn" onclick="nav('events')" style="margin-top:0;">すべて見る</button>
+      </div>
+      <div class="ev-list" id="home-ev-list"><div style="text-align:center;padding:44px;color:var(--gin);font-size:12px;">読み込み中...</div></div>
+      <div style="text-align:center;margin-top:20px;"><button class="btn-o" onclick="nav('events')">イベント一覧へ →</button></div>
+    </div>
+    <div class="block-slot" id="slot-events-below"></div>
+  </section>
+
+  <!-- ガイド案内 トップ -->
+  <section style="padding:72px 0;background:var(--sumi);">
+    <div class="sec">
+      <div class="reveal"><span class="sl">VOLUNTEER GUIDE</span><h2 class="st">ボランティアガイド案内</h2><div class="sd"></div></div>
+      <div class="guide-box reveal">
+        <div style="font-family:'Shippori Mincho',serif;font-size:14px;color:var(--kin);margin-bottom:14px;letter-spacing:.08em;">無料ガイドで洲本城をより深く</div>
+        <div class="guide-grid">
+          <div class="guide-item">
+            <div class="guide-ico-wrap"><img id="ico-pin" src="" alt="" style="display:none;"><span id="ico-pin-fb" style="font-size:16px;">📍</span></div>
+            <div class="guide-txt"><div class="guide-label">集合場所</div>洲本城山公園入口・大手門跡付近</div>
+          </div>
+          <div class="guide-item">
+            <div class="guide-ico-wrap"><img id="ico-time" src="" alt="" style="display:none;"><span id="ico-time-fb" style="font-size:16px;">⏱️</span></div>
+            <div class="guide-txt"><div class="guide-label">所要時間</div>約90分〜120分（石垣・天守・展望台）</div>
+          </div>
+          <div class="guide-item">
+            <div class="guide-ico-wrap"><img id="ico-cal" src="" alt="" style="display:none;"><span id="ico-cal-fb" style="font-size:16px;">📅</span></div>
+            <div class="guide-txt"><div class="guide-label">開催日</div>土・日・祝日（要事前予約）</div>
+          </div>
+          <div class="guide-item">
+            <div class="guide-ico-wrap"><img id="ico-person" src="" alt="" style="display:none;"><span id="ico-person-fb" style="font-size:16px;">👥</span></div>
+            <div class="guide-txt"><div class="guide-label">対象</div>個人・グループ・学校団体</div>
+          </div>
+        </div>
+        <div style="margin-top:16px;font-size:12px;color:rgba(245,240,232,.6);line-height:1.9;">洲本城ボランティアガイドの会が、城の歴史・石垣の見どころ・展望スポットを丁寧にご案内します。</div>
+        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn-p" onclick="nav('guide')">ガイドを申し込む</button>
+          <button class="btn-o" onclick="nav('guide')">詳しく見る</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- アクセス -->
+  <section id="access-section" style="padding:72px 0;">
+    <div class="block-slot" id="slot-access-above"></div>
+    <div class="sec">
+      <div class="reveal"><span class="sl">ACCESS</span><h2 class="st">アクセス</h2><div class="sd"></div></div>
+      <div class="ac-grid reveal">
+        <div class="ac-item">
+          <div class="ac-meth"><img id="ico-car" src="" alt="" style="display:none;"><span id="ico-car-fb">🚗</span> お車の場合</div>
+          <div class="ac-det">神戸淡路鳴門自動車道<br><strong>洲本IC</strong>から約15分</div><div class="ac-note">※城山公園無料駐車場あり</div>
+        </div>
+        <div class="ac-item">
+          <div class="ac-meth"><img id="ico-bus" src="" alt="" style="display:none;"><span id="ico-bus-fb">🚌</span> バスの場合</div>
+          <div class="ac-det">三宮・神戸から高速バスで洲本バスセンターへ。下車後タクシーまたは徒歩約30分</div><div class="ac-note">城山公園バス停下車すぐ</div>
+        </div>
+        <div class="ac-item">
+          <div class="ac-meth"><img id="ico-ship" src="" alt="" style="display:none;"><span id="ico-ship-fb">🚢</span> フェリーの場合</div>
+          <div class="ac-det">高速船：明石港〜岩屋港（約13分）<br>その後路線バスで洲本方面へ</div><div class="ac-note">淡路交通バス洲本行き乗車</div>
+        </div>
+        <div class="ac-item">
+          <div class="ac-meth"><img id="ico-map2" src="" alt="" style="display:none;"><span id="ico-map2-fb">🗺</span> 所在地</div>
+          <div class="ac-det" id="access-addr">〒656-0023<br>兵庫県洲本市小路谷1272-1<br>洲本城（三熊山城山公園内）</div><div class="ac-note">Google Maps「洲本城跡」で検索</div>
+        </div>
+      </div>
+      <div class="reveal" style="margin-top:2px;">
+        <iframe id="map-iframe" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3284.5!2d134.8945!3d34.3506!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x354f5b5a5e5a5a5b%3A0x0!2z5rWF5pys5Z-O!5e0!3m2!1sja!2sjp!4v1" width="100%" height="260" style="border:1px solid rgba(201,168,76,.15);filter:grayscale(30%) invert(90%) hue-rotate(180deg);" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    <div class="block-slot" id="slot-access-below"></div>
+  </section>
+
+  <!-- お問い合わせ -->
+  <section style="background:linear-gradient(to bottom,rgba(26,39,68,.1),var(--sumi));padding:72px 0;">
+    <div class="block-slot" id="slot-contact-above"></div>
+    <div class="sec">
+      <div class="reveal" style="text-align:center;">
+        <span class="sl">CONTACT</span>
+        <h2 class="st" id="contact-title">お問い合わせ</h2>
+        <div class="sd" style="margin:13px auto;"></div>
+        <p id="contact-desc" style="font-size:12px;color:rgba(245,240,232,.5);letter-spacing:.08em;line-height:1.9;">洲本城・観光に関するご質問はこちらからどうぞ</p>
+      </div>
+      <div class="cf-wrap reveal">
+        <div id="cf-form"><div id="cf-fields"></div>
+          <button class="cf-sub" id="cf-btn" onclick="submitCF()">送 信 す る</button>
+          <p id="cf-note" style="font-size:9px;color:var(--gin);margin-top:7px;text-align:center;letter-spacing:.1em;"></p>
+        </div>
+        <div class="cf-ok" id="cf-ok">
+          <div style="font-size:26px;margin-bottom:10px;">✉️</div>
+          <div style="font-family:'Shippori Mincho',serif;font-size:19px;color:var(--kin);margin-bottom:8px;">送信完了</div>
+          <div style="font-size:12px;color:rgba(245,240,232,.65);line-height:1.9;">お問い合わせありがとうございます。<br>担当者よりご連絡いたします。</div>
+        </div>
+      </div>
+    </div>
+    <div class="block-slot" id="slot-contact-below"></div>
+  </section>
+
+  <!-- 広告バナー -->
+  <div class="ad-wrap">
+    <div class="ad-grid" id="home-ad-grid">
+      <div class="ad-banner">
+        <div class="ad-lbl">広告</div>
+        <div class="ad-banner-link" onclick="nav('advertise')" style="cursor:pointer;">
+          <div class="ad-ph">
+            <img class="ad-ph-ico" id="ad-ico-1" src="" alt="" style="display:none;">
+            <span id="ad-ico-1-fb" style="font-size:28px;opacity:.5;">🏨</span>
+            <div class="ad-ph-ttl" id="ad-text-1">淡路島のホテル・旅館</div>
+            <div class="ad-ph-sub">バナー広告スペース</div>
+          </div>
+        </div>
+      </div>
+      <div class="ad-banner">
+        <div class="ad-lbl">PR</div>
+        <div class="ad-banner-link" onclick="nav('advertise')" style="cursor:pointer;">
+          <div class="ad-ph" style="border:1px dashed rgba(201,168,76,.2);">
+            <img class="ad-ph-ico" id="ad-ico-2" src="" alt="" style="display:none;">
+            <span id="ad-ico-2-fb" style="font-size:28px;opacity:.5;">📢</span>
+            <div class="ad-ph-ttl">バナー広告募集中</div>
+            <div class="ad-ph-sub">詳しくはこちら →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /view-home -->
+
+<!-- ② 洲本城とは -->
+<div class="spa-view" id="view-about">
+  <div class="page-hero"><div class="page-hero-content"><h1 class="page-hero-title">洲本城とは</h1><p class="page-hero-sub">ABOUT SUMOTO CASTLE</p></div></div>
+  <div id="about-content">
+    <div class="about-section">
+      <div class="about-section-inner">
+        <div class="reveal"><span class="sl">01 · TENSHU</span><h2 class="st">日本最古の模擬天守</h2><div class="sd"></div></div>
+        <div class="about-img-wrap reveal"><div class="ph-img" style="font-size:48px;opacity:.2;">🏯</div></div>
+        <p class="reveal" style="font-size:13px;line-height:2.1;color:rgba(245,240,232,.75);margin-bottom:14px;">1928年（昭和3年）に建造された模擬天守は日本最古。昭和初期の浪漫を今に伝える歴史的建造物です。</p>
+        <p class="reveal" style="font-size:13px;line-height:2.1;color:rgba(245,240,232,.65);">高さ約20mの白壁の天守は、昭和の技術で復元された山城建築の粋。城山公園入口から約20分の山道を登った先に現れます。現在も外観を保存しており、近くで石垣の積み方を観察することができます。</p>
+      </div>
+    </div>
+    <div class="about-section" style="background:rgba(26,39,68,.05);">
+      <div class="about-section-inner">
+        <div class="reveal"><span class="sl">02 · ISHIGAKI</span><h2 class="st">壮大な石垣群</h2><div class="sd"></div></div>
+        <div class="about-img-wrap reveal"><div class="ph-img" style="font-size:48px;opacity:.2;">🪨</div></div>
+        <p class="reveal" style="font-size:13px;line-height:2.1;color:rgba(245,240,232,.75);margin-bottom:14px;">戦国期の野面積みから近世の打込み接へと変化する石垣群。「石垣の博物館」とも呼ばれます。</p>
+        <p class="reveal" style="font-size:13px;line-height:2.1;color:rgba(245,240,232,.65);">特に大手門跡から天守台に至る「登り石垣」は、長さ約1.1kmに及ぶ国内最長クラスの遺構で、国の史跡に指定されています。時代ごとに異なる石の積み方が残ることから、専門家・歴史ファンに高く評価されています。</p>
+      </div>
+    </div>
+    <div class="about-section">
+      <div class="about-section-inner">
+        <div class="reveal"><span class="sl">03 · MIKUMA-YAMA</span><h2 class="st">三熊山</h2><div class="sd"></div></div>
+        <div class="about-img-wrap reveal"><div class="ph-img" style="font-size:48px;opacity:.2;">🌿</div></div>
+        <p class="reveal" style="font-size:13px;line-height:2.1;color:rgba(245,240,232,.75);margin-bottom:14px;">標高133mの三熊山は、播磨灘・紀伊水道を一望できる絶景の地。晴天時には四国や和歌山まで見渡せます。</p>
+        <p class="reveal" style="font-size:13px;line-height:2.1;color:rgba(245,240,232,.65);">山頂部には洲本城跡が広がり、四季折々の自然も楽しめます。春は山桜、夏は新緑、秋は紅葉、冬は夜景と、年間を通じて異なる表情を見せます。遊歩道が整備されており、家族連れでも気軽に散策できます。</p>
+      </div>
+    </div>
+    <div class="about-section" style="background:rgba(26,39,68,.05);">
+      <div class="about-section-inner">
+        <div class="reveal"><span class="sl">04 · CASTLE TOWN</span><h2 class="st">城下町</h2><div class="sd"></div></div>
+        <div class="about-img-wrap reveal"><div class="ph-img" style="font-size:48px;opacity:.2;">🏘️</div></div>
+        <p class="reveal" style="font-size:13px;line-height:2.1;color:rgba(245,240,232,.75);margin-bottom:14px;">洲本城の城下町として発展した洲本市街。往時の面影を残す町並みが今も残ります。</p>
+        <p class="reveal" style="font-size:13px;line-height:2.1;color:rgba(245,240,232,.65);">洲本市街には武家屋敷跡、旧家屋、伝統的な商家の建物などが散在し、歴史を感じながら散策できます。洲本温泉も城下町エリアに位置し、歴史と温泉を組み合わせた観光コースが楽しめます。</p>
+      </div>
+    </div>
+    <div class="about-section">
+      <div class="about-section-inner">
+        <div class="reveal"><span class="sl">05 · GALLERY</span><h2 class="st">フォトギャラリー</h2><div class="sd"></div></div>
+        <div class="gallery-grid reveal" id="about-gallery-grid">
+          <div style="aspect-ratio:4/3;background:linear-gradient(135deg,#1a2744,#0d1829);display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,168,76,.1);font-size:32px;opacity:.3;">🏯</div>
+          <div style="aspect-ratio:4/3;background:linear-gradient(135deg,#1a2744,#0d1829);display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,168,76,.1);font-size:32px;opacity:.3;">🌊</div>
+          <div style="aspect-ratio:4/3;background:linear-gradient(135deg,#1a2744,#0d1829);display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,168,76,.1);font-size:32px;opacity:.3;">🪨</div>
+          <div style="aspect-ratio:4/3;background:linear-gradient(135deg,#1a2744,#0d1829);display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,168,76,.1);font-size:32px;opacity:.3;">🌸</div>
+        </div>
+        <p style="font-size:10px;color:var(--gin);margin-top:12px;letter-spacing:.1em;">※ 写真はadmin → 城の説明カード → ギャラリーから設定できます</p>
+      </div>
+    </div>
+  </div>
+</div><!-- /view-about -->
+
+<!-- ③ 詳細年表 -->
+<div class="spa-view" id="view-timeline">
+  <div class="page-hero"><div class="page-hero-content"><h1 class="page-hero-title">洲本城の歴史</h1><p class="page-hero-sub">TIMELINE OF SUMOTO CASTLE</p></div></div>
+  <div class="sec">
+    <div class="reveal"><span class="sl">HISTORY · TIMELINE</span><h2 class="st">詳細年表</h2><div class="sd"></div></div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-era">中世</div><div class="tl-year">1526年（大永6年）</div><div class="tl-ttl">由良成興による築城</div><div class="tl-txt">淡路守護代・由良成興により三熊山に築城。淡路島統治の拠点として整備される。海と山に守られた天然の要害として機能した。</div><div class="tl-detail">三熊山は標高133mの独立峰で、瀬戸内海と紀伊水道を見渡せる戦略的要衝。当初は簡素な山城であったと考えられる。</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-era">戦国</div><div class="tl-year">1562年（永禄5年）</div><div class="tl-ttl">安宅氏による支配</div><div class="tl-txt">三好氏の一族・安宅冬康が淡路島を領有。洲本城を大規模に整備し、瀬戸内海の制海権を握る拠点とした。</div><div class="tl-detail">安宅氏は優れた水軍を擁し、三好政権の水軍力の中核を担った。洲本城はその本拠として大きく発展した。</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">1585年（天正13年）</div><div class="tl-ttl">仙石秀久が城主に</div><div class="tl-txt">豊臣秀吉の四国攻め後、仙石秀久が淡路島を領有。城の近代化工事が進められ、城下町の整備が始まる。</div><div class="tl-detail">秀吉の天下統一政策のもと、淡路島は戦略的な要地として重視された。城郭の大改修が行われ、現代にも通じる構造が整備される。</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-era">近世</div><div class="tl-year">1615年（元和元年）</div><div class="tl-ttl">脇坂安治の治世</div><div class="tl-txt">脇坂安治が3万石で入封。石垣の大規模な改修が行われ、現在見られる高石垣の多くがこの時代に整備される。</div><div class="tl-detail">脇坂氏は加藤清正や福島正則らと並ぶ豊臣家の武将。洲本城の石垣技術はこの時代に最高潮を迎え、打込み接の技法が導入された。</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">1635年（寛永12年）</div><div class="tl-ttl">廃城・陣屋への移転</div><div class="tl-txt">稲田氏が城代として入り、のちに洲本城は廃城となる。藩庁は山上から山麓の洲本陣屋へ移転。石垣のみが残る。</div><div class="tl-detail">江戸時代の一国一城令（1615年）により多くの城が廃城。洲本城も正式な城としての機能を失い、管理が陣屋に移る。</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-era">近代</div><div class="tl-year">1928年（昭和3年）</div><div class="tl-ttl">模擬天守の建造</div><div class="tl-txt">昭和初期に観光振興を目的として模擬天守が建造される。これが日本最古の模擬天守として現在に至る。</div><div class="tl-detail">鉄筋コンクリート造の模擬天守として建造。戦前の日本で城郭観光が注目された時代を反映している。</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-era">現代</div><div class="tl-year">1952年（昭和27年）</div><div class="tl-ttl">国の史跡指定</div><div class="tl-txt">洲本城跡が国の史跡に指定される。城跡の保護と整備が本格的に始まる。</div><div class="tl-detail">石垣・登り石垣・天守台などが史跡として保護対象となり、学術的な発掘調査も実施されるようになった。</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">現在</div><div class="tl-ttl">国史跡・観光地として</div><div class="tl-txt">整備が続く洲本城跡。年間を通じて多くの観光客が訪れ、淡路島の歴史と文化を伝える重要な拠点となっている。</div><div class="tl-detail">ボランティアガイドによる案内活動、夜桜ライトアップ、歴史講座など多彩なイベントが開催されている。</div></div>
+    </div>
+  </div>
+</div><!-- /view-timeline -->
+
+<!-- ④ 最新情報一覧 -->
+<div class="spa-view" id="view-news">
+  <div class="page-hero"><div class="page-hero-content"><h1 class="page-hero-title">最新情報</h1><p class="page-hero-sub">LATEST NEWS</p></div></div>
+  <div class="sec">
+    <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center;">
+      <select id="news-cat-f" onchange="filterNews()" style="background:var(--gL);border:1px solid rgba(201,168,76,.2);padding:8px 12px;color:var(--washi);font-size:12px;outline:none;font-family:inherit;">
+        <option value="">すべてのカテゴリ</option>
+        <option>お知らせ</option><option>歴史</option><option>イベント</option><option>観光情報</option><option>グルメ</option>
+      </select>
+      <span id="news-cnt" style="font-size:11px;color:var(--gin);margin-left:auto;align-self:center;"></span>
+    </div>
+    <div class="art-grid" id="news-art-grid"><div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--gin);font-size:12px;">読み込み中...</div></div>
+  </div>
+  <!-- 記事詳細（インライン） -->
+  <div id="news-detail" style="display:none;max-width:760px;margin:0 auto;padding:0 20px 60px;">
+    <button onclick="closeNewsDetail()" style="background:none;border:1px solid rgba(201,168,76,.25);color:var(--gin);padding:6px 16px;font-size:10px;letter-spacing:.12em;cursor:pointer;margin-bottom:24px;font-family:inherit;transition:all .3s;">← 一覧に戻る</button>
+    <div id="nd-hero" style="width:100%;background:linear-gradient(135deg,#1a2744,#0d1829);display:flex;align-items:center;justify-content:center;min-height:180px;margin-bottom:0;"></div>
+    <div style="padding:36px 0;">
+      <div id="nd-cat" style="font-size:9px;letter-spacing:.28em;color:var(--kin);margin-bottom:10px;"></div>
+      <h1 id="nd-title" style="font-family:'Shippori Mincho',serif;font-size:clamp(20px,3.5vw,30px);line-height:1.4;margin-bottom:10px;"></h1>
+      <div id="nd-date" style="font-size:10px;color:var(--gin);margin-bottom:24px;"></div>
+      <div style="height:1px;background:rgba(201,168,76,.12);margin-bottom:24px;"></div>
+      <div id="nd-content" style="font-size:14px;line-height:2.3;color:rgba(245,240,232,.85);"></div>
+      <a id="nd-ext" href="#" target="_blank" style="display:none;margin-top:24px;padding:11px 22px;border:1px solid rgba(201,168,76,.4);color:var(--kin);font-size:11px;letter-spacing:.16em;text-decoration:none;transition:all .3s;">外部リンクへ ↗</a>
+    </div>
+  </div>
+</div><!-- /view-news -->
+
+<!-- ⑤ イベント -->
+<div class="spa-view" id="view-events">
+  <div class="page-hero"><div class="page-hero-content"><h1 class="page-hero-title">イベント情報</h1><p class="page-hero-sub">EVENTS & SCHEDULE</p></div></div>
+  <div class="sec">
+    <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center;">
+      <button id="ev-tab-upcoming" onclick="switchEvTab('upcoming')" style="padding:7px 18px;font-size:11px;letter-spacing:.12em;cursor:pointer;background:var(--kin);color:var(--sumi);border:none;font-family:inherit;transition:all .2s;">開催予定</button>
+      <button id="ev-tab-past" onclick="switchEvTab('past')" style="padding:7px 18px;font-size:11px;letter-spacing:.12em;cursor:pointer;background:var(--gL);color:var(--gin);border:1px solid rgba(201,168,76,.15);font-family:inherit;transition:all .2s;">過去のイベント</button>
+    </div>
+    <div class="ev-list" id="ev-upcoming-list"></div>
+    <div class="ev-list" id="ev-past-list" style="display:none;"></div>
+  </div>
+  <!-- イベント詳細（インライン） -->
+  <div id="ev-detail" style="display:none;max-width:760px;margin:0 auto;padding:0 20px 60px;">
+    <button onclick="closeEvDetail()" style="background:none;border:1px solid rgba(201,168,76,.25);color:var(--gin);padding:6px 16px;font-size:10px;letter-spacing:.12em;cursor:pointer;margin-bottom:24px;font-family:inherit;">← 一覧に戻る</button>
+    <div id="evd-hero-img" style="width:100%;min-height:200px;background:linear-gradient(135deg,#1a2744,#0d1829);display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,168,76,.1);"></div>
+    <div style="padding:32px 0;">
+      <div id="evd-tag2" style="display:inline-block;font-size:9px;letter-spacing:.2em;color:var(--kin);border:1px solid rgba(201,168,76,.35);padding:3px 10px;margin-bottom:12px;">イベント</div>
+      <h1 id="evd-ttl2" style="font-family:'Shippori Mincho',serif;font-size:clamp(20px,3.5vw,30px);line-height:1.4;margin-bottom:18px;"></h1>
+      <div id="evd-info2" style="display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:24px;"></div>
+      <div style="height:1px;background:rgba(201,168,76,.12);margin-bottom:18px;"></div>
+      <div style="font-family:'Shippori Mincho',serif;font-size:15px;color:var(--kin);margin-bottom:10px;">詳細説明</div>
+      <div id="evd-desc2" style="font-size:13px;line-height:2;color:rgba(245,240,232,.8);"></div>
+      <div id="evd-notice2-wrap" style="display:none;margin-top:18px;">
+        <div style="font-family:'Shippori Mincho',serif;font-size:15px;color:var(--kin);margin-bottom:10px;">注意事項</div>
+        <div id="evd-notice2" style="background:rgba(201,168,76,.06);border-left:3px solid var(--kin);padding:12px 16px;font-size:12px;line-height:1.9;color:rgba(245,240,232,.75);"></div>
+      </div>
+      <div id="evd-related2-wrap" style="display:none;margin-top:18px;">
+        <div style="font-family:'Shippori Mincho',serif;font-size:15px;color:var(--kin);margin-bottom:10px;">関連情報</div>
+        <div id="evd-related2" style="font-size:13px;line-height:2;color:rgba(245,240,232,.8);"></div>
+      </div>
+      <div id="evd-photos2-wrap" style="display:none;margin-top:18px;">
+        <div style="font-family:'Shippori Mincho',serif;font-size:15px;color:var(--kin);margin-bottom:10px;">フォトギャラリー</div>
+        <div id="evd-photos2" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;"></div>
+      </div>
+    </div>
+  </div>
+</div><!-- /view-events -->
+
+<!-- ⑥ 城内マップ（詳細・インタラクティブ） -->
+<div class="spa-view" id="view-map">
+  <div class="page-hero"><div class="page-hero-content"><h1 class="page-hero-title">城内マップ</h1><p class="page-hero-sub">CASTLE MAP & SPOTS</p></div></div>
+  <div class="sec">
+    <p style="font-size:12px;color:rgba(245,240,232,.55);line-height:1.9;margin-bottom:16px;text-align:center;">番号をタップするとスポットの詳細情報・写真が表示されます</p>
+    <div class="map-detail-container reveal">
+      <!-- 地図画像（adminで設定：イラストのみ） -->
+      <div id="map-detail-img-wrap" style="position:relative;">
+        <img id="map-detail-img" src="" alt="洲本城 詳細マップ" style="display:none;">
+        <div id="map-detail-placeholder">
+          <div class="ph-txt" style="font-family:'Shippori Mincho',serif;font-size:14px;color:rgba(201,168,76,.3);letter-spacing:.2em;">マップ画像を設定してください</div>
+          <div style="font-size:10px;color:rgba(136,153,170,.25);margin-top:6px;">admin → マップ設定 → 詳細マップ画像URL</div>
+          <!-- 未設定時SVG城郭図 -->
+          <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;margin-top:20px;opacity:.15;">
+            <ellipse cx="400" cy="280" rx="300" ry="180" fill="rgba(26,55,30,.4)" stroke="rgba(201,168,76,.1)" stroke-width="1"/>
+            <ellipse cx="400" cy="270" rx="220" ry="130" fill="rgba(26,55,30,.3)" stroke="rgba(201,168,76,.08)" stroke-width="1"/>
+            <path d="M160,420 L220,350 L240,300 L300,240" stroke="rgba(201,168,76,.35)" stroke-width="3" fill="none" stroke-dasharray="6,3"/>
+            <path d="M640,420 L580,350 L560,300 L500,240" stroke="rgba(201,168,76,.35)" stroke-width="3" fill="none" stroke-dasharray="6,3"/>
+            <rect x="280" y="180" width="240" height="140" rx="4" fill="rgba(26,39,68,.7)" stroke="rgba(201,168,76,.3)" stroke-width="2"/>
+            <rect x="350" y="100" width="100" height="90" rx="2" fill="rgba(201,168,76,.15)" stroke="rgba(201,168,76,.5)" stroke-width="2"/>
+            <polygon points="330,100 470,100 450,72 350,72" fill="rgba(201,168,76,.2)" stroke="rgba(201,168,76,.4)" stroke-width="1.5"/>
+            <rect x="365" y="50" width="70" height="28" fill="rgba(201,168,76,.18)" stroke="rgba(201,168,76,.4)" stroke-width="1.5"/>
+            <polygon points="350,50 450,50 435,28 365,28" fill="rgba(201,168,76,.22)" stroke="rgba(201,168,76,.4)" stroke-width="1.5"/>
+            <text x="400" y="455" text-anchor="middle" fill="rgba(201,168,76,.35)" font-size="11" font-family="serif" letter-spacing="4">三 熊 山</text>
+            <text x="400" y="140" text-anchor="middle" fill="rgba(245,240,232,.3)" font-size="10" letter-spacing="2">天守台</text>
+          </svg>
+        </div>
+        <!-- 番号マーカーレイヤー（画像の上に被せる） -->
+        <div id="map-markers-layer" style="position:absolute;inset:0;"></div>
+      </div>
+    </div>
+    <!-- スポットリスト -->
+    <div style="margin-top:28px;">
+      <div style="font-size:10px;letter-spacing:.3em;color:var(--kin);margin-bottom:12px;">スポット一覧（タップで詳細表示）</div>
+      <div class="spot-list-grid" id="spot-list-grid"></div>
+    </div>
+  </div>
+</div><!-- /view-map -->
+
+<!-- ⑦ 観光情報 -->
+<div class="spa-view" id="view-tourism">
+  <div class="page-hero"><div class="page-hero-content"><h1 class="page-hero-title">観光情報</h1><p class="page-hero-sub">TOURISM INFORMATION</p></div></div>
+  <div class="sec">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
+      <button onclick="filterTourism('')" class="tour-tab btn-p" style="font-size:10px;padding:6px 14px;">すべて</button>
+      <button onclick="filterTourism('周辺観光')" class="tour-tab btn-o" style="font-size:10px;padding:6px 14px;">周辺観光</button>
+      <button onclick="filterTourism('飲食店')" class="tour-tab btn-o" style="font-size:10px;padding:6px 14px;">飲食店</button>
+      <button onclick="filterTourism('駐車場')" class="tour-tab btn-o" style="font-size:10px;padding:6px 14px;">駐車場</button>
+      <button onclick="filterTourism('温泉')" class="tour-tab btn-o" style="font-size:10px;padding:6px 14px;">温泉</button>
+      <button onclick="filterTourism('淡路島')" class="tour-tab btn-o" style="font-size:10px;padding:6px 14px;">淡路島</button>
+    </div>
+    <div class="tourism-grid" id="tourism-grid">
+      <div class="tourism-card" data-cat="周辺観光"><div class="tc-img"><div class="tc-ph" style="font-size:32px;opacity:.3;">⛩️</div></div><div class="tc-body"><div class="tc-cat">周辺観光</div><div class="tc-name">洲本八幡神社</div><div class="tc-desc">洲本城の守護神として信仰された古社。歴代城主も参拝した由緒ある神社です。</div><div class="tc-meta">📍 洲本城から徒歩15分</div></div></div>
+      <div class="tourism-card" data-cat="温泉"><div class="tc-img"><div class="tc-ph" style="font-size:32px;opacity:.3;">♨️</div></div><div class="tc-body"><div class="tc-cat">温泉</div><div class="tc-name">洲本温泉</div><div class="tc-desc">淡路島最大の温泉地。城下町エリアに位置し、観光の疲れを癒すのに最適です。</div><div class="tc-meta">📍 洲本市街・城から車5分</div></div></div>
+      <div class="tourism-card" data-cat="飲食店"><div class="tc-img"><div class="tc-ph" style="font-size:32px;opacity:.3;">🍜</div></div><div class="tc-body"><div class="tc-cat">飲食店</div><div class="tc-name">淡路島グルメ</div><div class="tc-desc">玉ねぎ・海鮮・淡路牛など淡路島ならではの食材を使った料理が楽しめます。</div><div class="tc-meta">📍 洲本市内各所</div></div></div>
+      <div class="tourism-card" data-cat="駐車場"><div class="tc-img"><div class="tc-ph" style="font-size:32px;opacity:.3;">🅿️</div></div><div class="tc-body"><div class="tc-cat">駐車場</div><div class="tc-name">城山公園無料駐車場</div><div class="tc-desc">洲本城山公園内の無料駐車場。普通車約50台収容可能。</div><div class="tc-meta">🕐 24時間開放 / 無料</div></div></div>
+      <div class="tourism-card" data-cat="淡路島"><div class="tc-img"><div class="tc-ph" style="font-size:32px;opacity:.3;">🌸</div></div><div class="tc-body"><div class="tc-cat">淡路島</div><div class="tc-name">あわじ花さじき</div><div class="tc-desc">淡路島北部にある丘陵地の花の公園。季節の花々が一面に咲き誇ります。</div><div class="tc-meta">📍 洲本から車30分</div></div></div>
+      <div class="tourism-card" data-cat="淡路島"><div class="tc-img"><div class="tc-ph" style="font-size:32px;opacity:.3;">🎪</div></div><div class="tc-body"><div class="tc-cat">淡路島</div><div class="tc-name">淡路島モンキーセンター</div><div class="tc-desc">野生のニホンザルを間近で観察できる施設。ガイドツアーも人気です。</div><div class="tc-meta">📍 洲本から車15分</div></div></div>
+      <div class="tourism-card" data-cat="周辺観光"><div class="tc-img"><div class="tc-ph" style="font-size:32px;opacity:.3;">🏛️</div></div><div class="tc-body"><div class="tc-cat">周辺観光</div><div class="tc-name">洲本市立淡路文化史料館</div><div class="tc-desc">淡路島の歴史・文化・自然を展示。洲本城の出土品も見られます。</div><div class="tc-meta">📍 洲本市炬口1-1-17</div></div></div>
+      <div class="tourism-card" data-cat="飲食店"><div class="tc-img"><div class="tc-ph" style="font-size:32px;opacity:.3;">🍣</div></div><div class="tc-body"><div class="tc-cat">飲食店</div><div class="tc-name">洲本市場の海鮮</div><div class="tc-desc">新鮮な瀬戸内・紀伊水道の魚介類を使った海鮮料理が味わえます。</div><div class="tc-meta">📍 洲本漁港周辺</div></div></div>
+    </div>
+  </div>
+</div><!-- /view-tourism -->
+
+<!-- ⑧ ボランティアガイド -->
+<div class="spa-view" id="view-guide">
+  <div class="page-hero"><div class="page-hero-content"><h1 class="page-hero-title">ボランティアガイド</h1><p class="page-hero-sub">VOLUNTEER GUIDE SERVICE</p></div></div>
+  <div class="sec">
+    <div class="reveal"><span class="sl">FREE GUIDE SERVICE</span><h2 class="st">洲本城ボランティアガイド</h2><div class="sd"></div>
+      <p style="font-size:13px;color:rgba(245,240,232,.65);line-height:2;max-width:600px;">洲本城ボランティアガイドの会が、城の歴史・石垣の見どころ・展望スポットを丁寧にご案内します。無料でご参加いただけます。</p>
+    </div>
+    <div class="guide-info-grid reveal">
+      <div class="guide-info-item"><div class="guide-info-lbl">集合場所</div><div class="guide-info-val">洲本城山公園入口<br>大手門跡付近</div></div>
+      <div class="guide-info-item"><div class="guide-info-lbl">所要時間</div><div class="guide-info-val">約90分〜120分<br>（石垣・天守・展望台）</div></div>
+      <div class="guide-info-item"><div class="guide-info-lbl">開催日</div><div class="guide-info-val">土・日・祝日<br>要事前予約・雨天中止</div></div>
+      <div class="guide-info-item"><div class="guide-info-lbl">対象</div><div class="guide-info-val">個人・グループ・学校団体<br>どなたでも参加可</div></div>
+      <div class="guide-info-item"><div class="guide-info-lbl">参加費</div><div class="guide-info-val">無料<br>（交通費・入場料は各自）</div></div>
+      <div class="guide-info-item"><div class="guide-info-lbl">予約・問い合わせ</div><div class="guide-info-val">下記フォームまたは<br>洲本市観光課</div></div>
+    </div>
+    <div class="guide-flow reveal">
+      <div style="font-family:'Shippori Mincho',serif;font-size:16px;color:var(--kin);margin-bottom:18px;">ガイドの流れ</div>
+      <div class="guide-flow-item"><div class="guide-flow-num">01</div><div class="guide-flow-body"><div class="guide-flow-ttl">大手門跡・集合</div><div class="guide-flow-txt">山麓の大手門跡付近に集合。ガイドからコース説明と注意事項をお伝えします。（約10分）</div></div></div>
+      <div class="guide-flow-item"><div class="guide-flow-num">02</div><div class="guide-flow-body"><div class="guide-flow-ttl">登り石垣を見ながら登山</div><div class="guide-flow-txt">国内最長クラスの登り石垣を解説しながら山頂へ。（約30分）</div></div></div>
+      <div class="guide-flow-item"><div class="guide-flow-num">03</div><div class="guide-flow-body"><div class="guide-flow-ttl">天守・石垣群の見学</div><div class="guide-flow-txt">日本最古の模擬天守と各郭の石垣を詳しく解説。（約30分）</div></div></div>
+      <div class="guide-flow-item"><div class="guide-flow-num">04</div><div class="guide-flow-body"><div class="guide-flow-ttl">展望台・眺望</div><div class="guide-flow-txt">播磨灘・紀伊水道を一望する展望台へ。（約20分）</div></div></div>
+      <div class="guide-flow-item"><div class="guide-flow-num">05</div><div class="guide-flow-body"><div class="guide-flow-ttl">下山・解散</div><div class="guide-flow-txt">安全に下山して解散。（約10分）</div></div></div>
+    </div>
+    <!-- ガイド申し込みフォーム（専用EmailJS） -->
+    <div class="special-form-box reveal" style="margin-top:40px;">
+      <div class="special-form-ttl">ガイドを申し込む</div>
+      <div class="special-form-sub">フォームよりお申し込みください。担当者よりご連絡いたします。<br>※ 3日前までにご予約ください。</div>
+      <div id="guide-form-fields"></div>
+      <button class="cf-sub" id="guide-cf-btn" onclick="submitGuideForm()">申 し 込 む</button>
+      <p id="guide-cf-note" style="font-size:9px;color:var(--gin);margin-top:7px;letter-spacing:.1em;"></p>
+      <div class="cf-ok" id="guide-cf-ok" style="display:none;">
+        <div style="font-size:22px;margin-bottom:8px;">✅</div>
+        <div style="font-family:'Shippori Mincho',serif;font-size:17px;color:var(--kin);margin-bottom:8px;">申し込みを受け付けました</div>
+        <div style="font-size:12px;color:rgba(245,240,232,.65);line-height:1.9;">担当者より3営業日以内にご連絡いたします。</div>
+      </div>
+    </div>
+  </div>
+</div><!-- /view-guide -->
+
+<!-- ⑨ 広告掲載 -->
+<div class="spa-view" id="view-advertise">
+  <div class="page-hero"><div class="page-hero-content"><h1 class="page-hero-title">広告掲載</h1><p class="page-hero-sub">ADVERTISING INFORMATION</p></div></div>
+  <div class="sec">
+    <div class="reveal"><span class="sl">BANNER ADVERTISING</span><h2 class="st">バナー広告募集</h2><div class="sd"></div>
+      <p style="font-size:13px;color:rgba(245,240,232,.65);line-height:2;max-width:600px;">洲本城公式サイトへの広告掲載をご希望の方はお気軽にお問い合わせください。淡路島・洲本市への観光客に効果的にリーチできます。</p>
+    </div>
+    <div class="adv-plan-grid reveal">
+      <div class="adv-plan">
+        <div class="adv-plan-name">ライトプラン</div>
+        <div class="adv-plan-price">¥5,000<span style="font-size:14px;color:var(--gin);">/月</span></div>
+        <div class="adv-plan-period">掲載期間：1ヶ月〜</div>
+        <ul class="adv-plan-features">
+          <li>バナーサイズ：16:9（横幅50%）</li>
+          <li>掲載場所：フッター上部</li>
+          <li>月間PV：約5,000〜</li>
+          <li>画像・リンク設定</li>
+        </ul>
+      </div>
+      <div class="adv-plan recommended">
+        <div class="adv-plan-name">スタンダードプラン</div>
+        <div class="adv-plan-price">¥10,000<span style="font-size:14px;color:var(--gin);">/月</span></div>
+        <div class="adv-plan-period">掲載期間：1ヶ月〜</div>
+        <ul class="adv-plan-features">
+          <li>バナーサイズ：16:9（横幅50%）</li>
+          <li>掲載場所：複数スロット対応</li>
+          <li>月間PV：約10,000〜</li>
+          <li>画像・リンク・テキスト設定</li>
+          <li>掲載レポート提供</li>
+        </ul>
+      </div>
+      <div class="adv-plan">
+        <div class="adv-plan-name">プレミアムプラン</div>
+        <div class="adv-plan-price">要相談</div>
+        <div class="adv-plan-period">掲載期間：応相談</div>
+        <ul class="adv-plan-features">
+          <li>特集記事・コンテンツ連携</li>
+          <li>イベントスポンサー</li>
+          <li>SNS連動・プレスリリース</li>
+          <li>カスタム対応</li>
+          <li>専任担当者対応</li>
+        </ul>
+      </div>
+    </div>
+    <div class="reveal" style="margin-top:32px;background:var(--gL);border:1px solid rgba(201,168,76,.12);padding:24px;">
+      <div style="font-family:'Shippori Mincho',serif;font-size:16px;color:var(--kin);margin-bottom:14px;">バナーサイズ・掲載仕様</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:13px;color:rgba(245,240,232,.75);line-height:1.9;">
+        <div><div style="font-size:9px;letter-spacing:.2em;color:var(--kin);margin-bottom:5px;">バナーサイズ</div>比率 16:9（推奨：1200×675px）</div>
+        <div><div style="font-size:9px;letter-spacing:.2em;color:var(--kin);margin-bottom:5px;">ファイル形式</div>JPG / PNG / WebP</div>
+        <div><div style="font-size:9px;letter-spacing:.2em;color:var(--kin);margin-bottom:5px;">PC表示</div>横並び2カラム</div>
+        <div><div style="font-size:9px;letter-spacing:.2em;color:var(--kin);margin-bottom:5px;">スマホ表示</div>縦並び1カラム</div>
+      </div>
+    </div>
+    <!-- 広告申し込みフォーム（専用EmailJS） -->
+    <div class="special-form-box reveal" style="margin-top:32px;">
+      <div class="special-form-ttl">広告掲載を申し込む</div>
+      <div class="special-form-sub">フォームよりお申し込みください。担当者より料金・仕様の詳細をご案内いたします。</div>
+      <div id="ad-form-fields"></div>
+      <button class="cf-sub" id="ad-cf-btn" onclick="submitAdForm()">申 し 込 む</button>
+      <p id="ad-cf-note" style="font-size:9px;color:var(--gin);margin-top:7px;letter-spacing:.1em;"></p>
+      <div class="cf-ok" id="ad-cf-ok" style="display:none;">
+        <div style="font-size:22px;margin-bottom:8px;">✅</div>
+        <div style="font-family:'Shippori Mincho',serif;font-size:17px;color:var(--kin);margin-bottom:8px;">申し込みを受け付けました</div>
+        <div style="font-size:12px;color:rgba(245,240,232,.65);line-height:1.9;">担当者より3営業日以内にご連絡いたします。</div>
+      </div>
+    </div>
+  </div>
+</div><!-- /view-advertise -->
+
+<!-- ⑩ アクセス単独ページ -->
+<div class="spa-view" id="view-access">
+  <div class="page-hero"><div class="page-hero-content"><h1 class="page-hero-title">アクセス</h1><p class="page-hero-sub">ACCESS INFORMATION</p></div></div>
+  <div class="sec">
+    <div class="ac-grid reveal">
+      <div class="ac-item"><div class="ac-meth">🚗 お車の場合</div><div class="ac-det">神戸淡路鳴門自動車道<br><strong>洲本IC</strong>から約15分</div><div class="ac-note">※城山公園無料駐車場あり（普通車約50台）</div></div>
+      <div class="ac-item"><div class="ac-meth">🚌 バスの場合</div><div class="ac-det">三宮・神戸から高速バスで洲本バスセンターへ。下車後タクシーまたは徒歩約30分（登山道）</div><div class="ac-note">城山公園バス停下車すぐ</div></div>
+      <div class="ac-item"><div class="ac-meth">🚢 フェリーの場合</div><div class="ac-det">高速船：明石港〜岩屋港（約13分）<br>その後路線バスで洲本方面へ</div><div class="ac-note">淡路交通バス洲本行き乗車</div></div>
+      <div class="ac-item"><div class="ac-meth">🗺 所在地</div><div class="ac-det">〒656-0023<br>兵庫県洲本市小路谷1272-1<br>洲本城（三熊山城山公園内）</div><div class="ac-note">Google Maps「洲本城跡」で検索</div></div>
+    </div>
+    <div class="reveal" style="margin-top:2px;">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3284.5!2d134.8945!3d34.3506!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x354f5b5a5e5a5a5b%3A0x0!2z5rWF5pys5Z-O!5e0!3m2!1sja!2sjp!4v1" width="100%" height="300" style="border:1px solid rgba(201,168,76,.15);filter:grayscale(30%) invert(90%) hue-rotate(180deg);" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </div>
+</div><!-- /view-access -->
+
+<!-- ⑪ お問い合わせ単独ページ -->
+<div class="spa-view" id="view-contact">
+  <div class="page-hero"><div class="page-hero-content"><h1 class="page-hero-title">お問い合わせ</h1><p class="page-hero-sub">CONTACT US</p></div></div>
+  <div class="sec">
+    <div style="text-align:center;max-width:540px;margin:0 auto;">
+      <p style="font-size:13px;color:rgba(245,240,232,.55);letter-spacing:.08em;line-height:1.9;">洲本城・観光に関するご質問はこちらからどうぞ</p>
+      <div class="cf-wrap" style="margin-top:28px;">
+        <div id="contact-form2"><div id="cf-fields2"></div>
+          <button class="cf-sub" id="cf-btn2" onclick="submitCF2()">送 信 す る</button>
+          <p id="cf-note2" style="font-size:9px;color:var(--gin);margin-top:7px;text-align:center;letter-spacing:.1em;"></p>
+        </div>
+        <div class="cf-ok" id="cf-ok2" style="display:none;">
+          <div style="font-size:26px;margin-bottom:10px;">✉️</div>
+          <div style="font-family:'Shippori Mincho',serif;font-size:19px;color:var(--kin);margin-bottom:8px;">送信完了</div>
+          <div style="font-size:12px;color:rgba(245,240,232,.65);line-height:1.9;">お問い合わせありがとうございます。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /view-contact -->
+
+<!-- FOOTER -->
+<footer id="site-footer" style="display:none;">
+  <div class="ft-logo">洲本城</div><div class="ft-en">SUMOTO CASTLE OFFICIAL</div>
+  <ul class="ft-nav">
+    <li><button onclick="nav('home')">ホーム</button></li>
+    <li><button onclick="nav('about')">城について</button></li>
+    <li><button onclick="nav('timeline')">歴史年表</button></li>
+    <li><button onclick="nav('news')">最新情報</button></li>
+    <li><button onclick="nav('events')">イベント</button></li>
+    <li><button onclick="nav('map')">城内マップ</button></li>
+    <li><button onclick="nav('tourism')">観光情報</button></li>
+    <li><button onclick="nav('guide')">ガイド案内</button></li>
+    <li><button onclick="nav('advertise')">広告掲載</button></li>
+    <li><button onclick="nav('access')">アクセス</button></li>
+    <li><button onclick="nav('contact')">お問い合わせ</button></li>
+  </ul>
+  <div class="ft-copy">© 2025 洲本城観光協会 All Rights Reserved.</div>
+</footer>
+
+<!-- ══════════ FIREBASE MODULE ══════════ -->
+<script type="module">
+import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import{getFirestore,collection,getDocs,getDoc,addDoc,doc,query,orderBy,serverTimestamp}
+  from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+const FC={apiKey:"AIzaSyA7kshE6i4GPxzPzXC4TfUFPp7EbGuiVdU",authDomain:"bussinesscardmae.firebaseapp.com",projectId:"bussinesscardmae",storageBucket:"bussinesscardmae.firebasestorage.app",messagingSenderId:"142830820792",appId:"1:142830820792:web:ddfeeec8f22010fd2b434d"};
+const db=getFirestore(initializeApp(FC));
+
+/* utils */
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function rich(t){if(!t)return'';return esc(t).replace(/!\[([^\]]*)\]\((https?:\/\/[^\)]+)\)/g,'<img src="$2" alt="$1" style="max-width:100%;margin:8px 0;">').replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>').replace(/(https?:\/\/(?![^<]*<\/a>)[^\s<"]+)/g,u=>`<a href="${u}" target="_blank" rel="noopener">${u}</a>`).replace(/\n/g,'<br>');}
+
+/* ── setImg helper（画像URLがあれば<img>を表示、なければfallback表示） ── */
+function setImg(imgId,fbId,url,opts={}){
+  const img=document.getElementById(imgId);
+  const fb=document.getElementById(fbId);
+  if(!img)return;
+  if(url){
+    img.src=url;img.style.display='block';
+    if(fb)fb.style.display='none';
+    if(opts.width)img.style.width=opts.width;
+    if(opts.height)img.style.height=opts.height;
+  }else{
+    img.style.display='none';
+    if(fb)fb.style.display='inline-block';
+  }
+}
+
+/* ── Site Assets（ローディング画像・アイコン画像・マップ画像） ── */
+async function loadAssets(){
+  try{
+    const s=await getDoc(doc(db,'siteSettings','assets'));
+    if(!s.exists())return;
+    const d=s.data();
+    // ローディング画像
+    if(d.loadingImg){
+      const ldImg=document.getElementById('ld-img');
+      const ldFb=document.getElementById('ld-img-fallback');
+      ldImg.src=d.loadingImg;ldImg.style.display='block';
+      if(ldFb)ldFb.style.display='none';
+    }
+    // 天気バーのお城アイコン
+    setImg('ico-castle-wb','ico-castle-wb-fb',d.iconCastle);
+    // feat アイコン
+    setImg('feat-ico-1','feat-ico-1-fb',d.iconCastle);
+    setImg('feat-ico-2','feat-ico-2-fb',d.iconWave);
+    setImg('feat-ico-3','feat-ico-3-fb',d.iconRock);
+    setImg('feat-ico-4','feat-ico-4-fb',d.iconCherry);
+    // ガイドボックスアイコン
+    setImg('ico-pin','ico-pin-fb',d.iconPin);
+    setImg('ico-time','ico-time-fb',d.iconTime);
+    setImg('ico-cal','ico-cal-fb',d.iconCalendar);
+    setImg('ico-person','ico-person-fb',d.iconPerson);
+    // アクセスアイコン
+    setImg('ico-car','ico-car-fb',d.iconCar);
+    setImg('ico-bus','ico-bus-fb',d.iconBus);
+    setImg('ico-ship','ico-ship-fb',d.iconShip);
+    setImg('ico-map2','ico-map2-fb',d.iconMap);
+    // ホーム地図画像（名所名入り）
+    if(d.homeMapImg){
+      const hm=document.getElementById('home-map-img');
+      const hp=document.getElementById('home-map-placeholder');
+      hm.src=d.homeMapImg;hm.style.display='block';
+      if(hp)hp.style.display='none';
+    }
+    // 詳細マップ画像（イラストのみ）
+    if(d.detailMapImg){
+      const dm=document.getElementById('map-detail-img');
+      const dp=document.getElementById('map-detail-placeholder');
+      dm.src=d.detailMapImg;dm.style.display='block';
+      if(dp)dp.style.display='none';
+    }
+    // 広告バナーアイコン
+    setImg('ad-ico-1','ad-ico-1-fb',d.adIcon1);
+    setImg('ad-ico-2','ad-ico-2-fb',d.adIcon2);
+    if(d.adText1)document.getElementById('ad-text-1').textContent=d.adText1;
+    // マップポップアップのプレースホルダーアイコン
+    setImg('ico-map-ph','',d.iconCastle);
+  }catch(e){console.warn('assets',e);}
+}
+
+/* ── Hero ── */
+async function loadHero(){
+  try{
+    const s=await getDoc(doc(db,'siteSettings','hero'));
+    if(s.exists()){const d=s.data();if(d.images?.length)initSlides(d.images);if(d.catchcopy)document.getElementById('h-desc').innerHTML=d.catchcopy.replace(/\n/g,'<br>');}
+  }catch{}
+}
+function initSlides(imgs){
+  const c=document.getElementById('hero-slides'),d=document.getElementById('h-dots');c.innerHTML='';d.innerHTML='';
+  imgs.forEach((u,i)=>{const s=document.createElement('div');s.className='h-slide'+(i===0?' active':'');s.style.backgroundImage=`url('${u}')`;c.appendChild(s);const dot=document.createElement('div');dot.className='h-dot'+(i===0?' active':'');dot.onclick=()=>goSlide(i);d.appendChild(dot);});
+  if(imgs.length<2)return;
+  window._hs={slides:[...c.querySelectorAll('.h-slide')],dots:[...d.querySelectorAll('.h-dot')],cur:0};
+  function goSlide(n){const h=window._hs;h.slides[h.cur].classList.remove('active');h.dots[h.cur].classList.remove('active');h.cur=n;h.slides[n].classList.add('active');h.dots[n].classList.add('active');}
+  window.goSlide=goSlide;setInterval(()=>goSlide((window._hs.cur+1)%imgs.length),5000);
+}
+
+/* ── Breaking ── */
+async function loadBreaking(){
+  try{
+    const s=await getDoc(doc(db,'breakingNews','main'));
+    if(s.exists()&&s.data().enabled&&s.data().text){const d=s.data();const bar=document.getElementById('bnbar');bar.style.display='flex';bar.style.background=d.color||'#1a2744';const h=rich(d.text);document.getElementById('bn-txt2').innerHTML=h+'&nbsp;&nbsp;&nbsp;&nbsp;'+h;document.getElementById('hdr').dataset.bn='1';recalcHdrTop();}
+  }catch{}
+}
+
+/* ── Popup ── */
+async function loadPopup(){
+  try{
+    const s=await getDoc(doc(db,'popup','main'));
+    if(s.exists()&&s.data().enabled){const d=s.data();if(localStorage.getItem('popup-dismissed')===new Date().toDateString())return;document.getElementById('popm-ttl').textContent=d.title||'お知らせ';document.getElementById('popm-body').innerHTML=rich(d.body||'');const pi=document.getElementById('popm-img');if(d.imageUrl){pi.src=d.imageUrl;pi.style.display='block';}else pi.style.display='none';const lb=document.getElementById('popm-lnk');if(d.linkUrl){lb.href=d.linkUrl;lb.textContent=d.linkLabel||'詳しく見る';lb.style.display='inline-flex';}else lb.style.display='none';setTimeout(()=>document.getElementById('popm').classList.add('show'),1800);}
+  }catch{}
+}
+
+/* ── Blocks ── */
+async function loadBlocks(){
+  try{const snap=await getDocs(query(collection(db,'blocks'),orderBy('order')));snap.docs.map(d=>({id:d.id,...d.data()})).filter(b=>b.enabled!==false).forEach(renderBlock);observeReveal();}catch(e){console.warn('blocks',e);}
+}
+function renderBlock(b){
+  const slot=document.getElementById('slot-'+b.slot);if(!slot)return;
+  const el=document.createElement('div');el.className='reveal';
+  if(b.type==='announcement'){
+    const icoHtml=b.iconUrl?`<div class="blk-ann-ico-wrap"><img src="${esc(b.iconUrl)}" alt=""></div>`:`<div class="blk-ann-ico-wrap" style="font-size:20px;">${b.icon||'📢'}</div>`;
+    el.innerHTML=`<div class="blk-ann" style="background:rgba(${b.color||'201,168,76'},.07);border-left-color:${b.borderColor||'var(--kin)'}"><div class="blk-ann-ico-wrap">${b.iconUrl?`<img src="${esc(b.iconUrl)}" alt="" style="width:28px;height:28px;object-fit:contain;">`:(b.icon||'📢')}</div><div class="blk-ann-body">${b.title?`<div class="blk-ann-title" style="color:${b.titleColor||'var(--kin)'}">${esc(b.title)}</div>`:''}<div class="blk-ann-text">${rich(b.text||'')}</div>${b.linkUrl?`<a href="${esc(b.linkUrl)}" ${b.linkTarget==='_blank'?'target="_blank" rel="noopener"':''} class="blk-ann-link">${esc(b.linkLabel||'詳しく見る')}</a>`:''}</div></div>`;
+  }else if(b.type==='image-article'){
+    const imgH=b.imageUrl?`<div class="blk-img-art-img"><img src="${esc(b.imageUrl)}" loading="lazy"></div>`:`<div class="blk-img-art-img"><div class="ph-img" style="font-size:36px;opacity:.2;">🏯</div></div>`;
+    const bodyH=`<div class="blk-img-art-body">${b.category?`<div class="blk-img-art-cat">${esc(b.category)}</div>`:''}<div class="blk-img-art-ttl">${esc(b.title||'')}</div><div class="blk-img-art-txt">${rich(b.text||'')}</div>${b.linkUrl?`<a href="${esc(b.linkUrl)}" ${b.linkTarget==='_blank'?'target="_blank" rel="noopener"':''} class="blk-img-art-link">${esc(b.linkLabel||'詳しく見る')}</a>`:''}</div>`;
+    el.innerHTML=`<div class="${b.fullWidth?'blk-img-art full':'blk-img-art'}">${b.layout==='right'?bodyH+imgH:imgH+bodyH}</div>`;
+  }else if(b.type==='countdown'){
+    el.innerHTML=`<div style="padding:16px;"><div class="blk-cd" id="cd-${b.id}"><div class="blk-cd-title">${esc(b.title||'')}</div><div class="blk-cd-sub">${esc(b.subtitle||'')}</div><div class="blk-cd-nums" id="cdn-${b.id}">...</div></div></div>`;
+    setTimeout(()=>startCD(b.id,b.targetDate),50);
+  }else if(b.type==='html'){el.innerHTML=`<div class="blk-html">${b.html||''}</div>`;
+  }else if(b.type==='ad'){el.innerHTML=`<div class="blk-ad"><div class="blk-ad-lbl">広告</div>${b.html||''}</div>`;
+  }else if(b.type==='form'){const fid='bf-'+b.id;el.innerHTML=`<div style="padding:0 16px;"><div class="blk-form">${b.title?`<div class="blk-form-title">${esc(b.title)}</div>`:''} ${b.subtitle?`<div class="blk-form-sub">${esc(b.subtitle)}</div>`:''}<div class="blk-form-inner" id="${fid}"></div></div></div>`;renderBF(fid,b.fields||[],b.id);
+  }else if(b.type==='image-modal'){el.innerHTML=`<div style="padding:0 16px;"><div class="blk-img-mt" onclick="openImgModal('${esc(b.imageUrl||'')}','${esc(b.caption||'')}')"><img src="${esc(b.imageUrl||'')}" loading="lazy" style="width:100%;display:block;${b.maxHeight?'max-height:'+b.maxHeight+'px;object-fit:cover;':''}"><div class="blk-img-mt-ov"><span>クリックで拡大</span></div></div>${b.caption?`<div style="text-align:center;font-size:10px;color:var(--gin);margin-top:5px;">${esc(b.caption)}</div>`:''}</div>`;
+  }else if(b.type==='card-grid'){
+    const items=(b.cards||[]).map(c=>`<div class="blk-card-item" ${c.link?`onclick="window.open('${esc(c.link)}','_blank')"`:''} ><div class="blk-card-ico-wrap">${c.iconUrl?`<img src="${esc(c.iconUrl)}" alt="" style="width:100%;height:100%;object-fit:contain;">`:`<span style="font-size:22px;">${c.icon||'⭐'}</span>`}</div><div class="blk-card-ttl">${esc(c.title||'')}</div><div class="blk-card-txt">${rich(c.text||'')}</div></div>`).join('');
+    el.innerHTML=`<div style="padding:16px;"><div class="blk-cards">${items}</div></div>`;
+  }
+  slot.appendChild(el);
+}
+function renderBF(cid,fields,bid){
+  const c=document.getElementById(cid);if(!c)return;
+  const df=[{id:'name',type:'text',label:'お名前',required:true,placeholder:'山田 太郎'},{id:'email',type:'email',label:'メールアドレス',required:true,placeholder:'example@email.com'},{id:'message',type:'textarea',label:'お問い合わせ内容',required:true,placeholder:'ご質問をご記入ください'}];
+  const f=fields.length?fields:df;
+  c.innerHTML=f.map(field=>{const id=`bf_${bid}_${field.id}`;let inp='';
+    if(field.type==='textarea')inp=`<textarea id="${id}" class="cf-ta" placeholder="${esc(field.placeholder||'')}" ${field.required?'required':''}></textarea>`;
+    else if(field.type==='select')inp=`<select id="${id}" class="cf-sel">${(field.options||[]).map(o=>`<option>${esc(o)}</option>`).join('')}</select>`;
+    else if(field.type==='radio')inp=`<div class="cf-rg">${(field.options||[]).map(o=>`<label class="cf-ri"><input type="radio" name="${id}" value="${esc(o)}"><label>${esc(o)}</label></label>`).join('')}</div>`;
+    else if(field.type==='checkbox')inp=`<div class="cf-cg">${(field.options||[]).map(o=>`<label class="cf-ci"><input type="checkbox" name="${id}" value="${esc(o)}"><label>${esc(o)}</label></label>`).join('')}</div>`;
+    else inp=`<input type="${field.type||'text'}" id="${id}" class="cf-input" placeholder="${esc(field.placeholder||'')}" ${field.required?'required':''}>`; 
+    return `<div class="cf-fld"><label class="cf-lbl">${esc(field.label)}${field.required?'<span class="req">*</span>':''}</label>${inp}</div>`;
+  }).join('')+`<button class="cf-sub" onclick="submitBF('${bid}',${JSON.stringify(f).replace(/'/g,"\\'")},'${cid}')">送 信 す る</button>`;
+}
+window.submitBF=async function(bid,fields,cid){
+  const values={};let valid=true;
+  for(const f of fields){const id=`bf_${bid}_${f.id}`;if(f.type==='radio'){const c=document.querySelector(`input[name="${id}"]:checked`);values[f.label]=c?c.value:'';if(f.required&&!values[f.label])valid=false;}else if(f.type==='checkbox'){values[f.label]=[...document.querySelectorAll(`input[name="${id}"]:checked`)].map(e=>e.value).join(', ');}else{const el=document.getElementById(id);values[f.label]=el?el.value.trim():'';if(f.required&&!values[f.label])valid=false;}}
+  if(!valid){alert('必須項目を入力してください');return;}
+  try{await addDoc(collection(db,'contacts'),{...values,blockId:bid,read:false,createdAt:serverTimestamp()});const cfg=window._ejsCfg;if(cfg?.pub&&cfg?.svc&&cfg?.tpl){const mb=Object.entries(values).map(([k,v])=>`${k}: ${v}`).join('\n');await emailjs.send(cfg.svc,cfg.tpl,{from_name:values['お名前']||'—',from_email:values['メールアドレス']||'—',message:mb});}const c=document.getElementById(cid);if(c){c.innerHTML='<div style="text-align:center;padding:20px;border:1px solid rgba(201,168,76,.3);"><div style="font-size:20px;margin-bottom:6px;">✉️</div><div style="font-family:\'Shippori Mincho\',serif;font-size:15px;color:var(--kin);">送信完了</div></div>';}}catch{alert('送信に失敗しました。時間をおいてお試しください。');}
+};
+function startCD(id,target){const el=document.getElementById('cdn-'+id);if(!el||!target)return;const end=new Date(target);function tick(){const now=new Date();const diff=end-now;if(diff<=0){el.innerHTML='<span style="font-family:\'Shippori Mincho\',serif;font-size:20px;color:var(--kin);">開催中</span>';return;}const d=Math.floor(diff/86400000);const h=Math.floor((diff%86400000)/3600000);const m=Math.floor((diff%3600000)/60000);const s=Math.floor((diff%60000)/1000);el.innerHTML=`<div class="blk-cd-unit"><span class="blk-cd-n">${d}</span><div class="blk-cd-l">日</div></div><div class="blk-cd-sep">:</div><div class="blk-cd-unit"><span class="blk-cd-n">${String(h).padStart(2,'0')}</span><div class="blk-cd-l">時間</div></div><div class="blk-cd-sep">:</div><div class="blk-cd-unit"><span class="blk-cd-n">${String(m).padStart(2,'0')}</span><div class="blk-cd-l">分</div></div><div class="blk-cd-sep">:</div><div class="blk-cd-unit"><span class="blk-cd-n">${String(s).padStart(2,'0')}</span><div class="blk-cd-l">秒</div></div>`;setTimeout(tick,1000);}tick();
+}
+
+/* ── Site Settings ── */
+async function loadSettings(){
+  try{const s=await getDoc(doc(db,'siteSettings','general'));if(!s.exists())return;const d=s.data();
+    if(d.aboutTitle)document.getElementById('home-about-title').textContent=d.aboutTitle;
+    if(d.aboutDesc)document.getElementById('home-about-desc').innerHTML=rich(d.aboutDesc);
+    if(d.contactTitle)document.getElementById('contact-title').textContent=d.contactTitle;
+    if(d.contactDesc)document.getElementById('contact-desc').textContent=d.contactDesc;
+    if(d.accessAddress)document.getElementById('access-addr').innerHTML=d.accessAddress.replace(/\n/g,'<br>');
+    if(d.mapEmbed)document.getElementById('map-iframe').src=d.mapEmbed;
+  }catch{}
+}
+
+/* ── Castle Cards ── */
+async function loadCastleCards(){
+  try{const s=await getDoc(doc(db,'siteSettings','castleCards'));if(!s.exists())return;const cards=s.data().cards||[];if(!cards.length)return;
+    document.getElementById('feat-grid').innerHTML=cards.map((c,i)=>`
+      <div class="feat-card reveal" style="transition-delay:${i*.1}s" onclick="nav('about')">
+        <div class="feat-num">0${i+1}</div>
+        <div class="feat-ico-wrap">${c.iconUrl?`<img src="${esc(c.iconUrl)}" alt="" style="width:100%;height:100%;object-fit:contain;">`:`<span style="font-size:28px;">${esc(c.ico||'🏯')}</span>`}</div>
+        <div class="feat-ttl">${esc(c.ttl||'')}</div>
+        <div class="feat-txt">${esc(c.summary||'')}</div>
+        <div class="feat-more">詳しく見る</div>
+      </div>`).join('');
+    observeReveal();
+  }catch{}
+}
+
+/* ── Map Spots ── */
+async function loadMapSpots(){
+  // Firestoreからスポット取得、なければデフォルト
+  let spots=[];
+  try{
+    const snap=await getDocs(collection(db,'mapSpots'));
+    spots=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.order-b.order);
+  }catch{}
+  if(!spots.length){
+    spots=[
+      {order:1,num:1,name:'大手門跡',x:20,y:82,desc:'山麓にある大手門跡。石垣が残り、城下町から山頂への入口でした。登り石垣もここから始まります。',time:'登山口として所要約2分',loc:'洲本市小路谷',photo:''},
+      {order:2,num:2,name:'登り石垣',x:28,y:65,desc:'国内最長クラスの登り石垣。全長約1.1kmにわたり山頂まで続きます。戦国末期〜江戸初期の石積み技術の粋です。',time:'見学所要約15分',loc:'大手門〜天守台',photo:''},
+      {order:3,num:3,name:'南あわじ方面展望所',x:22,y:42,desc:'山腹にある展望スポット。南あわじ市方面と紀伊水道を見渡せます。',time:'登山口から約15分',loc:'三熊山中腹',photo:''},
+      {order:4,num:4,name:'天守台',x:50,y:30,desc:'山頂にある天守台。日本最古の模擬天守（1928年建造）が建ちます。石垣の積み方が間近で観察できる見どころです。',time:'登山口から約20分',loc:'三熊山山頂',photo:''},
+      {order:5,num:5,name:'播磨灘展望台',x:70,y:35,desc:'播磨灘・淡路島北部・四国まで一望できる絶景スポット。夕暮れ時と夜景が特に美しい。',time:'天守から約5分',loc:'山頂東側',photo:''},
+      {order:6,num:6,name:'北の丸跡',x:62,y:52,desc:'北の丸（北曲輪）跡。石垣が良好な状態で残り、江戸初期の打込み接の技法が見られます。',time:'見学所要約10分',loc:'天守北側',photo:''},
+      {order:7,num:7,name:'三の丸跡',x:38,y:55,desc:'三の丸（三曲輪）跡。広い曲輪跡が残り、当時の城郭の規模を感じられます。',time:'見学所要約5分',loc:'山頂西側',photo:''},
+    ];
+  }
+  window._mapSpots=spots;
+  renderMapMarkers(spots);
+  renderSpotList(spots);
+}
+function renderMapMarkers(spots){
+  const layer=document.getElementById('map-markers-layer');if(!layer)return;
+  layer.innerHTML=spots.map(s=>`
+    <div class="map-marker" id="marker-${s.num}" style="left:${s.x}%;top:${s.y}%;" onclick="openMapSpot(${s.num})">
+      <div class="map-marker-pin">${s.num}</div>
+    </div>`).join('');
+}
+function renderSpotList(spots){
+  const grid=document.getElementById('spot-list-grid');if(!grid)return;
+  grid.innerHTML=spots.map(s=>`
+    <div class="spot-list-item" id="spot-li-${s.num}" onclick="openMapSpot(${s.num})">
+      <div class="spot-list-num">${s.num}</div>
+      <div class="spot-list-name">${esc(s.name)}</div>
+    </div>`).join('');
+}
+
+window.openMapSpot=function(num){
+  const s=window._mapSpots?.find(x=>x.num===num);if(!s)return;
+  // マーカーactive切り替え
+  document.querySelectorAll('.map-marker').forEach(m=>m.classList.remove('active'));
+  document.querySelectorAll('.spot-list-item').forEach(m=>m.classList.remove('active'));
+  const marker=document.getElementById('marker-'+num);if(marker)marker.classList.add('active');
+  const li=document.getElementById('spot-li-'+num);if(li)li.classList.add('active');
+  // ポップアップ内容
+  document.getElementById('mp-num').textContent='SPOT '+String(num).padStart(2,'0');
+  document.getElementById('mp-name').textContent=s.name;
+  document.getElementById('mp-desc').textContent=s.desc;
+  const imgWrap=document.getElementById('mp-img-wrap');const ph=document.getElementById('mp-img-ph');
+  if(s.photo){imgWrap.innerHTML=`<img src="${esc(s.photo)}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentNode.innerHTML='<div class=\'mp-img-placeholder\'><span style=\'font-size:32px;opacity:.3;\'>🏯</span></div>'">`;ph.style.display='none';}
+  else{if(imgWrap.querySelector('img'))imgWrap.innerHTML=`<div class="mp-img-placeholder" id="mp-img-ph"><div style="font-size:32px;opacity:.2;">🏯</div></div>`;}
+  document.getElementById('mp-meta').innerHTML=`<div class="mp-meta-item">📍 ${esc(s.loc)}</div><div class="mp-meta-item">⏱️ ${esc(s.time)}</div>`;
+  // ポップアップ位置（スクロール位置に合わせて画面内に表示）
+  const popup=document.getElementById('map-popup');
+  const mc=document.getElementById('map-detail-img-wrap');
+  if(mc){
+    const rect=mc.getBoundingClientRect();
+    const pw=Math.min(360,window.innerWidth-24);
+    let left=rect.right+8;
+    if(left+pw>window.innerWidth)left=Math.max(rect.left-pw-8,8);
+    let top=window.scrollY+rect.top+16;
+    if(rect.top+400>window.innerHeight)top=window.scrollY+Math.max(rect.top+rect.height-400,80);
+    popup.style.position='absolute';popup.style.left=left+'px';popup.style.top=top+'px';popup.style.width=pw+'px';
+  }
+  popup.classList.add('show');
+};
+
+/* ── Articles ── */
+let arts=[];
+async function loadArticles(){
+  try{const snap=await getDocs(query(collection(db,'articles'),orderBy('createdAt','desc')));arts=snap.docs.map(d=>({id:d.id,...d.data()}));}
+  catch{arts=[{id:'d1',title:'洲本城 春の夜桜ライトアップ開催',category:'お知らせ',slug:'sakura-2025',content:'今年も洲本城の春の夜桜ライトアップを開催します。\n\n点灯期間：3月下旬〜4月上旬\n点灯時間：日没〜21:00\n\n石垣と桜のコントラストが幻想的な夜景をお楽しみください。',imageUrl:'',linkUrl:'',createdAt:{toDate:()=>new Date('2025-03-01')},published:true},{id:'d2',title:'石垣修復工事の完了について',category:'歴史',slug:'ishigaki-2025',content:'令和7年3月より実施しておりました北側石垣の修復工事が完了しました。\n\n往時の姿を取り戻した石垣をぜひご覧ください。',imageUrl:'',linkUrl:'',createdAt:{toDate:()=>new Date('2025-03-15')},published:true},{id:'d3',title:'洲本城周辺グルメマップを公開',category:'グルメ',slug:'gourmet-2025',content:'洲本城周辺の飲食店をまとめたグルメマップを公開しました。',imageUrl:'',linkUrl:'',createdAt:{toDate:()=>new Date('2025-02-20')},published:true}];}
+  window._arts=arts;renderHomeArts();renderNewsGrid(arts.filter(a=>a.published));
+}
+function artCardHtml(a,i){
+  const date=a.createdAt?.toDate?a.createdAt.toDate().toLocaleDateString('ja-JP'):'—';
+  const th=a.imageUrl?`<div class="art-thumb"><img src="${esc(a.imageUrl)}" loading="lazy" onerror="this.style.display='none'"></div>`:`<div class="art-thumb"><div class="art-thumb-placeholder"><span style="font-size:36px;opacity:.2;">🏯</span></div></div>`;
+  return `<div class="art-card reveal" style="transition-delay:${i*.08}s" onclick="openArtDetail('${a.id}')">${th}<div class="art-body"><div class="art-cat">${esc(a.category||'お知らせ')}</div><div class="art-ttl">${esc(a.title)}</div><div class="art-date">${date}</div><div class="art-more">続きを読む</div></div></div>`;
+}
+function renderHomeArts(){const grid=document.getElementById('home-art-grid');const pub=arts.filter(a=>a.published).slice(0,3);if(!pub.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--gin);">記事はありません</div>';return;}grid.innerHTML=pub.map(artCardHtml).join('');observeReveal();}
+function renderNewsGrid(list){const grid=document.getElementById('news-art-grid');document.getElementById('news-cnt').textContent=list.length+'件';if(!list.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:44px;color:var(--gin);">記事はありません</div>';return;}grid.innerHTML=list.map(artCardHtml).join('');observeReveal();}
+window.filterNews=()=>renderNewsGrid(arts.filter(a=>a.published&&(!document.getElementById('news-cat-f').value||a.category===document.getElementById('news-cat-f').value)));
+window.openArtDetail=function(id){
+  const a=window._arts?.find(x=>x.id===id);if(!a)return;
+  if(!document.getElementById('view-news').classList.contains('active')){nav('news');setTimeout(()=>showNewsDetail(a),60);}else showNewsDetail(a);
+};
+function showNewsDetail(a){
+  document.getElementById('news-art-grid').style.display='none';
+  document.querySelector('#view-news > .sec > div:first-child')?.style&&(document.querySelector('#view-news > .sec > div:first-child').style.display='none');
+  const nd=document.getElementById('news-detail');nd.style.display='block';
+  const hw=document.getElementById('nd-hero');if(a.imageUrl){hw.innerHTML=`<img src="${esc(a.imageUrl)}" style="width:100%;display:block;" onerror="this.parentNode.innerHTML=''">`;hw.style.minHeight='0';}else{hw.innerHTML='';hw.style.minHeight='0';}
+  document.getElementById('nd-cat').textContent=a.category||'';document.getElementById('nd-title').textContent=a.title;document.getElementById('nd-date').textContent=a.createdAt?.toDate?a.createdAt.toDate().toLocaleDateString('ja-JP'):'';document.getElementById('nd-content').innerHTML=rich(a.content||'');
+  const ext=document.getElementById('nd-ext');if(a.linkUrl){ext.href=a.linkUrl;ext.style.display='inline-flex';}else ext.style.display='none';
+  if(a.slug)history.replaceState({},'','#news-'+a.slug);window.scrollTo(0,0);
+}
+window.closeNewsDetail=function(){document.getElementById('news-detail').style.display='none';document.getElementById('news-art-grid').style.display='';const hd=document.querySelector('#view-news > .sec > div:first-child');if(hd)hd.style.display='';history.replaceState({},'','#news');};
+
+/* ── Events ── */
+let evs=[];
+async function loadEvents(){
+  try{const snap=await getDocs(query(collection(db,'events'),orderBy('date')));evs=snap.docs.map(d=>({id:d.id,...d.data()}));}
+  catch{evs=[{id:'e1',title:'春の夜桜ライトアップ',description:'石垣と桜が幻想的。\n\nライトアップ期間中は洲本城の石垣と桜が美しく輝きます。',date:'2025-04-05',time:'18:00〜21:00',venue:'洲本城城山公園',fee:'無料',notice:'雨天中止。',related:'',photos:[]},{id:'e2',title:'歴史講座「戦国淡路の武将たち」',description:'地元歴史家による特別講座。',date:'2025-05-18',time:'14:00〜15:30',venue:'洲本城歴史館',fee:'無料',notice:'定員30名（先着順・要申込）',related:'',photos:[]},{id:'e3',title:'城下町マルシェ in 洲本',description:'淡路島の食と文化が集結。',date:'2025-06-07',time:'10:00〜17:00',venue:'洲本城周辺広場',fee:'入場無料',notice:'',related:'',photos:[]}];}
+  window._evs=evs;renderHomeEvs();renderEvLists();
+}
+function evItemHtml(e,i){const d=new Date(e.date);const past=d<new Date();return `<div class="ev-item reveal" style="transition-delay:${i*.08}s" onclick="openEvDetail('${e.id}')"><div class="ev-dt"><div class="ev-mo">${d.getMonth()+1}月</div><div class="ev-day">${d.getDate()}</div></div><div class="ev-body"><div class="ev-ttl">${esc(e.title)}${past?'<span class="ev-past-badge">終了</span>':''}</div><div class="ev-desc-short">${esc((e.description||'').slice(0,40))}${(e.description||'').length>40?'...':''}</div></div><div class="ev-arrow">›</div></div>`;}
+function renderHomeEvs(){const list=document.getElementById('home-ev-list');const upcoming=evs.filter(e=>new Date(e.date)>=new Date()).slice(0,3);if(!upcoming.length){list.innerHTML='<div style="text-align:center;padding:44px;color:var(--gin);">イベント情報はありません</div>';return;}list.innerHTML=upcoming.map(evItemHtml).join('');observeReveal();}
+function renderEvLists(){const now=new Date();const up=evs.filter(e=>new Date(e.date)>=now);const past=evs.filter(e=>new Date(e.date)<now).reverse();const ul=document.getElementById('ev-upcoming-list');const pl=document.getElementById('ev-past-list');ul.innerHTML=up.length?up.map(evItemHtml).join(''):'<div style="text-align:center;padding:44px;color:var(--gin);">開催予定のイベントはありません</div>';pl.innerHTML=past.length?past.map(evItemHtml).join(''):'<div style="text-align:center;padding:44px;color:var(--gin);">過去のイベントはありません</div>';observeReveal();}
+window.switchEvTab=function(tab){const isUp=tab==='upcoming';document.getElementById('ev-upcoming-list').style.display=isUp?'':'none';document.getElementById('ev-past-list').style.display=isUp?'none':'';const ub=document.getElementById('ev-tab-upcoming');const pb=document.getElementById('ev-tab-past');ub.style.background=isUp?'var(--kin)':'var(--gL)';ub.style.color=isUp?'var(--sumi)':'var(--gin)';pb.style.background=isUp?'var(--gL)':'var(--kin)';pb.style.color=isUp?'var(--gin)':'var(--sumi)';};
+window.openEvDetail=function(id){
+  const e=window._evs?.find(x=>x.id===id);if(!e)return;
+  if(!document.getElementById('view-events').classList.contains('active')){nav('events');setTimeout(()=>showEvDetail(e),60);}else showEvDetail(e);
+};
+function showEvDetail(e){
+  document.getElementById('ev-upcoming-list').style.display='none';document.getElementById('ev-past-list').style.display='none';document.querySelectorAll('#view-events .sec > *:not(#ev-detail)').forEach(el=>el.style.display='none');
+  const det=document.getElementById('ev-detail');det.style.display='block';
+  const d=new Date(e.date);const dStr=d.toLocaleDateString('ja-JP',{year:'numeric',month:'long',day:'numeric',weekday:'short'});
+  const hw=document.getElementById('evd-hero-img');if(e.imageUrl){hw.innerHTML=`<img src="${esc(e.imageUrl)}" style="width:100%;height:100%;object-fit:cover;">`;hw.style.minHeight='260px';}else{hw.innerHTML='<div style="font-size:48px;opacity:.2;">🎉</div>';hw.style.minHeight='160px';}
+  document.getElementById('evd-ttl2').textContent=e.title;document.getElementById('evd-tag2').textContent=new Date(e.date)<new Date()?'過去のイベント':'イベント';
+  document.getElementById('evd-info2').innerHTML=`<div style="background:var(--gL);border:1px solid rgba(201,168,76,.08);padding:14px"><div style="font-size:9px;letter-spacing:.2em;color:var(--kin);margin-bottom:5px;">開催日</div><div style="font-size:12px;">${dStr}</div></div><div style="background:var(--gL);border:1px solid rgba(201,168,76,.08);padding:14px"><div style="font-size:9px;letter-spacing:.2em;color:var(--kin);margin-bottom:5px;">時間</div><div style="font-size:12px;">${esc(e.time||'詳細本文参照')}</div></div><div style="background:var(--gL);border:1px solid rgba(201,168,76,.08);padding:14px"><div style="font-size:9px;letter-spacing:.2em;color:var(--kin);margin-bottom:5px;">開催場所</div><div style="font-size:12px;">${esc(e.venue||'洲本城城山公園')}</div></div><div style="background:var(--gL);border:1px solid rgba(201,168,76,.08);padding:14px"><div style="font-size:9px;letter-spacing:.2em;color:var(--kin);margin-bottom:5px;">参加費</div><div style="font-size:12px;">${esc(e.fee||'無料')}</div></div>`;
+  document.getElementById('evd-desc2').innerHTML=rich(e.description||'');
+  const nw=document.getElementById('evd-notice2-wrap');if(e.notice){document.getElementById('evd-notice2').innerHTML=rich(e.notice);nw.style.display='block';}else nw.style.display='none';
+  const rw=document.getElementById('evd-related2-wrap');if(e.related){document.getElementById('evd-related2').innerHTML=rich(e.related);rw.style.display='block';}else rw.style.display='none';
+  const pw=document.getElementById('evd-photos2-wrap');if(e.photos?.length){document.getElementById('evd-photos2').innerHTML=e.photos.map(p=>`<img src="${esc(p)}" style="aspect-ratio:4/3;object-fit:cover;width:100%;cursor:pointer;border:1px solid rgba(201,168,76,.1);" loading="lazy" onclick="openImgModal('${esc(p)}','${esc(e.title)}')" onerror="this.style.display='none'">`).join('');pw.style.display='block';}else pw.style.display='none';
+  window.scrollTo(0,0);
+}
+window.closeEvDetail=function(){document.getElementById('ev-detail').style.display='none';document.querySelectorAll('#view-events .sec > *:not(#ev-detail)').forEach(el=>el.style.display='');document.getElementById('ev-upcoming-list').style.display='';};
+
+/* ── Contact Forms ── */
+let formFields=[];
+async function loadCF(){
+  const df=[{id:'name',type:'text',label:'お名前',required:true,placeholder:'山田 太郎'},{id:'email',type:'email',label:'メールアドレス',required:true,placeholder:'example@email.com'},{id:'message',type:'textarea',label:'お問い合わせ内容',required:true,placeholder:'ご質問・ご意見をご記入ください'}];
+  try{const s=await getDoc(doc(db,'siteSettings','contactForm'));formFields=s.exists()&&s.data().fields?.length?s.data().fields:df;}catch{formFields=df;}
+  function makeFields(containerId){
+    const container=document.getElementById(containerId);if(!container)return;
+    container.innerHTML=formFields.map(f=>{const id=`${containerId}_${f.id}`;let inp='';
+      if(f.type==='textarea')inp=`<textarea id="${id}" class="cf-ta" placeholder="${esc(f.placeholder||'')}" ${f.required?'required':''}></textarea>`;
+      else if(f.type==='select')inp=`<select id="${id}" class="cf-sel">${(f.options||[]).map(o=>`<option>${esc(o)}</option>`).join('')}</select>`;
+      else if(f.type==='radio')inp=`<div class="cf-rg">${(f.options||[]).map(o=>`<label class="cf-ri"><input type="radio" name="${id}" value="${esc(o)}"><label>${esc(o)}</label></label>`).join('')}</div>`;
+      else if(f.type==='checkbox')inp=`<div class="cf-cg">${(f.options||[]).map(o=>`<label class="cf-ci"><input type="checkbox" name="${id}" value="${esc(o)}"><label>${esc(o)}</label></label>`).join('')}</div>`;
+      else inp=`<input type="${f.type||'text'}" id="${id}" class="cf-input" placeholder="${esc(f.placeholder||'')}" ${f.required?'required':''}>`; 
+      return `<div class="cf-fld"><label class="cf-lbl">${esc(f.label)}${f.required?'<span class="req">*</span>':''}</label>${inp}</div>`;
+    }).join('');
+  }
+  makeFields('cf-fields');makeFields('cf-fields2');
+}
+/* ガイドフォーム */
+const GUIDE_FIELDS=[
+  {id:'name',type:'text',label:'お名前',required:true,placeholder:'山田 太郎'},
+  {id:'email',type:'email',label:'メールアドレス',required:true,placeholder:'example@email.com'},
+  {id:'phone',type:'tel',label:'電話番号',required:false,placeholder:'090-0000-0000'},
+  {id:'date',type:'text',label:'ご希望日',required:true,placeholder:'例：2025年6月15日（土）'},
+  {id:'people',type:'text',label:'人数',required:true,placeholder:'例：大人2名・子供1名'},
+  {id:'note',type:'textarea',label:'備考',required:false,placeholder:'ご要望・質問があればご記入ください'},
+];
+/* 広告フォーム */
+const AD_FIELDS=[
+  {id:'company',type:'text',label:'会社・お店名',required:true,placeholder:'株式会社〇〇'},
+  {id:'name',type:'text',label:'担当者名',required:true,placeholder:'山田 太郎'},
+  {id:'email',type:'email',label:'メールアドレス',required:true,placeholder:'example@example.com'},
+  {id:'phone',type:'tel',label:'電話番号',required:false,placeholder:'090-0000-0000'},
+  {id:'plan',type:'select',label:'ご希望プラン',required:true,options:['ライトプラン（¥5,000/月）','スタンダードプラン（¥10,000/月）','プレミアムプラン（要相談）']},
+  {id:'period',type:'text',label:'ご希望掲載期間',required:false,placeholder:'例：2025年7月〜3ヶ月'},
+  {id:'note',type:'textarea',label:'その他・ご要望',required:false,placeholder:'掲載内容についてのご要望等'},
+];
+function makeSpecialForm(containerId,fields){
+  const container=document.getElementById(containerId);if(!container)return;
+  container.innerHTML=fields.map(f=>{const id=`${containerId}_${f.id}`;let inp='';
+    if(f.type==='textarea')inp=`<textarea id="${id}" class="cf-ta" placeholder="${esc(f.placeholder||'')}" ${f.required?'required':''}></textarea>`;
+    else if(f.type==='select')inp=`<select id="${id}" class="cf-sel" ${f.required?'required':''}><option value="">選択してください</option>${(f.options||[]).map(o=>`<option>${esc(o)}</option>`).join('')}</select>`;
+    else inp=`<input type="${f.type||'text'}" id="${id}" class="cf-input" placeholder="${esc(f.placeholder||'')}" ${f.required?'required':''}>`; 
+    return `<div class="cf-fld"><label class="cf-lbl">${esc(f.label)}${f.required?'<span class="req">*</span>':''}</label>${inp}</div>`;
+  }).join('');
+}
+makeSpecialForm('guide-form-fields',GUIDE_FIELDS);
+makeSpecialForm('ad-form-fields',AD_FIELDS);
+
+async function sendForm(fields,containerId,formId,btnId,okId,cfgKey,saveCollection){
+  const values={};let valid=true;
+  for(const f of fields){const id=`${containerId}_${f.id}`;if(f.type==='select'){const el=document.getElementById(id);values[f.label]=el?el.value.trim():'';if(f.required&&!values[f.label])valid=false;}else{const el=document.getElementById(id);values[f.label]=el?el.value.trim():'';if(f.required&&!values[f.label])valid=false;}}
+  if(!valid){alert('必須項目を入力してください');return;}
+  const btn=document.getElementById(btnId);btn.disabled=true;btn.textContent='送 信 中...';
+  try{
+    await addDoc(collection(db,saveCollection),{...values,read:false,createdAt:serverTimestamp()});
+    const cfg=window[cfgKey];
+    if(cfg?.pub&&cfg?.svc&&cfg?.tpl){const mb=Object.entries(values).map(([k,v])=>`${k}: ${v}`).join('\n');await emailjs.send(cfg.svc,cfg.tpl,{from_name:values['お名前']||values['担当者名']||'—',from_email:values['メールアドレス']||'—',message:mb});}
+    document.getElementById(formId).style.display='none';document.getElementById(okId).style.display='block';
+  }catch(e){console.error(e);alert('送信に失敗しました。時間をおいてお試しください。');btn.disabled=false;btn.textContent='申 し 込 む';}
+}
+window.submitGuideForm=()=>sendForm(GUIDE_FIELDS,'guide-form-fields','guide-form-fields','guide-cf-btn','guide-cf-ok','_ejsGuideCfg','guideRequests');
+window.submitAdForm=()=>sendForm(AD_FIELDS,'ad-form-fields','ad-form-fields','ad-cf-btn','ad-cf-ok','_ejsAdCfg','adRequests');
+
+async function sendCFData(prefix,btnId,formId,okId){
+  const values={};let valid=true;
+  for(const f of formFields){const id=`${prefix}_${f.id}`;if(f.type==='radio'){const c=document.querySelector(`input[name="${id}"]:checked`);values[f.label]=c?c.value:'';if(f.required&&!values[f.label])valid=false;}else if(f.type==='checkbox'){values[f.label]=[...document.querySelectorAll(`input[name="${id}"]:checked`)].map(e=>e.value).join(', ');}else{const el=document.getElementById(id);values[f.label]=el?el.value.trim():'';if(f.required&&!values[f.label])valid=false;}}
+  if(!valid){alert('必須項目を入力してください');return;}
+  const btn=document.getElementById(btnId);btn.disabled=true;btn.textContent='送 信 中...';
+  try{await addDoc(collection(db,'contacts'),{...values,read:false,createdAt:serverTimestamp()});const cfg=window._ejsCfg;if(cfg?.pub&&cfg?.svc&&cfg?.tpl){const mb=Object.entries(values).map(([k,v])=>`${k}: ${v}`).join('\n');await emailjs.send(cfg.svc,cfg.tpl,{from_name:values['お名前']||'—',from_email:values['メールアドレス']||'—',message:mb});}document.getElementById(formId).style.display='none';document.getElementById(okId).style.display='block';}
+  catch{alert('送信に失敗しました。時間をおいてお試しください。');btn.disabled=false;btn.textContent='送 信 す る';}
+}
+window._doSend=()=>sendCFData('cf-fields','cf-btn','cf-form','cf-ok');
+window._doSend2=()=>sendCFData('cf-fields2','cf-btn2','contact-form2','cf-ok2');
+
+/* ── EmailJS（複数アカウント） ── */
+async function loadEmailJS(){
+  try{
+    // メイン（お問い合わせ）
+    const s=await getDoc(doc(db,'siteSettings','emailjs'));
+    if(s.exists()){const d=s.data();window._ejsCfg={pub:d.publicKey,svc:d.serviceId,tpl:d.templateId};if(d.publicKey)emailjs.init(d.publicKey);}
+    // ガイド専用
+    const sg=await getDoc(doc(db,'siteSettings','emailjs_guide'));
+    if(sg.exists()){const d=sg.data();window._ejsGuideCfg={pub:d.publicKey,svc:d.serviceId,tpl:d.templateId};
+      document.getElementById('guide-cf-note').textContent=d.publicKey?'':'※ EmailJS（ガイド用）が未設定のため管理画面から設定してください';}
+    else{document.getElementById('guide-cf-note').textContent='※ EmailJS（ガイド用）が未設定のため管理画面から設定してください';}
+    // 広告専用
+    const sa=await getDoc(doc(db,'siteSettings','emailjs_ad'));
+    if(sa.exists()){const d=sa.data();window._ejsAdCfg={pub:d.publicKey,svc:d.serviceId,tpl:d.templateId};
+      document.getElementById('ad-cf-note').textContent=d.publicKey?'':'※ EmailJS（広告用）が未設定のため管理画面から設定してください';}
+    else{document.getElementById('ad-cf-note').textContent='※ EmailJS（広告用）が未設定のため管理画面から設定してください';}
+  }catch{}
+}
+
+/* ── INIT ── */
+Promise.all([loadAssets(),loadHero(),loadBreaking(),loadPopup(),loadBlocks(),loadSettings(),loadCastleCards(),loadMapSpots(),loadArticles(),loadEvents(),loadCF(),loadEmailJS()]);
+</script>
+
+<!-- ══════════ SPA ROUTER & UI ══════════ -->
+<script>
+window.addEventListener('load',()=>{setTimeout(()=>{const l=document.getElementById('ld');l.classList.add('out');setTimeout(()=>l.remove(),800);},900);});
+
+function recalcHdrTop(){const bn=document.getElementById('hdr').dataset.bn==='1';document.getElementById('hdr').style.top=(48+(bn?34:0))+'px';}
+recalcHdrTop();window.recalcHdrTop=recalcHdrTop;
+
+window.addEventListener('scroll',()=>{
+  const scrolled=window.scrollY>60;document.getElementById('hdr').classList.toggle('scrolled',scrolled);
+  const heroEl=document.getElementById('hero');const logo=document.getElementById('site-logo');
+  if(heroEl&&document.getElementById('view-home').classList.contains('active')){logo.classList.toggle('visible',window.scrollY>heroEl.offsetHeight*0.45);}
+  else{logo.classList.add('visible');}
+});
+
+window.toggleMenu=function(){const h=document.getElementById('ham'),m=document.getElementById('mmenu');h.classList.toggle('open');m.classList.toggle('open');document.body.style.overflow=m.classList.contains('open')?'hidden':'';};
+
+const VIEWS=['home','about','timeline','news','events','map','tourism','guide','advertise','access','contact'];
+window.nav=function(page){
+  // ページ変更時にマップポップアップを閉じる
+  closeMapPopup();
+  VIEWS.forEach(v=>{const el=document.getElementById('view-'+v);if(el)el.classList.toggle('active',v===page);});
+  document.getElementById('site-footer').style.display=page==='home'?'none':'block';
+  const logo=document.getElementById('site-logo');
+  if(page==='home'){logo.classList.remove('visible');}else{logo.classList.add('visible');}
+  history.pushState({},'','#'+page);
+  window.scrollTo(0,0);
+  document.querySelectorAll('.nav-lnks a').forEach(a=>{const href=a.getAttribute('onclick')||'';a.style.color=href.includes(`'${page}'`)?'var(--kin)':'rgba(245,240,232,.75)';});
+  document.getElementById('mmenu').classList.remove('open');document.getElementById('ham').classList.remove('open');document.body.style.overflow='';
+  observeReveal();
+};
+
+window.addEventListener('DOMContentLoaded',()=>{const hash=(location.hash||'').replace('#','').split('-')[0];nav(VIEWS.includes(hash)?hash:'home');});
+window.addEventListener('popstate',()=>{const hash=(location.hash||'').replace('#','').split('-')[0];nav(VIEWS.includes(hash)?hash:'home');});
+
+function observeReveal(){const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.07});document.querySelectorAll('.reveal,.art-card,.ev-item,.tl-item').forEach(el=>{if(!el.classList.contains('visible'))obs.observe(el);});}
+observeReveal();
+['home-art-grid','home-ev-list','news-art-grid','ev-upcoming-list','ev-past-list','slot-hero-below','slot-about-above','slot-about-below','slot-history-above','slot-history-below','slot-news-above','slot-news-below','slot-events-above','slot-events-below','slot-access-above','slot-access-below','slot-contact-above','slot-contact-below'].forEach(id=>{const el=document.getElementById(id);if(el)new MutationObserver(observeReveal).observe(el,{childList:true});});
+
+window.submitCF=()=>{if(window._doSend)window._doSend();};
+window.submitCF2=()=>{if(window._doSend2)window._doSend2();};
+window.closePopup=()=>document.getElementById('popm').classList.remove('show');
+window.closePopupToday=()=>{localStorage.setItem('popup-dismissed',new Date().toDateString());closePopup();};
+window.openImgModal=function(src,cap){document.getElementById('imgm-img').src=src;document.getElementById('imgm-cap').textContent=cap||'';document.getElementById('imgm').classList.add('show');document.body.style.overflow='hidden';};
+window.closeImgM=function(){document.getElementById('imgm').classList.remove('show');document.body.style.overflow='';};
+window.closeMapPopup=()=>document.getElementById('map-popup').classList.remove('show');
+window.filterTourism=function(cat){document.querySelectorAll('.tourism-card').forEach(c=>{c.style.display=(!cat||c.dataset.cat===cat)?'':'none';});document.querySelectorAll('.tour-tab').forEach(b=>{const isActive=(cat===''&&b.textContent==='すべて')||(b.textContent===cat);b.className=isActive?'tour-tab btn-p':'tour-tab btn-o';b.style.fontSize='10px';b.style.padding='6px 14px';});};
+
+/* ── Weather ── */
+(async()=>{try{const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude=34.3506&longitude=134.8945&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FTokyo&forecast_days=3');const d=(await r.json()).daily;const lb=['今日','明日','明後日'];const wmo=c=>c===0?'☀️':c<=2?'🌤️':c<=3?'☁️':c<=48?'🌫️':c<=67?'🌧️':c<=77?'❄️':c<=82?'🌦️':'⛈️';document.getElementById('wb-days').innerHTML=[0,1,2].map(i=>`<div class="wb-day"><span class="wb-lbl">${lb[i]}</span><span class="wb-ico">${wmo(d.weathercode[i])}</span><span class="wb-tmp">${Math.round(d.temperature_2m_max[i])}°<span style="font-size:10px;color:var(--gin)">/${Math.round(d.temperature_2m_min[i])}°</span></span><span class="wb-rain">☔${d.precipitation_probability_max[i]}%</span></div>`).join('');}catch{document.getElementById('wb-days').innerHTML='<span style="font-size:10px;color:var(--gin);padding-left:6px;">取得不可</span>';}})();
+</script>
+</body>
+</html>
