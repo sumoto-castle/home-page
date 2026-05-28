@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>洲本城まつり 第16回 | 築城500年記念 公式特設サイト</title>
+<meta name="description" content="洲本城築城500年を記念する第16回 洲本城まつり。令和7年11月3日（月・祝）開催。武者行列・夜間ライトアップ・ステージイベント・出店多数。">
+<meta name="keywords" content="洲本城まつり,洲本城,築城500年,淡路島,兵庫県,洲本市,城まつり,武者行列">
+<meta property="og:title" content="第16回 洲本城まつり｜洲本城築城500年記念">
+<meta property="og:description" content="洲本城築城500年を記念する第16回 洲本城まつり。令和7年11月3日（月・祝）開催。武者行列・夜間ライトアップ・ステージイベント・出店多数。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="">
+<meta name="theme-color" content="#0a0e1a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ══ TOKENS — 既存サイトと統一 ══ */
+:root{
+  --sumi:#0a0e1a;
+  --ai:#1a2744;
+  --kin:#c9a84c;
+  --kinL:#e0c170;
+  --kinD:#9a7a28;
+  --washi:#f5f0e8;
+  --gin:#8899aa;
+  --gL:rgba(255,255,255,.06);
+  --bdr:rgba(201,168,76,.18);
+  --red:#8b1a1a;
+  --redL:#b52525;
+}
+
+/* ══ RESET ══ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--sumi);color:var(--washi);font-family:'Noto Sans JP',sans-serif;overflow-x:hidden;line-height:1.7}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--sumi)}
+::-webkit-scrollbar-thumb{background:var(--kin);border-radius:2px}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+
+/* ══ LOADER ══ */
+#ld{
+  position:fixed;inset:0;z-index:9999;background:var(--sumi);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
+  transition:opacity .8s
+}
+#ld.out{opacity:0;pointer-events:none}
+.ld-mon{width:90px;height:90px;animation:pulse 1.5s infinite}
+.ld-t{font-family:'Shippori Mincho',serif;color:var(--kin);font-size:12px;letter-spacing:.6em}
+.ld-sub{font-size:9px;letter-spacing:.4em;color:var(--gin)}
+.ld-bar{width:80px;height:1px;background:rgba(201,168,76,.15);position:relative;overflow:hidden}
+.ld-bar::after{content:'';position:absolute;left:-100%;top:0;width:100%;height:100%;background:var(--kin);animation:lda 1.4s infinite ease-in-out}
+@keyframes lda{to{left:100%}}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* ══ HEADER ══ */
+#hdr{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  padding:0 24px;height:56px;display:flex;align-items:center;
+  transition:background .5s,box-shadow .5s;
+}
+#hdr.scrolled{background:rgba(10,14,26,.94);backdrop-filter:blur(20px);box-shadow:0 1px 0 var(--bdr)}
+.hdr-in{width:100%;max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.hdr-logo{font-family:'Shippori Mincho',serif;font-size:16px;color:var(--kin);letter-spacing:.2em;opacity:0;transition:opacity .4s}
+.hdr-logo.visible{opacity:1}
+.hdr-nav{display:flex;gap:20px;list-style:none}
+.hdr-nav a{font-size:10px;letter-spacing:.12em;color:rgba(245,240,232,.65);cursor:pointer;transition:color .3s}
+.hdr-nav a:hover{color:var(--kin)}
+.hdr-back{font-size:10px;letter-spacing:.12em;color:rgba(201,168,76,.6);border:1px solid rgba(201,168,76,.25);padding:5px 13px;transition:all .3s}
+.hdr-back:hover{border-color:var(--kin);color:var(--kin)}
+#ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;background:none;border:none}
+#ham span{display:block;width:20px;height:1px;background:var(--washi);transition:all .3s}
+#ham.open span:nth-child(1){transform:rotate(45deg) translate(4px,4px)}
+#ham.open span:nth-child(2){opacity:0}
+#ham.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px)}
+
+/* ══ MOBILE MENU ══ */
+#mmenu{
+  position:fixed;inset:0;background:rgba(10,14,26,.97);backdrop-filter:blur(20px);
+  z-index:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+  opacity:0;pointer-events:none;transition:opacity .35s;
+}
+#mmenu.open{opacity:1;pointer-events:all}
+#mmenu a{font-family:'Shippori Mincho',serif;font-size:20px;color:var(--washi);letter-spacing:.2em;cursor:pointer;transition:color .3s}
+#mmenu a:hover{color:var(--kin)}
+.mmenu-close{position:absolute;top:20px;right:24px;background:none;border:none;color:var(--gin);font-size:22px;cursor:pointer}
+
+/* ══ HERO ══ */
+#hero{
+  position:relative;min-height:100svh;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,#050810 0%,#0f1729 35%,#1a2744 60%,#0a0e1a 100%)}
+/* 星 */
+.hero-stars{position:absolute;inset:0;pointer-events:none}
+.hero-stars::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    radial-gradient(1px 1px at 8% 15%,rgba(201,168,76,.7) 0%,transparent 100%),
+    radial-gradient(1px 1px at 92% 8%,rgba(255,255,255,.5) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 65% 20%,rgba(201,168,76,.5) 0%,transparent 100%),
+    radial-gradient(1px 1px at 35% 75%,rgba(255,255,255,.35) 0%,transparent 100%),
+    radial-gradient(1px 1px at 78% 62%,rgba(201,168,76,.4) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 18% 88%,rgba(255,255,255,.3) 0%,transparent 100%),
+    radial-gradient(1px 1px at 52% 42%,rgba(201,168,76,.3) 0%,transparent 100%),
+    radial-gradient(1px 1px at 88% 45%,rgba(255,255,255,.4) 0%,transparent 100%);
+}
+/* 城シルエット大 */
+.hero-castle{
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:min(720px,100vw);pointer-events:none;opacity:.09;
+}
+/* 紅白幕風ライン */
+.hero-kohaku{
+  position:absolute;top:0;left:0;right:0;height:6px;
+  background:repeating-linear-gradient(90deg,var(--red) 0px,var(--red) 40px,#fff 40px,#fff 80px);
+  opacity:.35;
+}
+/* ゆらめき光 */
+.hero-glow{
+  position:absolute;width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,168,76,.07) 0%,transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-55%);
+  animation:glowPulse 4s ease-in-out infinite;
+}
+@keyframes glowPulse{0%,100%{transform:translate(-50%,-55%) scale(1)}50%{transform:translate(-50%,-55%) scale(1.1)}}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,14,26,.2) 0%,rgba(10,14,26,0) 40%,rgba(10,14,26,.85) 100%)}
+
+.hero-cnt{
+  position:relative;z-index:10;text-align:center;padding:0 20px;max-width:760px;width:100%;
+  margin-top:40px;
+}
+/* 500周年バッジ */
+.hero-anniversary{
+  display:inline-flex;align-items:center;gap:10px;
+  border:1px solid rgba(201,168,76,.4);
+  padding:6px 18px 6px 14px;
+  margin-bottom:28px;
+  background:rgba(201,168,76,.06);
+  animation:fiU .8s ease both;
+}
+.ann-jewel{width:8px;height:8px;background:var(--kin);transform:rotate(45deg);flex-shrink:0}
+.ann-txt{font-size:10px;letter-spacing:.4em;color:var(--kin)}
+
+.hero-year{
+  font-family:'Shippori Mincho',serif;font-size:clamp(13px,2.5vw,18px);
+  color:rgba(201,168,76,.7);letter-spacing:.6em;margin-bottom:8px;
+  animation:fiU .8s .1s ease both;
+}
+.hero-ttl-500{
+  font-family:'Shippori Mincho',serif;
+  font-size:clamp(52px,14vw,120px);
+  font-weight:700;line-height:.9;
+  color:var(--kin);
+  text-shadow:0 0 80px rgba(201,168,76,.35),0 0 160px rgba(201,168,76,.12);
+  letter-spacing:.08em;
+  animation:fiU .9s .2s ease both;
+  position:relative;display:inline-block;
+}
+.hero-ttl-500 sup{
+  font-size:clamp(16px,3.5vw,28px);
+  vertical-align:super;letter-spacing:.2em;color:rgba(201,168,76,.7);
+  position:relative;top:.05em;
+}
+.hero-ttl-main{
+  font-family:'Shippori Mincho',serif;
+  font-size:clamp(24px,5.5vw,52px);
+  font-weight:600;letter-spacing:.18em;
+  line-height:1.2;margin-top:8px;
+  animation:fiU .9s .3s ease both;
+}
+.hero-ttl-main span{color:var(--kin)}
+.hero-divider{
+  width:60px;height:1px;
+  background:linear-gradient(to right,transparent,var(--kin),transparent);
+  margin:20px auto;
+  animation:scX 1s .5s ease both;
+}
+.hero-date{
+  font-family:'Shippori Mincho',serif;font-size:clamp(16px,3.5vw,26px);
+  letter-spacing:.22em;color:var(--washi);
+  animation:fiU .9s .55s ease both;
+}
+.hero-date span{color:var(--kin)}
+.hero-sub{
+  font-size:clamp(11px,2vw,13px);letter-spacing:.12em;color:rgba(245,240,232,.55);
+  margin-top:8px;animation:fiU .9s .65s ease both;
+}
+.hero-cta{
+  margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+  animation:fiU .9s .8s ease both;
+}
+.btn-p{
+  padding:12px 28px;background:var(--kin);color:var(--sumi);
+  font-size:11px;letter-spacing:.2em;font-weight:700;cursor:pointer;
+  border:none;transition:all .3s;font-family:inherit;display:inline-block;
+}
+.btn-p:hover{background:var(--kinL);transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,168,76,.3)}
+.btn-o{
+  padding:12px 28px;border:1px solid rgba(201,168,76,.45);color:var(--kin);
+  font-size:11px;letter-spacing:.2em;cursor:pointer;background:transparent;
+  transition:all .3s;font-family:inherit;display:inline-block;
+}
+.btn-o:hover{border-color:var(--kin);background:rgba(201,168,76,.08);transform:translateY(-2px)}
+.scroll-ind{
+  position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  z-index:10;animation:fi 1s 1.8s ease both;
+}
+.scroll-ind span{font-size:8px;letter-spacing:.38em;color:rgba(201,168,76,.5)}
+.scroll-ln{width:1px;height:30px;background:linear-gradient(to bottom,var(--kin),transparent);animation:sp 2s infinite}
+@keyframes sp{0%,100%{opacity:.3;transform:scaleY(.5);transform-origin:top}50%{opacity:1;transform:scaleY(1)}}
+
+/* ══ SECTION COMMONS ══ */
+.sec{padding:72px 20px;max-width:1200px;margin:0 auto}
+.sec-sm{padding:56px 20px;max-width:1200px;margin:0 auto}
+.sl{font-size:9px;letter-spacing:.48em;color:var(--kin);margin-bottom:10px;display:block}
+.st{font-family:'Shippori Mincho',serif;font-size:clamp(22px,4vw,38px);font-weight:500;letter-spacing:.1em;line-height:1.3}
+.sd{width:38px;height:1px;background:linear-gradient(to right,var(--kin),transparent);margin:14px 0}
+.sec-divider{height:1px;background:var(--bdr);max-width:1200px;margin:0 auto}
+
+/* ══ REVEAL ══ */
+.reveal{opacity:0;transform:translateY(20px);transition:all .6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-l{opacity:0;transform:translateX(-20px);transition:all .6s ease}
+.reveal-l.visible{opacity:1;transform:translateX(0)}
+.reveal-r{opacity:0;transform:translateX(20px);transition:all .6s ease}
+.reveal-r.visible{opacity:1;transform:translateX(0)}
+
+/* ══ COUNTDOWN ══ */
+#countdown-sec{
+  background:linear-gradient(160deg,var(--ai),#0a0e1a);
+  border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);
+  padding:40px 20px;text-align:center;
+  position:relative;overflow:hidden;
+}
+#countdown-sec::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.06) 0%,transparent 60%);
+}
+.cd-label{font-size:9px;letter-spacing:.48em;color:var(--kin);margin-bottom:16px;position:relative}
+.cd-nums{
+  display:inline-flex;gap:4px;align-items:center;
+  position:relative;
+}
+.cd-unit{text-align:center;min-width:60px}
+.cd-n{font-family:'Shippori Mincho',serif;font-size:clamp(32px,8vw,58px);color:var(--washi);line-height:1;display:block}
+.cd-l{font-size:9px;color:var(--gin);letter-spacing:.18em;margin-top:3px}
+.cd-sep{font-family:'Shippori Mincho',serif;font-size:clamp(24px,5vw,40px);color:rgba(201,168,76,.35);padding-bottom:8px}
+.cd-past{font-family:'Shippori Mincho',serif;font-size:clamp(18px,4vw,28px);color:var(--kin);letter-spacing:.2em}
+
+/* ══ 築城500年 SECTION ══ */
+#s500{background:linear-gradient(to bottom,var(--sumi),rgba(26,39,68,.15),var(--sumi))}
+.s500-header{text-align:center;margin-bottom:48px}
+.s500-emblem{
+  display:inline-block;border:1px solid rgba(201,168,76,.3);
+  padding:14px 28px;margin-bottom:20px;position:relative;
+}
+.s500-emblem::before,.s500-emblem::after{
+  content:'';position:absolute;width:6px;height:6px;
+  background:var(--kin);transform:rotate(45deg);
+}
+.s500-emblem::before{top:-3px;left:50%;margin-left:-3px}
+.s500-emblem::after{bottom:-3px;left:50%;margin-left:-3px}
+.s500-emblem-txt{font-family:'Shippori Mincho',serif;font-size:clamp(11px,2vw,14px);letter-spacing:.5em;color:var(--kin)}
+.s500-main{font-family:'Shippori Mincho',serif;font-size:clamp(28px,5.5vw,50px);font-weight:700;color:var(--washi);letter-spacing:.15em;line-height:1.2;margin-bottom:6px}
+.s500-main em{color:var(--kin);font-style:normal}
+.s500-desc{font-size:13px;line-height:2.1;color:rgba(245,240,232,.65);max-width:640px;margin:0 auto}
+
+.history-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px;margin-top:40px}
+.hist-card{
+  background:var(--gL);border:1px solid rgba(201,168,76,.1);
+  padding:28px 22px;position:relative;overflow:hidden;
+  transition:border-color .3s,transform .3s;
+}
+.hist-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(to right,transparent,var(--kin),transparent);
+  transform:scaleX(0);transition:transform .4s;
+}
+.hist-card:hover{border-color:rgba(201,168,76,.3);transform:translateY(-4px)}
+.hist-card:hover::after{transform:scaleX(1)}
+.hist-ico{font-size:28px;margin-bottom:12px;display:block}
+.hist-yr{font-size:10px;letter-spacing:.2em;color:var(--kin);margin-bottom:5px}
+.hist-ttl{font-family:'Shippori Mincho',serif;font-size:17px;color:var(--washi);margin-bottom:8px}
+.hist-txt{font-size:12px;line-height:1.9;color:rgba(245,240,232,.6)}
+
+/* 歴代城主タイムライン */
+.lords-line{margin-top:40px;position:relative;max-width:760px;margin-left:auto;margin-right:auto}
+.lords-line::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--kin),transparent)}
+.lord-item{padding:0 0 24px 28px;position:relative;opacity:0;transform:translateX(-12px);transition:all .5s}
+.lord-item.visible{opacity:1;transform:translateX(0)}
+.lord-dot{position:absolute;left:-4px;top:5px;width:9px;height:9px;background:var(--kin);border-radius:50%;box-shadow:0 0 8px rgba(201,168,76,.5)}
+.lord-era{display:inline-block;font-size:8px;letter-spacing:.18em;color:var(--gin);border:1px solid rgba(136,153,170,.2);padding:2px 8px;margin-bottom:5px}
+.lord-name{font-family:'Shippori Mincho',serif;font-size:16px;color:var(--kin);margin-bottom:3px}
+.lord-note{font-size:12px;line-height:1.8;color:rgba(245,240,232,.6)}
+
+/* ══ 概要 ══ */
+#s-overview{background:linear-gradient(to bottom,rgba(26,39,68,.1),var(--sumi))}
+.overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:2px;margin-top:36px}
+.ov-box{
+  background:var(--gL);border:1px solid rgba(201,168,76,.1);
+  padding:24px 20px;position:relative;overflow:hidden;
+}
+.ov-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--kin),transparent)}
+.ov-lbl{font-size:9px;letter-spacing:.3em;color:var(--kin);margin-bottom:8px}
+.ov-val{font-family:'Shippori Mincho',serif;font-size:clamp(16px,2.5vw,20px);color:var(--washi);line-height:1.4;margin-bottom:4px}
+.ov-note{font-size:10px;color:var(--gin)}
+/* 特別な「無料」ボックス */
+.ov-box.free .ov-val{color:var(--kin)}
+
+/* ══ SCHEDULE ══ */
+#s-schedule{background:var(--sumi)}
+.schedule-wrap{max-width:720px;margin:36px auto 0;position:relative}
+.sch-line{position:absolute;left:52px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--kin),rgba(201,168,76,.1))}
+.sch-item{display:flex;gap:0;margin-bottom:0}
+.sch-time-col{width:52px;flex-shrink:0;text-align:right;padding-right:20px;padding-top:3px}
+.sch-time{font-family:'Shippori Mincho',serif;font-size:13px;color:var(--kin);white-space:nowrap;letter-spacing:.04em}
+.sch-dot-col{width:18px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;position:relative}
+.sch-dot{width:12px;height:12px;border-radius:50%;background:var(--kin);border:2px solid var(--sumi);box-shadow:0 0 8px rgba(201,168,76,.5);flex-shrink:0;margin-top:4px}
+.sch-dot.big{width:16px;height:16px;background:var(--kinL)}
+.sch-line-seg{flex:1;width:1px;background:var(--bdr);margin:4px auto 0}
+.sch-body{flex:1;padding:0 0 28px 16px}
+.sch-cat{font-size:9px;letter-spacing:.22em;color:var(--kin);margin-bottom:4px}
+.sch-ttl{font-family:'Shippori Mincho',serif;font-size:16px;color:var(--washi);margin-bottom:5px}
+.sch-note{font-size:11px;line-height:1.8;color:rgba(245,240,232,.55)}
+.sch-highlight{
+  background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);
+  padding:6px 10px;margin-top:6px;display:inline-block;
+  font-size:10px;color:var(--kin);letter-spacing:.08em;
+}
+
+/* ══ HIGHLIGHTS ══ */
+#s-highlights{background:linear-gradient(to bottom,rgba(26,39,68,.1),var(--sumi))}
+.hl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2px;margin-top:36px}
+.hl-card{
+  position:relative;overflow:hidden;
+  background:var(--gL);border:1px solid rgba(201,168,76,.1);
+  transition:border-color .3s,transform .3s;
+}
+.hl-card:hover{border-color:rgba(201,168,76,.35);transform:translateY(-4px)}
+.hl-thumb{
+  width:100%;height:180px;overflow:hidden;
+  background:linear-gradient(135deg,var(--ai),#0a0e1a);
+  display:flex;align-items:center;justify-content:center;position:relative;
+}
+.hl-thumb-ico{font-size:56px;opacity:.25;transition:transform .5s}
+.hl-card:hover .hl-thumb-ico{transform:scale(1.1)}
+.hl-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(10,14,26,.7))}
+.hl-body{padding:22px 18px}
+.hl-num{font-family:'Shippori Mincho',serif;font-size:32px;color:rgba(201,168,76,.1);line-height:1;margin-bottom:4px}
+.hl-ttl{font-family:'Shippori Mincho',serif;font-size:18px;color:var(--kin);margin-bottom:8px}
+.hl-txt{font-size:12px;line-height:1.9;color:rgba(245,240,232,.65)}
+
+/* ══ NOTICE ══ */
+#s-notice{background:rgba(26,39,68,.2)}
+.notice-list{margin-top:24px}
+.notice-item{
+  display:flex;gap:16px;padding:16px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);
+  align-items:flex-start;
+}
+.notice-item:last-child{border-bottom:none}
+.notice-date{font-size:11px;color:var(--gin);white-space:nowrap;min-width:80px;font-family:'Shippori Mincho',serif;letter-spacing:.06em;margin-top:1px}
+.notice-badge{
+  font-size:8px;letter-spacing:.14em;padding:2px 8px;flex-shrink:0;
+  background:rgba(201,168,76,.15);color:var(--kin);border:1px solid rgba(201,168,76,.25);
+  margin-top:1px;
+}
+.notice-badge.new{background:rgba(201,168,76,.25);color:var(--kinL)}
+.notice-txt{font-size:13px;line-height:1.7;flex:1}
+
+/* ══ ACCESS ══ */
+#s-access{background:var(--sumi)}
+.access-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:32px}
+.ac-item{background:var(--gL);border:1px solid rgba(201,168,76,.1);padding:22px}
+.ac-meth{font-size:9px;letter-spacing:.22em;color:var(--kin);margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.ac-det{font-size:13px;line-height:1.9;color:rgba(245,240,232,.8)}
+.ac-note{font-size:10px;color:var(--gin);margin-top:5px}
+.map-wrap{margin-top:2px}
+.map-wrap iframe{width:100%;height:280px;border:1px solid rgba(201,168,76,.15);filter:grayscale(30%) invert(88%) hue-rotate(180deg);display:block}
+
+/* busmo ボックス */
+.busmo-box{
+  margin-top:20px;background:rgba(26,39,68,.4);
+  border:1px solid rgba(201,168,76,.2);padding:22px 24px;
+}
+.busmo-ttl{font-family:'Shippori Mincho',serif;font-size:15px;color:var(--kin);margin-bottom:10px;letter-spacing:.08em}
+.busmo-logo{height:28px;width:auto;filter:brightness(1.2);margin-bottom:12px}
+.busmo-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.busmo-link{
+  padding:9px 20px;border:1px solid rgba(201,168,76,.35);
+  color:var(--kin);font-size:11px;letter-spacing:.16em;
+  transition:all .3s;display:inline-flex;align-items:center;gap:7px;
+}
+.busmo-link:hover{background:rgba(201,168,76,.08);border-color:var(--kin)}
+.busmo-link::after{content:'→';font-size:11px}
+
+/* ══ FOOTER ══ */
+footer{
+  border-top:1px solid rgba(201,168,76,.12);
+  padding:44px 20px 28px;text-align:center;
+  background:linear-gradient(to top,rgba(10,14,26,1),var(--sumi));
+}
+.ft-logo{font-family:'Shippori Mincho',serif;font-size:18px;color:var(--kin);letter-spacing:.3em;margin-bottom:4px}
+.ft-sub{font-size:9px;letter-spacing:.32em;color:var(--gin);margin-bottom:22px}
+.ft-links{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:20px}
+.ft-links a{font-size:10px;color:var(--gin);letter-spacing:.14em;transition:color .3s;cursor:pointer}
+.ft-links a:hover{color:var(--kin)}
+.ft-sep{color:rgba(136,153,170,.2)}
+.ft-copy{font-size:9px;color:rgba(136,153,170,.35);letter-spacing:.16em}
+.ft-main-link{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid rgba(201,168,76,.25);padding:8px 20px;
+  font-size:11px;color:rgba(201,168,76,.6);letter-spacing:.14em;
+  margin-bottom:24px;transition:all .3s;
+}
+.ft-main-link:hover{border-color:var(--kin);color:var(--kin)}
+
+/* ══ 祭り紋様デコレーション ══ */
+.mon{
+  display:inline-block;width:56px;height:56px;
+  border:1px solid rgba(201,168,76,.3);border-radius:50%;
+  position:relative;flex-shrink:0;
+}
+.mon::before{
+  content:'家';
+  font-family:'Shippori Mincho',serif;font-size:22px;color:rgba(201,168,76,.4);
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+}
+/* セクション区切り装飾 */
+.ornament{
+  display:flex;align-items:center;gap:16px;margin:0 auto 40px;max-width:320px;
+}
+.orn-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--bdr))}
+.orn-line.r{background:linear-gradient(to left,transparent,var(--bdr))}
+.orn-mark{width:8px;height:8px;background:var(--kin);transform:rotate(45deg);flex-shrink:0}
+
+/* ══ PAGE HERO ══ */
+.page-hero{
+  padding-top:56px;text-align:center;
+  background:linear-gradient(160deg,#050810,#0f1729);
+  position:relative;overflow:hidden;
+}
+
+/* ══ ANIMATIONS ══ */
+@keyframes fiU{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+@keyframes scX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:768px){
+  .hdr-nav{display:none}
+  #ham{display:flex}
+  .access-grid{grid-template-columns:1fr}
+  .history-grid{grid-template-columns:1fr}
+  .hl-grid{grid-template-columns:1fr}
+  .overview-grid{grid-template-columns:1fr 1fr}
+  .sch-time{font-size:11px}
+  .hero-cta .btn-p,.hero-cta .btn-o{padding:10px 20px;font-size:10px}
+  .cd-unit{min-width:48px}
+  .cd-n{font-size:36px}
+  .busmo-links{flex-direction:column}
+  .busmo-link{justify-content:center}
+}
+@media(max-width:480px){
+  .overview-grid{grid-template-columns:1fr}
+  .sch-line{left:46px}
+  .sch-time-col{width:46px}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="ld">
+  <svg class="ld-mon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="5,95 95,95 88,72 68,68 63,72 52,62 48,62 37,72 32,68 12,72" fill="rgba(201,168,76,.25)"/>
+    <rect x="30" y="52" width="40" height="20" fill="rgba(201,168,76,.35)"/>
+    <rect x="34" y="46" width="32" height="8" fill="rgba(201,168,76,.3)"/>
+    <rect x="38" y="28" width="24" height="20" fill="rgba(201,168,76,.45)"/>
+    <polygon points="34,28 66,28 62,18 38,18" fill="rgba(201,168,76,.4)"/>
+    <rect x="42" y="8" width="16" height="12" fill="rgba(201,168,76,.5)"/>
+    <polygon points="38,8 62,8 58,0 42,0" fill="rgba(201,168,76,.45)"/>
+  </svg>
+  <div class="ld-t">洲本城まつり</div>
+  <div class="ld-sub">SUMOTO CASTLE FESTIVAL 2025</div>
+  <div class="ld-bar"></div>
+</div>
+
+<!-- HEADER -->
+<header id="hdr">
+  <div class="hdr-in">
+    <div class="hdr-logo" id="site-logo">洲本城まつり</div>
+    <nav><ul class="hdr-nav" id="hdr-nav">
+      <li><a href="#s500">築城500年</a></li>
+      <li><a href="#s-overview">概要</a></li>
+      <li><a href="#s-schedule">タイムスケジュール</a></li>
+      <li><a href="#s-highlights">見どころ</a></li>
+      <li><a href="#s-access">アクセス</a></li>
+    </ul></nav>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <a href="index.html" class="hdr-back">← 公式サイトへ</a>
+      <button id="ham" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- MOBILE MENU -->
+<div id="mmenu">
+  <button class="mmenu-close" onclick="toggleMenu()">✕</button>
+  <a href="#s500" onclick="toggleMenu()">築城500年</a>
+  <a href="#s-overview" onclick="toggleMenu()">イベント概要</a>
+  <a href="#s-schedule" onclick="toggleMenu()">タイムスケジュール</a>
+  <a href="#s-highlights" onclick="toggleMenu()">見どころ</a>
+  <a href="#s-notice" onclick="toggleMenu()">お知らせ</a>
+  <a href="#s-access" onclick="toggleMenu()">アクセス</a>
+  <a href="index.html" onclick="toggleMenu()">← 公式サイトへ</a>
+</div>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-kohaku"></div>
+  <div class="hero-stars"></div>
+  <div class="hero-glow"></div>
+
+  <!-- 城シルエット -->
+  <svg class="hero-castle" viewBox="0 0 800 420" xmlns="http://www.w3.org/2000/svg" fill="var(--kin)">
+    <polygon points="0,420 800,420 745,295 590,272 545,295 445,255 355,255 255,295 210,272 55,295"/>
+    <rect x="195" y="210" width="410" height="90"/><rect x="215" y="192" width="370" height="28"/>
+    <rect x="225" y="178" width="12" height="16"/><rect x="262" y="178" width="12" height="16"/>
+    <rect x="300" y="178" width="12" height="16"/><rect x="338" y="178" width="12" height="16"/>
+    <rect x="376" y="178" width="12" height="16"/><rect x="414" y="178" width="12" height="16"/>
+    <rect x="452" y="178" width="12" height="16"/><rect x="490" y="178" width="12" height="16"/>
+    <rect x="528" y="178" width="12" height="16"/>
+    <rect x="305" y="108" width="190" height="86"/><polygon points="285,108 515,108 494,78 306,78"/>
+    <rect x="325" y="44" width="150" height="38"/><polygon points="306,44 494,44 475,17 325,17"/>
+    <rect x="345" y="2" width="110" height="18"/>
+  </svg>
+
+  <div class="hero-ov"></div>
+
+  <div class="hero-cnt">
+    <div class="hero-anniversary">
+      <div class="ann-jewel"></div>
+      <span class="ann-txt">SUMOTO CASTLE 500th ANNIVERSARY</span>
+      <div class="ann-jewel"></div>
+    </div>
+    <div class="hero-ttl-500">築城500年</div>
+    <div class="hero-ttl-main">第<span>16</span>回洲本城まつり</div>
+    <div class="hero-divider"></div>
+    <div class="hero-date">令和八年　<span>十一月三日</span>（月・祝）</div>
+    <div class="hero-sub">NOVEMBER 3 (MON/HOLIDAY) · SUMOTO CASTLE · AWAJI ISLAND</div>
+    <div class="hero-cta">
+      <a href="#s-overview" class="btn-p">イベント概要</a>
+      <a href="#s-access" class="btn-o">アクセス</a>
+    </div>
+  </div>
+  <div class="scroll-ind"><span>SCROLL</span><div class="scroll-ln"></div></div>
+</section>
+
+<!-- ══ COUNTDOWN ══ -->
+<div id="countdown-sec">
+  <div class="cd-label">COUNTDOWN TO THE FESTIVAL</div>
+  <div class="cd-nums" id="cd-nums">
+    <div class="cd-unit"><span class="cd-n" id="cd-d">—</span><div class="cd-l">日</div></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-unit"><span class="cd-n" id="cd-h">—</span><div class="cd-l">時間</div></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-unit"><span class="cd-n" id="cd-m">—</span><div class="cd-l">分</div></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-unit"><span class="cd-n" id="cd-s">—</span><div class="cd-l">秒</div></div>
+  </div>
+</div>
+
+<!-- ══ 築城500年 ══ -->
+<section id="s500">
+  <div class="sec">
+    <div class="s500-header reveal">
+      <div class="s500-emblem"><span class="s500-emblem-txt">SUMOTO CASTLE · 1526 – 2026</span></div>
+      <h2 class="s500-main">洲本城<em>築城五百年</em></h2>
+      <div class="sd" style="margin:14px auto;"></div>
+      <p class="s500-desc">大永六年（1526年）、淡路守護代・由良成興によって三熊山に築かれた洲本城。以来五百年——石垣は今も語りかける、戦国の息吹を。</p>
+    </div>
+
+    <div class="history-grid">
+      <div class="hist-card reveal" style="transition-delay:0s">
+        <span class="hist-ico">🏯</span>
+        <div class="hist-yr">1526年（大永6年）</div>
+        <div class="hist-ttl">築城</div>
+        <div class="hist-txt">淡路守護代・由良成興により三熊山に築城。瀬戸内海の要衝として、淡路島統治の本拠となる。</div>
+      </div>
+      <div class="hist-card reveal" style="transition-delay:.1s">
+        <span class="hist-ico">🗺️</span>
+        <div class="hist-yr">指定 国史跡</div>
+        <div class="hist-ttl">国の史跡</div>
+        <div class="hist-txt">1952年に国の史跡に指定。城跡・登り石垣・天守台などが文化財として保護・整備されている。</div>
+      </div>
+      <div class="hist-card reveal" style="transition-delay:.2s">
+        <span class="hist-ico">🪨</span>
+        <div class="hist-yr">国内最長クラス</div>
+        <div class="hist-ttl">登り石垣</div>
+        <div class="hist-txt">全長約1.1km。時代ごとに異なる積み方が残る「石垣の博物館」。戦国末期から江戸初期の技術の粋。</div>
+      </div>
+      <div class="hist-card reveal" style="transition-delay:.3s">
+        <span class="hist-ico">⛩️</span>
+        <div class="hist-yr">1928年（昭和3年）</div>
+        <div class="hist-ttl">日本最古の模擬天守</div>
+        <div class="hist-txt">昭和初期に建造された日本最古の模擬天守。白壁の天守は今も山頂に聳え、淡路島を見守り続ける。</div>
+      </div>
+    </div>
+
+    <!-- 歴代城主 -->
+    <div style="margin-top:56px;">
+      <div class="ornament reveal">
+        <div class="orn-line"></div>
+        <div class="orn-mark"></div>
+        <div style="font-size:10px;letter-spacing:.3em;color:var(--kin);white-space:nowrap;">歴代城主</div>
+        <div class="orn-mark"></div>
+        <div class="orn-line r"></div>
+      </div>
+      <div class="lords-line">
+        <div class="lord-item">
+          <div class="lord-dot"></div>
+          <div class="lord-era">中世 戦国期</div>
+          <div class="lord-name">由良成興</div>
+          <div class="lord-note">大永6年（1526）築城。淡路守護代として三熊山に城を構え、島の統治を掌る。</div>
+        </div>
+        <div class="lord-item">
+          <div class="lord-dot"></div>
+          <div class="lord-era">戦国期</div>
+          <div class="lord-name">安宅冬康</div>
+          <div class="lord-note">三好氏の一族。洲本城を水軍の拠点として整備し、瀬戸内海の制海権を握った。</div>
+        </div>
+        <div class="lord-item">
+          <div class="lord-dot"></div>
+          <div class="lord-era">豊臣期</div>
+          <div class="lord-name">仙石秀久</div>
+          <div class="lord-note">天正13年（1585）、豊臣秀吉の四国攻め後に入封。城の近代化と城下町整備を推進した。</div>
+        </div>
+        <div class="lord-item">
+          <div class="lord-dot"></div>
+          <div class="lord-era">江戸期</div>
+          <div class="lord-name">脇坂安治</div>
+          <div class="lord-note">元和元年（1615）に3万石で入封。現在見られる高石垣の多くはこの時代に整備された。</div>
+        </div>
+        <div class="lord-item">
+          <div class="lord-dot"></div>
+          <div class="lord-era">江戸期〜明治</div>
+          <div class="lord-name">稲田家</div>
+          <div class="lord-note">脇坂氏転封後に城代として統治。幕末まで洲本の地を守り、その後廃藩置県へ。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- ══ イベント概要 ══ -->
+<section id="s-overview">
+  <div class="sec">
+    <div class="reveal">
+      <span class="sl">EVENT OVERVIEW</span>
+      <h2 class="st">イベント概要</h2>
+      <div class="sd"></div>
+    </div>
+    <div class="overview-grid reveal">
+      <div class="ov-box">
+        <div class="ov-lbl">開催日</div>
+        <div class="ov-val">令和8年 11月3日（月・祝）</div>
+        <div class="ov-note">文化の日 · 雨天決行</div>
+      </div>
+      <div class="ov-box">
+        <div class="ov-lbl">開催時間</div>
+        <div class="ov-val">10:00 — 21:00</div>
+        <div class="ov-note">夜間ライトアップ 18:00〜21:00</div>
+      </div>
+      <div class="ov-box">
+        <div class="ov-lbl">会場</div>
+        <div class="ov-val">洲本城 城山公園</div>
+        <div class="ov-note">〒656-0023 兵庫県洲本市小路谷</div>
+      </div>
+      <div class="ov-box free">
+        <div class="ov-lbl">入場料</div>
+        <div class="ov-val">無 料</div>
+        <div class="ov-note">どなたでもご参加いただけます</div>
+      </div>
+      <div class="ov-box">
+        <div class="ov-lbl">主催</div>
+        <div class="ov-val">洲本城まつり実行委員会</div>
+        <div class="ov-note">洲本市 / 洲本市観光協会</div>
+      </div>
+      <div class="ov-box">
+        <div class="ov-lbl">駐車場</div>
+        <div class="ov-val">城山公園 無料駐車場</div>
+        <div class="ov-note">普通車約50台 ※混雑時は周辺駐車場へ</div>
+      </div>
+    </div>
+
+    <!-- 500年特別メッセージ -->
+    <div class="reveal" style="margin-top:40px;background:linear-gradient(135deg,rgba(26,39,68,.5),rgba(10,14,26,.5));border:1px solid rgba(201,168,76,.2);padding:32px;max-width:760px;margin-left:auto;margin-right:auto;margin-top:40px;">
+      <div style="text-align:center;margin-bottom:16px;">
+        <div class="ornament" style="margin-bottom:0;">
+          <div class="orn-line"></div>
+          <div class="orn-mark"></div>
+          <div style="font-size:9px;letter-spacing:.3em;color:var(--kin);white-space:nowrap;">特別開催</div>
+          <div class="orn-mark"></div>
+          <div class="orn-line r"></div>
+        </div>
+      </div>
+      <p style="font-family:'Shippori Mincho',serif;font-size:17px;color:var(--kin);text-align:center;letter-spacing:.12em;margin-bottom:14px;">築城五百年の節目に、盛大に祝う</p>
+      <p style="font-size:13px;line-height:2.2;color:rgba(245,240,232,.7);text-align:center;">1526年に産声を上げ、五百年の歴史を積み重ねてきた洲本城。<br>今年の洲本城まつりは、この歴史的な節目を全島挙げて祝う特別な一日となります。<br>武者行列・夜間ライトアップ・ステージイベントなど、例年を超える規模でお届けします。</p>
+    </div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- ══ タイムスケジュール ══ -->
+<section id="s-schedule">
+  <div class="sec">
+    <div class="reveal">
+      <span class="sl">TIME SCHEDULE · NOVEMBER 3</span>
+      <h2 class="st">タイムスケジュール</h2>
+      <div class="sd"></div>
+      <p style="font-size:12px;color:rgba(245,240,232,.5);margin-top:4px;">※ 時刻・内容は予告なく変更となる場合があります</p>
+    </div>
+    <div class="schedule-wrap">
+      <div class="sch-item reveal">
+        <div class="sch-time-col"><div class="sch-time">10:00</div></div>
+        <div class="sch-dot-col"><div class="sch-dot big"></div><div class="sch-line-seg"></div></div>
+        <div class="sch-body">
+          <div class="sch-cat">開会</div>
+          <div class="sch-ttl">開会式・主催者挨拶</div>
+          <div class="sch-note">洲本城山公園メインステージにて。築城500年記念セレモニーを実施。</div>
+          <div class="sch-highlight">🎉 築城500年記念セレモニー</div>
+        </div>
+      </div>
+      <div class="sch-item reveal">
+        <div class="sch-time-col"><div class="sch-time">10:30</div></div>
+        <div class="sch-dot-col"><div class="sch-dot"></div><div class="sch-line-seg"></div></div>
+        <div class="sch-body">
+          <div class="sch-cat">出店 · 体験</div>
+          <div class="sch-ttl">飲食・物産ブース オープン</div>
+          <div class="sch-note">淡路島の名産品・グルメ・物産ブース40店舗以上が出店。歴史体験ブースも同時オープン。</div>
+        </div>
+      </div>
+      <div class="sch-item reveal">
+        <div class="sch-time-col"><div class="sch-time">11:00</div></div>
+        <div class="sch-dot-col"><div class="sch-dot big"></div><div class="sch-line-seg"></div></div>
+        <div class="sch-body">
+          <div class="sch-cat">メインイベント</div>
+          <div class="sch-ttl">武者行列 出陣式</div>
+          <div class="sch-note">洲本城ゆかりの武将に扮した武者行列が城下を練り歩く。甲冑姿の参加者約100名による豪華絢爛な行列。</div>
+          <div class="sch-highlight">⚔️ 洲本城歴代武将 武者行列</div>
+        </div>
+      </div>
+      <div class="sch-item reveal">
+        <div class="sch-time-col"><div class="sch-time">12:00</div></div>
+        <div class="sch-dot-col"><div class="sch-dot"></div><div class="sch-line-seg"></div></div>
+        <div class="sch-body">
+          <div class="sch-cat">ステージ</div>
+          <div class="sch-ttl">郷土芸能・伝統芸能 披露</div>
+          <div class="sch-note">淡路島に伝わる淡路人形浄瑠璃・よさこい・郷土芸能グループによるステージ発表。</div>
+        </div>
+      </div>
+      <div class="sch-item reveal">
+        <div class="sch-time-col"><div class="sch-time">14:00</div></div>
+        <div class="sch-dot-col"><div class="sch-dot big"></div><div class="sch-line-seg"></div></div>
+        <div class="sch-body">
+          <div class="sch-cat">特別企画</div>
+          <div class="sch-ttl">築城500年記念 歴史講演会</div>
+          <div class="sch-note">地元歴史研究家による「洲本城500年の歩み」特別講演。登り石垣や歴代城主のエピソードも。</div>
+          <div class="sch-highlight">🏯 500年の歴史を語る特別講演</div>
+        </div>
+      </div>
+      <div class="sch-item reveal">
+        <div class="sch-time-col"><div class="sch-time">15:30</div></div>
+        <div class="sch-dot-col"><div class="sch-dot"></div><div class="sch-line-seg"></div></div>
+        <div class="sch-body">
+          <div class="sch-cat">ステージ</div>
+          <div class="sch-ttl">音楽ライブ・パフォーマンス</div>
+          <div class="sch-note">淡路島ゆかりのアーティストによる音楽ライブ。夕暮れに染まる洲本城をバックに幻想的なステージ。</div>
+        </div>
+      </div>
+      <div class="sch-item reveal">
+        <div class="sch-time-col"><div class="sch-time">17:30</div></div>
+        <div class="sch-dot-col"><div class="sch-dot big"></div><div class="sch-line-seg"></div></div>
+        <div class="sch-body">
+          <div class="sch-cat">クロージング</div>
+          <div class="sch-ttl">閉会式・500年記念点灯式</div>
+          <div class="sch-note">夜間ライトアップ点灯式。500本のキャンドルに灯りを点し、築城500年への感謝を捧げる。</div>
+          <div class="sch-highlight">🕯️ 500本キャンドル点灯式</div>
+        </div>
+      </div>
+      <div class="sch-item reveal">
+        <div class="sch-time-col"><div class="sch-time">18:00</div></div>
+        <div class="sch-dot-col"><div class="sch-dot big"></div><div class="sch-line-seg"></div></div>
+        <div class="sch-body">
+          <div class="sch-cat">夜間特別企画</div>
+          <div class="sch-ttl">築城500年記念 夜間ライトアップ</div>
+          <div class="sch-note">石垣と天守を特別ライトアップ。通常の金色照明に加え、500年を祝う特別演出光を実施。撮影スポット多数設置予定。</div>
+          <div class="sch-highlight">✨ 500周年特別カラーライトアップ</div>
+        </div>
+      </div>
+      <div class="sch-item reveal">
+        <div class="sch-time-col"><div class="sch-time">21:00</div></div>
+        <div class="sch-dot-col"><div class="sch-dot"></div></div>
+        <div class="sch-body">
+          <div class="sch-cat">終了</div>
+          <div class="sch-ttl">全イベント終了・閉場</div>
+          <div class="sch-note">ライトアップ終了。お帰りの際は足元にご注意ください。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- ══ 見どころ ══ -->
+<section id="s-highlights">
+  <div class="sec">
+    <div class="reveal">
+      <span class="sl">HIGHLIGHTS</span>
+      <h2 class="st">見どころ紹介</h2>
+      <div class="sd"></div>
+    </div>
+    <div class="hl-grid">
+      <div class="hl-card reveal" style="transition-delay:0s">
+        <div class="hl-thumb">
+          <div class="hl-thumb-ico">⚔️</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-num">01</div>
+          <div class="hl-ttl">武者行列</div>
+          <div class="hl-txt">洲本城の歴代城主・武将に扮した総勢約100名による壮大な武者行列。甲冑を纏った勇姿が城下を練り歩く、まつりの最大の見せ場。今年は築城500年にちなみ、仙石秀久・脇坂安治など歴史上の武将も再現します。</div>
+        </div>
+      </div>
+      <div class="hl-card reveal" style="transition-delay:.1s">
+        <div class="hl-thumb">
+          <div class="hl-thumb-ico">✨</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-num">02</div>
+          <div class="hl-ttl">築城500年記念ライトアップ</div>
+          <div class="hl-txt">日没後、石垣と天守が黄金色に輝く夜間ライトアップ。今年は500周年を祝う特別演出として、通常の金色に加えて多彩な光が城を彩ります。SNS映えする幻想的な撮影スポットも多数設置。</div>
+        </div>
+      </div>
+      <div class="hl-card reveal" style="transition-delay:.2s">
+        <div class="hl-thumb">
+          <div class="hl-thumb-ico">🏮</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-num">03</div>
+          <div class="hl-ttl">出店・グルメエリア</div>
+          <div class="hl-txt">淡路島の名産品・玉ねぎ料理・淡路牛・海鮮・淡路島バーガーなど地元グルメが集結。物産品・工芸品・歴史グッズの販売も。40店舗以上が軒を連ねる賑やかな城下町の雰囲気をお楽しみください。</div>
+        </div>
+      </div>
+      <div class="hl-card reveal" style="transition-delay:.3s">
+        <div class="hl-thumb">
+          <div class="hl-thumb-ico">🎭</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-num">04</div>
+          <div class="hl-ttl">ステージイベント</div>
+          <div class="hl-txt">淡路人形浄瑠璃・よさこい・音楽ライブなど多彩なステージプログラム。夕暮れに染まる洲本城をバックにした音楽ライブは特別な雰囲気。500年記念の歴史講演会も必見です。</div>
+        </div>
+      </div>
+      <div class="hl-card reveal" style="transition-delay:.4s">
+        <div class="hl-thumb">
+          <div class="hl-thumb-ico">🕯️</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-num">05</div>
+          <div class="hl-ttl">500本キャンドル点灯式</div>
+          <div class="hl-txt">500年を象徴する500本のキャンドルに灯りを点す特別セレモニー。夕暮れの城山に揺れるキャンドルの灯りが幻想的な空間を演出します。参加者全員で500年の歴史に感謝を捧げます。</div>
+        </div>
+      </div>
+      <div class="hl-card reveal" style="transition-delay:.5s">
+        <div class="hl-thumb">
+          <div class="hl-thumb-ico">📜</div>
+        </div>
+        <div class="hl-body">
+          <div class="hl-num">06</div>
+          <div class="hl-ttl">歴史・体験コーナー</div>
+          <div class="hl-txt">甲冑着付け体験・石垣解説ガイドツアー・歴史パネル展示など、子どもから大人まで楽しめる体験型コンテンツを多数用意。洲本城500年の歴史を全身で感じてください。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- ══ お知らせ ══ -->
+<section id="s-notice" style="background:rgba(26,39,68,.15);">
+  <div class="sec-sm">
+    <div class="reveal">
+      <span class="sl">INFORMATION</span>
+      <h2 class="st">お知らせ</h2>
+      <div class="sd"></div>
+    </div>
+    <div class="notice-list reveal">
+      <div class="notice-item">
+        <div class="notice-date">2025.10.01</div>
+        <div class="notice-badge new">NEW</div>
+        <div class="notice-txt">武者行列参加者（武将役）の最終募集を開始しました。詳細は洲本市観光課までお問い合わせください。</div>
+      </div>
+      <div class="notice-item">
+        <div class="notice-date">2025.09.15</div>
+        <div class="notice-badge new">NEW</div>
+        <div class="notice-txt">築城500年記念特設ページを公開しました。タイムスケジュール・見どころ情報を随時更新します。</div>
+      </div>
+      <div class="notice-item">
+        <div class="notice-date">2025.09.01</div>
+        <div class="notice-badge">お知らせ</div>
+        <div class="notice-txt">第16回 洲本城まつりは令和7年11月3日（月・祝）に開催決定。今年は築城500年の記念特別開催となります。</div>
+      </div>
+      <div class="notice-item">
+        <div class="notice-date">2025.08.20</div>
+        <div class="notice-badge">お知らせ</div>
+        <div class="notice-txt">出店ブースの一般公募を締め切りました。当選者へは別途ご連絡いたします。</div>
+      </div>
+      <div class="notice-item">
+        <div class="notice-date">2025.07.10</div>
+        <div class="notice-badge">お願い</div>
+        <div class="notice-txt">当日の混雑緩和のため、公共交通機関・シャトルバスのご利用にご協力ください。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sec-divider"></div>
+
+<!-- ══ アクセス ══ -->
+<section id="s-access">
+  <div class="sec">
+    <div class="reveal">
+      <span class="sl">ACCESS</span>
+      <h2 class="st">アクセス</h2>
+      <div class="sd"></div>
+    </div>
+    <div class="access-grid reveal">
+      <div class="ac-item">
+        <div class="ac-meth">🚗 お車の場合</div>
+        <div class="ac-det">神戸淡路鳴門自動車道<br><strong>洲本IC</strong>より約15分</div>
+        <div class="ac-note">城山公園 無料駐車場あり（約50台）<br>※ まつり当日は満車になる場合があります</div>
+      </div>
+      <div class="ac-item">
+        <div class="ac-meth">🚌 バスの場合</div>
+        <div class="ac-det">神戸・三宮から高速バスで<br>洲本バスセンター下車</div>
+        <div class="ac-note">下車後タクシーまたは城山公園バス停へ<br>まつり当日は臨時シャトルバスを運行予定</div>
+      </div>
+      <div class="ac-item">
+        <div class="ac-meth">🚢 フェリーの場合</div>
+        <div class="ac-det">明石港 → 岩屋港（高速船 約13分）<br>その後路線バスで洲本方面へ</div>
+        <div class="ac-note">淡路交通バス 洲本行き乗車</div>
+      </div>
+      <div class="ac-item">
+        <div class="ac-meth">🗺 所在地</div>
+        <div class="ac-det">〒656-0023<br>兵庫県洲本市小路谷1272-1<br>洲本城（三熊山城山公園内）</div>
+        <div class="ac-note">Google Maps「洲本城跡」で検索</div>
+      </div>
+    </div>
+    <div class="map-wrap reveal">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3284.5!2d134.8945!3d34.3506!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x354f5b5a5e5a5a5b%3A0x0!2z5rWF5pys5Z-O!5e0!3m2!1sja!2sjp!4v1" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="洲本城 地図"></iframe>
+    </div>
+
+    <!-- busmo -->
+<div class="busmo-wrap">
+
+  <div class="busmo-box">
+
+    <div class="busmo-head">
+
+      <div class="busmo-head-text">
+
+        <div class="busmo-sub">
+          淡路島のバス・公共交通検索ツール
+        </div>
+
+        <div class="busmo-title">
+          洲本城へのアクセスは <span>busmo</span> が便利！
+        </div>
+
+        <div class="busmo-desc">
+          高速バスの時刻検索や、洲本バスセンターへのアクセス確認はこちら。
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="busmo-links">
+
+      <a 
+        href="https://busmo.656.ch/?i=EX_1000-EX_13"
+        target="_blank"
+        class="busmo-btn"
+      >
+        <img 
+          src="https://i.imgur.com/nAoyVA6.png"
+          alt="三宮"
+          class="busmo-icon-img"
+        >
+
+        <div class="busmo-btn-body">
+
+          <div class="busmo-route">
+            三宮 → 洲本バスセンター
+          </div>
+
+          <div class="busmo-btn-title">
+            三宮方面から
+          </div>
+
+          <div class="busmo-btn-text">
+            高速バス時刻を検索
+          </div>
+
+        </div>
+      </a>
+
+      <a 
+        href="https://busmo.656.ch/?i=EX_1-EX_13"
+        target="_blank"
+        class="busmo-btn"
+      >
+        <img 
+          src="https://i.imgur.com/Ibq2tmh.png"
+          alt="徳島"
+          class="busmo-icon-img"
+        >
+
+        <div class="busmo-btn-body">
+
+          <div class="busmo-route">
+            徳島駅前 → 洲本バスセンター
+          </div>
+
+          <div class="busmo-btn-title">
+            徳島方面から
+          </div>
+
+          <div class="busmo-btn-text">
+            高速バス時刻を検索
+          </div>
+
+        </div>
+      </a>
+
+    </div>
+
+  </div>
+
+</div>
+
+<style>
+.busmo-wrap{
+  padding:0 24px;
+}
+
+.busmo-box{
+  margin:40px auto 0;
+  max-width:1200px;
+  background:#d9e8bb;
+  border:2px solid #9fcb00;
+  padding:24px;
+}
+
+.busmo-head{
+  display:flex;
+  align-items:center;
+  gap:22px;
+  margin-bottom:22px;
+}
+
+.busmo-logo{
+  width:170px;
+  max-width:100%;
+  display:block;
+  flex-shrink:0;
+}
+
+.busmo-sub{
+  font-size:11px;
+  color:#4f4f4f;
+  margin-bottom:8px;
+}
+
+.busmo-title{
+  font-size:28px;
+  font-weight:700;
+  line-height:1.5;
+  color:#587000;
+  margin-bottom:10px;
+}
+
+.busmo-title span{
+  color:#9bc900;
+}
+
+.busmo-desc{
+  font-size:13px;
+  line-height:1.8;
+  color:#444;
+}
+
+.busmo-links{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:14px;
+}
+
+.busmo-btn{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  background:#a8d400;
+  border:2px solid #88b100;
+  padding:18px;
+  text-decoration:none;
+  color:#222;
+  transition:.2s;
+}
+
+.busmo-btn:hover{
+  background:#b9e500;
+  transform:translateY(-2px);
+}
+
+.busmo-icon-img{
+  width:58px;
+  height:58px;
+  object-fit:contain;
+  flex-shrink:0;
+}
+
+.busmo-btn-body{
+  display:flex;
+  flex-direction:column;
+}
+
+.busmo-route{
+  font-size:10px;
+  font-weight:700;
+  color:#5a7300;
+  margin-bottom:5px;
+  letter-spacing:.03em;
+}
+
+.busmo-btn-title{
+  font-size:15px;
+  font-weight:700;
+  margin-bottom:4px;
+}
+
+.busmo-btn-text{
+  font-size:11px;
+  line-height:1.6;
+}
+
+@media(max-width:700px){
+
+  .busmo-wrap{
+    padding:0 14px;
+  }
+
+  .busmo-box{
+    padding:18px;
+  }
+
+  .busmo-head{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:14px;
+    margin-bottom:18px;
+  }
+
+  .busmo-logo{
+    width:140px;
+  }
+
+  .busmo-title{
+    font-size:22px;
+  }
+
+  .busmo-desc{
+    font-size:12px;
+  }
+
+  .busmo-btn{
+    padding:14px;
+  }
+
+}
+</style>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div style="font-size:9px;letter-spacing:.3em;color:var(--kin);margin-bottom:10px;">SPECIAL SITE</div>
+  <div class="ft-logo">洲本城まつり</div>
+  <div class="ft-sub">第16回 · 築城500年記念 公式特設サイト</div>
+  <a href="index.html" class="ft-main-link">← 洲本城 公式サイトへ戻る</a>
+  <div class="ft-links">
+    <a href="#s500">築城500年</a>
+    <span class="ft-sep">|</span>
+    <a href="#s-overview">概要</a>
+    <span class="ft-sep">|</span>
+    <a href="#s-schedule">スケジュール</a>
+    <span class="ft-sep">|</span>
+    <a href="#s-highlights">見どころ</a>
+    <span class="ft-sep">|</span>
+    <a href="#s-notice">お知らせ</a>
+    <span class="ft-sep">|</span>
+    <a href="#s-access">アクセス</a>
+  </div>
+  <div class="ft-copy">© 2025 洲本城まつり実行委員会 / 洲本市観光協会 All Rights Reserved.</div>
+</footer>
+
+<script>
+/* ── LOADER ── */
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    const l=document.getElementById('ld');
+    l.classList.add('out');
+    setTimeout(()=>l.remove(),900);
+  },700);
+});
+
+/* ── HEADER SCROLL ── */
+window.addEventListener('scroll',()=>{
+  const scrolled=window.scrollY>60;
+  document.getElementById('hdr').classList.toggle('scrolled',scrolled);
+  document.getElementById('site-logo').classList.toggle('visible',scrolled);
+});
+
+/* ── MOBILE MENU ── */
+window.toggleMenu=function(){
+  const h=document.getElementById('ham');
+  const m=document.getElementById('mmenu');
+  h.classList.toggle('open');
+  m.classList.toggle('open');
+  document.body.style.overflow=m.classList.contains('open')?'hidden':'';
+};
+
+/* ── REVEAL OBSERVER ── */
+function observeReveal(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+  },{threshold:.06});
+  document.querySelectorAll('.reveal,.reveal-l,.reveal-r,.lord-item').forEach(el=>{
+    if(!el.classList.contains('visible'))obs.observe(el);
+  });
+}
+observeReveal();
+document.querySelectorAll('section').forEach(sec=>{
+  new MutationObserver(observeReveal).observe(sec,{childList:true,subtree:true});
+});
+
+/* ── COUNTDOWN ── */
+function updateCD(){
+  const target=new Date('2026-11-03T10:00:00+09:00');
+  const now=new Date();
+  const diff=target-now;
+  if(diff<=0){
+    document.getElementById('cd-nums').innerHTML='<div class="cd-past">本日開催中！</div>';
+    return;
+  }
+  const d=Math.floor(diff/86400000);
+  const h=Math.floor((diff%86400000)/3600000);
+  const m=Math.floor((diff%3600000)/60000);
+  const s=Math.floor((diff%60000)/1000);
+  document.getElementById('cd-d').textContent=d;
+  document.getElementById('cd-h').textContent=String(h).padStart(2,'0');
+  document.getElementById('cd-m').textContent=String(m).padStart(2,'0');
+  document.getElementById('cd-s').textContent=String(s).padStart(2,'0');
+}
+updateCD();
+setInterval(updateCD,1000);
+
+/* ── SMOOTH SCROLL for anchor links ── */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',function(e){
+    const id=this.getAttribute('href');
+    const el=document.querySelector(id);
+    if(el){
+      e.preventDefault();
+      const offset=64;
+      const top=el.getBoundingClientRect().top+window.scrollY-offset;
+      window.scrollTo({top,behavior:'smooth'});
+      // close mobile menu if open
+      document.getElementById('mmenu').classList.remove('open');
+      document.getElementById('ham').classList.remove('open');
+      document.body.style.overflow='';
+    }
+  });
+});
+</script>
+</body>
+</html>
