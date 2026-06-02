@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>淡路島 観光ナビ（防災警報連携）</title>
+<title>淡路島 観光ナビ（防災警報連携・ヘッダー被り対策済）</title>
 <style>
   :root {
     --purple: #9c27b0;
@@ -25,13 +25,44 @@
     color: var(--text-main);
   }
 
-  /* 観光サイトのダミーヘッダー・コンテンツ */
+  /* 【解決策のポイント】
+    上部に固定される可能性のある要素（バナーやヘッダー）を
+    一つの固定コンテナ「.sticky-top-container」にまとめます。
+  */
+  .sticky-top-container {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+
+  /* 防災警告バナー（コンテナ内に入るのでtop: 0の競合が起きない） */
+  .emergency-banner {
+    display: none; /* 初期状態は非表示 */
+    background-color: var(--red);
+    color: white;
+    text-align: center;
+    padding: 12px 20px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0% { background-color: #d32f2f; }
+    50% { background-color: #b71c1c; }
+    100% { background-color: #d32f2f; }
+  }
+
+  /* 観光サイトの元のヘッダー */
   .site-header {
     background-color: #ffffff;
     padding: 20px;
     text-align: center;
     border-bottom: 1px solid var(--border-color);
   }
+
+  /* メインコンテンツエリア */
   .site-hero {
     background: linear-gradient(135deg, #74b9ff, #a29bfe);
     height: 250px;
@@ -44,38 +75,19 @@
     text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
   }
 
-  /* 1. 防災警告バナー（警報発生時のみ動的に表示） */
-  .emergency-banner {
-    display: none; /* 初期状態は非表示 */
-    background-color: var(--red);
-    color: white;
-    text-align: center;
-    padding: 12px 20px;
-    font-weight: bold;
-    font-size: 1.1rem;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0% { background-color: #d32f2f; }
-    50% { background-color: #b71c1c; }
-    100% { background-color: #d32f2f; }
-  }
-
-  /* 2. ポップアップ（モーダルウィンドウ） */
+  /* ポップアップ（モーダルウィンドウ） */
   .modal-overlay {
-    display: none; /* 初期状態は非表示 */
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
-    z-index: 1000;
+    /* 元のヘッダーの重なり（z-index: 999）よりも
+      必ず前面に出るように1001以上に設定 
+    */
+    z-index: 1001; 
     justify-content: center;
     align-items: center;
     padding: 20px;
@@ -119,7 +131,7 @@
     overflow-y: auto;
   }
 
-  /* 注意事項の文脈ボックス（報道・観光客向け） */
+  /* 注意事項ボックス */
   .notice-box {
     background-color: var(--notice-bg);
     border: 1px solid var(--notice-border);
@@ -139,7 +151,7 @@
     gap: 5px;
   }
 
-  /* 淡路島全体の詳細表示用スタイル */
+  /* エリア詳細スタイル */
   .meta-info {
     font-size: 0.85rem;
     color: var(--text-sub);
@@ -178,7 +190,6 @@
     color: #000;
   }
 
-  /* レベル別カラー */
   .bg-purple { background-color: var(--purple); color: #ffffff; }
   .bg-red { background-color: var(--red); color: #ffffff; }
   .bg-yellow { background-color: var(--yellow); color: #202124; }
@@ -186,11 +197,22 @@
 </head>
 <body>
 
-<div id="emergency-banner" class="emergency-banner" onclick="openEmergencyModal()">
-  【災害情報】現在、洲本市に気象警報が発表されています。タップして詳細を確認してください。
+<div class="sticky-top-container">
+  <div id="emergency-banner" class="emergency-banner" onclick="openEmergencyModal()">
+    【災害情報】現在、洲本市に気象警報が発表されています。タップして詳細を確認してください。
+  </div>
+  <div class="site-header">
+    <h2>淡路島 観光ナビ</h2>
+  </div>
 </div>
 
-
+<div class="site-hero">
+  Welcome to Awaji Island
+</div>
+<div style="padding: 20px; text-align: center; color: #666;">
+  <p>（ここに通常の観光ホームページのコンテンツが入ります）</p>
+  <p>上部の「警告バナー」が出現した際、観光ナビヘッダーが下に押し出される形になるため、文字やボタンが裏に隠れてしまう現象を解決しました。</p>
+</div>
 
 <div id="emergency-modal" class="modal-overlay" onclick="closeEmergencyModal(event)">
   <div class="modal-card" onclick="event.stopPropagation()">
@@ -201,8 +223,8 @@
     <div class="modal-body">
       
       <div class="notice-box">
-        <div class="notice-title">⚠️ 観光客の皆様へのご注意</div>
-        <div>現在、淡路島内に気象警報が発令されています。今後の気象情報や交通機関（明石海峡大橋・大鳴門橋・各定期船）の運行状況に十分ご注意ください。安全のため、不要不急の外出はお控えてください。</div>
+        <div class="notice-title">⚠️ 観光客・報道関係の皆様へのご注意</div>
+        <div>現在、淡路島の一部地域に気象警報が発令されています。今後の気象情報や交通機関（明石海峡大橋・大鳴門橋・各定期船）の運行状況に十分ご注意ください。安全のため、不要不急の外出や危険な場所（海岸、河川、斜面付近など）への立ち入りは控えてください。</div>
       </div>
 
       <div class="meta-info">
@@ -230,7 +252,6 @@
   const FEED_URL = 'https://www.data.jma.go.jp/developer/xml/feed/extra.xml';
   const TARGET_CITIES = ['淡路市', '洲本市', '南あわじ市'];
 
-  // モーダル操作関数
   function openEmergencyModal() {
     document.getElementById('emergency-modal').style.display = 'flex';
   }
@@ -246,14 +267,12 @@
     const reportTimeDisplay = document.getElementById('report-time');
 
     try {
-      // 1. フィードの取得
       const feedRes = await fetch(FEED_URL);
       if (!feedRes.ok) throw new Error('Feed fetch failed');
       const feedText = await feedRes.text();
       const parser = new DOMParser();
       const feedXml = parser.parseFromString(feedText, 'application/xml');
 
-      // 2. 兵庫県の気象警報・注意報電文を探す
       const entries = feedXml.getElementsByTagName('entry');
       let targetXmlUrl = null;
 
@@ -276,21 +295,18 @@
         return;
       }
 
-      // 3. 詳細XMLの取得
       const xmlRes = await fetch(targetXmlUrl);
       if (!xmlRes.ok) throw new Error('XML fetch failed');
       const xmlText = await xmlRes.text();
       const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
 
-      // 発表時刻
       const reportDateTime = xmlDoc.getElementsByTagName('ReportDateTime')[0]?.textContent;
       if (reportDateTime) {
         reportTimeDisplay.textContent = `発表時刻: ${new Date(reportDateTime).toLocaleString('ja-JP')}`;
       }
 
-      // 4. データ構造解析
       const cityAlerts = { '淡路市': [], '洲本市': [], '南あわじ市': [] };
-      let hasSumotoWarningOrHigher = false; // 洲本市に警報以上が出ているかのフラグ
+      let hasSumotoWarningOrHigher = false;
 
       const items = xmlDoc.getElementsByTagName('Item');
       for (let i = 0; i < items.length; i++) {
@@ -314,7 +330,6 @@
             if (alertName && status && status !== '解除' && status !== '発表なし') {
               cityAlerts[areaName].push({ name: alertName, status: status });
 
-              // 洲本市で、かつ名前に「警報」または「特別警報」が含まれる場合（注意報はすり抜ける）
               if (areaName === '洲本市' && (alertName.includes('警報') || alertName.includes('特別警報'))) {
                 hasSumotoWarningOrHigher = true;
               }
@@ -323,9 +338,7 @@
         }
       }
 
-      // 5. 洲本市に警報以上が発令されている場合のみ、観光サイトにバナーを表示
       if (hasSumotoWarningOrHigher) {
-        // 最高レベルを検知してバナーの文字・色を調整
         const sumotoAlertNames = cityAlerts['洲本市'].map(a => a.name).join('');
         if (sumotoAlertNames.includes('特別警報')) {
           banner.textContent = '【緊急災害情報】洲本市に「特別警報」が発表されています。安全を確保し詳細を確認してください。';
@@ -336,10 +349,9 @@
         }
         banner.style.display = 'block';
       } else {
-        banner.style.display = 'none'; // 注意報のみ、または発表なしなら表示しない
+        banner.style.display = 'none';
       }
 
-      // 6. ポップアップ内部のレンダリング（裏側で最新状態にしておく）
       renderCityAlerts('alerts-awaji', cityAlerts['淡路市']);
       renderCityAlerts('alerts-sumoto', cityAlerts['洲本市']);
       renderCityAlerts('alerts-minamiawaji', cityAlerts['南あわじ市']);
@@ -376,7 +388,6 @@
     });
   }
 
-  // 監視処理の開始
   checkWeatherAlerts();
   setInterval(checkWeatherAlerts, 5 * 60 * 1000);
 </script>
