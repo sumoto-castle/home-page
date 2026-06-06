@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>404 – ページが見つかりません | 洲本城</title>
+<meta name="description" content="お探しのページは見つかりませんでした。">
+<meta name="theme-color" content="#0a0e1a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sumi:#0a0e1a;--ai:#1a2744;--kin:#c9a84c;--kinL:#e0c170;
+  --washi:#f5f0e8;--gin:#8899aa;--gL:rgba(255,255,255,.06);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--sumi);color:var(--washi);
+  font-family:'Noto Sans JP',sans-serif;
+  overflow-x:hidden;min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--sumi)}
+::-webkit-scrollbar-thumb{background:var(--kin);border-radius:2px}
+
+/* ── STARFIELD ── */
+.starfield{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(1px 1px at  5% 12%,rgba(201,168,76,.7) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 18% 78%,rgba(255,255,255,.35) 0%,transparent 100%),
+    radial-gradient(1px 1px at 32%  5%,rgba(201,168,76,.45) 0%,transparent 100%),
+    radial-gradient(2px 2px at 45% 88%,rgba(255,255,255,.25) 0%,transparent 100%),
+    radial-gradient(1px 1px at 58% 22%,rgba(201,168,76,.5) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 72% 55%,rgba(255,255,255,.3) 0%,transparent 100%),
+    radial-gradient(1px 1px at 85% 15%,rgba(201,168,76,.6) 0%,transparent 100%),
+    radial-gradient(1px 1px at 92% 70%,rgba(255,255,255,.4) 0%,transparent 100%),
+    radial-gradient(1px 1px at 12% 45%,rgba(201,168,76,.3) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 65% 90%,rgba(201,168,76,.35) 0%,transparent 100%);
+}
+
+/* ── FOG LAYER ── */
+.fog{
+  position:fixed;inset:0;pointer-events:none;z-index:1;
+  background:linear-gradient(160deg,#0a0e1a 0%,#1a2744 40%,#0d1829 100%);
+  opacity:.85;
+}
+
+/* ── MOON ── */
+.moon{
+  position:fixed;top:8%;right:12%;width:120px;height:120px;
+  border-radius:50%;pointer-events:none;z-index:2;
+  background:radial-gradient(circle at 38% 38%,rgba(224,193,112,.18) 0%,rgba(201,168,76,.04) 60%,transparent 100%);
+  box-shadow:0 0 60px 20px rgba(201,168,76,.07), 0 0 120px 60px rgba(201,168,76,.03);
+  animation:moonGlow 6s ease-in-out infinite;
+}
+@keyframes moonGlow{0%,100%{opacity:.6}50%{opacity:1}}
+
+/* ── CASTLE SILHOUETTE ── */
+.castle-wrap{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:min(700px,95vw);pointer-events:none;z-index:2;
+  opacity:.08;
+  animation:castleFloat 8s ease-in-out infinite;
+}
+@keyframes castleFloat{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-6px)}}
+
+/* ── MAIN CONTENT ── */
+.wrap{
+  position:relative;z-index:10;
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;padding:40px 24px;
+  max-width:600px;width:100%;
+}
+
+/* 404 NUMBER */
+.num-wrap{position:relative;margin-bottom:8px;}
+.num{
+  font-family:'Shippori Mincho',serif;
+  font-size:clamp(120px,22vw,200px);
+  font-weight:700;
+  line-height:1;
+  background:linear-gradient(135deg,rgba(201,168,76,.9) 0%,rgba(224,193,112,.5) 50%,rgba(201,168,76,.2) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  letter-spacing:-.02em;
+  animation:numIn 1s .1s cubic-bezier(.22,1,.36,1) both;
+  filter:drop-shadow(0 0 40px rgba(201,168,76,.25));
+}
+@keyframes numIn{from{opacity:0;transform:translateY(40px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* 装飾ライン */
+.deco-line{
+  display:flex;align-items:center;gap:14px;margin-bottom:28px;
+  animation:fadeUp 1s .35s ease both;
+}
+.deco-line::before,.deco-line::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(to var(--dir,right),transparent,rgba(201,168,76,.5));
+}
+.deco-line::before{--dir:right}
+.deco-line::after{--dir:left}
+.deco-text{
+  font-size:9px;letter-spacing:.5em;color:var(--kin);
+  white-space:nowrap;
+}
+
+/* タイトル */
+.ttl{
+  font-family:'Shippori Mincho',serif;
+  font-size:clamp(20px,4vw,28px);
+  font-weight:500;
+  letter-spacing:.18em;
+  margin-bottom:14px;
+  color:var(--washi);
+  animation:fadeUp 1s .45s ease both;
+}
+
+/* サブテキスト */
+.sub{
+  font-size:12px;
+  line-height:2;
+  color:rgba(245,240,232,.5);
+  letter-spacing:.08em;
+  margin-bottom:36px;
+  animation:fadeUp 1s .55s ease both;
+}
+
+/* ホームボタン */
+.btn-home{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:13px 32px;
+  background:var(--kin);color:var(--sumi);
+  font-size:11px;letter-spacing:.22em;font-weight:700;
+  font-family:'Noto Sans JP',sans-serif;
+  text-decoration:none;border:none;cursor:pointer;
+  transition:all .3s;
+  animation:fadeUp 1s .65s ease both;
+}
+.btn-home:hover{background:var(--kinL);transform:translateY(-3px);box-shadow:0 10px 30px rgba(201,168,76,.3)}
+
+.btn-home-arrow{transition:transform .3s}
+.btn-home:hover .btn-home-arrow{transform:translateX(4px)}
+
+/* ナビリンク */
+.nav-links{
+  display:flex;flex-wrap:wrap;gap:6px;justify-content:center;
+  margin-top:32px;
+  animation:fadeUp 1s .75s ease both;
+}
+.nav-links a{
+  font-size:10px;letter-spacing:.12em;
+  color:rgba(245,240,232,.45);
+  text-decoration:none;
+  padding:5px 12px;
+  border:1px solid rgba(201,168,76,.12);
+  transition:all .3s;cursor:pointer;
+}
+.nav-links a:hover{color:var(--kin);border-color:rgba(201,168,76,.4)}
+
+/* ロゴ */
+.logo-top{
+  position:fixed;top:0;left:0;right:0;
+  height:60px;
+  display:flex;align-items:center;padding:0 24px;
+  z-index:20;
+  background:linear-gradient(to bottom,rgba(10,14,26,.85),transparent);
+}
+.logo-link{
+  text-decoration:none;display:flex;flex-direction:column;line-height:1;
+  cursor:pointer;
+}
+.logo-jp{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:600;color:var(--kin);letter-spacing:.2em}
+.logo-en{font-size:8px;letter-spacing:.28em;color:var(--gin);margin-top:2px}
+
+/* 霧エフェクト（下部） */
+.mist{
+  position:fixed;bottom:0;left:0;right:0;height:220px;
+  pointer-events:none;z-index:3;
+  background:linear-gradient(to top,rgba(10,14,26,.7) 0%,transparent 100%);
+}
+
+/* 波紋アニメーション（404の周り） */
+.ripple{
+  position:absolute;inset:-30px;
+  border-radius:50%;
+  border:1px solid rgba(201,168,76,.08);
+  animation:rippleAnim 4s linear infinite;
+  pointer-events:none;
+}
+.ripple:nth-child(2){animation-delay:1.3s;inset:-60px;}
+.ripple:nth-child(3){animation-delay:2.6s;inset:-90px;}
+@keyframes rippleAnim{
+  0%{opacity:0;transform:scale(.8)}
+  20%{opacity:1}
+  100%{opacity:0;transform:scale(1.4)}
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* RESPONSIVE */
+@media(max-width:480px){
+  .num{font-size:26vw}
+  .moon{width:80px;height:80px;top:5%;right:5%}
+}
+</style>
+</head>
+<body>
+
+<div class="starfield"></div>
+<div class="fog"></div>
+<div class="moon"></div>
+
+<!-- 霞む城のシルエット -->
+<div class="castle-wrap" aria-hidden="true">
+  <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" fill="var(--kin)">
+    <polygon points="0,400 800,400 750,280 600,260 550,280 450,240 350,240 250,280 200,260 50,280"/>
+    <rect x="200" y="200" width="400" height="80"/>
+    <rect x="220" y="180" width="360" height="30"/>
+    <rect x="230" y="165" width="12" height="18"/>
+    <rect x="270" y="165" width="12" height="18"/>
+    <rect x="310" y="165" width="12" height="18"/>
+    <rect x="350" y="165" width="12" height="18"/>
+    <rect x="390" y="165" width="12" height="18"/>
+    <rect x="430" y="165" width="12" height="18"/>
+    <rect x="470" y="165" width="12" height="18"/>
+    <rect x="510" y="165" width="12" height="18"/>
+    <rect x="550" y="165" width="12" height="18"/>
+    <rect x="310" y="100" width="180" height="80"/>
+    <polygon points="290,100 510,100 490,70 310,70"/>
+    <rect x="330" y="40" width="140" height="35"/>
+    <polygon points="310,40 490,40 470,15 330,15"/>
+    <rect x="350" y="0" width="100" height="20"/>
+  </svg>
+</div>
+
+<div class="mist"></div>
+
+<!-- ロゴ -->
+<div class="logo-top">
+  <a class="logo-link" href="index.html">
+    <span class="logo-jp">洲本城</span>
+    <span class="logo-en">SUMOTO CASTLE</span>
+  </a>
+</div>
+
+<!-- メインコンテンツ -->
+<main class="wrap">
+  <div class="num-wrap">
+    <div class="ripple"></div>
+    <div class="ripple"></div>
+    <div class="ripple"></div>
+    <div class="num">404</div>
+  </div>
+
+  <div class="deco-line">
+    <span class="deco-text">PAGE NOT FOUND</span>
+  </div>
+
+  <h1 class="ttl">ページが見つかりません</h1>
+
+  <p class="sub">
+    お探しのページは、霞の中に消えてしまったようです。<br>
+    URLをご確認いただくか、<br>
+    下記よりトップページへお戻りください。
+  </p>
+
+  <a class="btn-home" href="index.html">
+    ホームへ戻る
+    <span class="btn-home-arrow">→</span>
+  </a>
+
+  <nav class="nav-links" aria-label="主要ページへのリンク">
+    <a href="index.html#about">城について</a>
+    <a href="index.html#timeline">歴史年表</a>
+    <a href="index.html#news">最新情報</a>
+    <a href="index.html#events">イベント</a>
+    <a href="index.html#map">城内マップ</a>
+    <a href="index.html#access">アクセス</a>
+    <a href="index.html#contact">お問い合わせ</a>
+  </nav>
+</main>
+
+</body>
+</html>
