@@ -329,7 +329,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
 /* ══ RESET & TOKENS ══ */
 :root{
@@ -1460,7 +1459,7 @@ footer{border-top:1px solid rgba(201,168,76,.1);padding:44px 20px 28px;text-alig
       <div class="guide-flow-item"><div class="guide-flow-num">04</div><div class="guide-flow-body"><div class="guide-flow-ttl">展望台・眺望</div><div class="guide-flow-txt">播磨灘・紀伊水道を一望する展望台へ。（約20分）</div></div></div>
       <div class="guide-flow-item"><div class="guide-flow-num">05</div><div class="guide-flow-body"><div class="guide-flow-ttl">下山・解散</div><div class="guide-flow-txt">安全に下山して解散。（約10分）</div></div></div>
     </div>
-    <!-- ガイド申し込みフォーム（専用EmailJS） -->
+    <!-- ガイド申し込みフォーム（Apps Script／ガイド用エイリアス） -->
     <div class="special-form-box reveal" style="margin-top:40px;">
       <div class="special-form-ttl">ガイドを申し込む</div>
       <div class="special-form-sub">フォームよりお申し込みください。担当者よりご連絡いたします。<br>※ 3日前までにご予約ください。</div>
@@ -1529,7 +1528,7 @@ footer{border-top:1px solid rgba(201,168,76,.1);padding:44px 20px 28px;text-alig
         <div><div style="font-size:9px;letter-spacing:.2em;color:var(--kin);margin-bottom:5px;">スマホ表示</div>縦並び1カラム</div>
       </div>
     </div>
-    <!-- 広告申し込みフォーム（専用EmailJS） -->
+    <!-- 広告申し込みフォーム（Apps Script／広告用エイリアス） -->
     <div class="special-form-box reveal" style="margin-top:32px;">
       <div class="special-form-ttl">広告掲載を申し込む</div>
       <div class="special-form-sub">フォームよりお申し込みください。担当者より料金・仕様の詳細をご案内いたします。</div>
@@ -1758,7 +1757,11 @@ window.submitBF=async function(bid,fields,cid){
   const values={};let valid=true;
   for(const f of fields){const id=`bf_${bid}_${f.id}`;if(f.type==='radio'){const c=document.querySelector(`input[name="${id}"]:checked`);values[f.label]=c?c.value:'';if(f.required&&!values[f.label])valid=false;}else if(f.type==='checkbox'){values[f.label]=[...document.querySelectorAll(`input[name="${id}"]:checked`)].map(e=>e.value).join(', ');}else{const el=document.getElementById(id);values[f.label]=el?el.value.trim():'';if(f.required&&!values[f.label])valid=false;}}
   if(!valid){alert('必須項目を入力してください');return;}
-  try{await addDoc(collection(db,'contacts'),{...values,blockId:bid,read:false,createdAt:serverTimestamp()});const cfg=window._ejsCfg;if(cfg?.pub&&cfg?.svc&&cfg?.tpl){const mb=Object.entries(values).map(([k,v])=>`${k}: ${v}`).join('\n');await emailjs.send(cfg.svc,cfg.tpl,{from_name:values['お名前']||'—',from_email:values['メールアドレス']||'—',message:mb});}const c=document.getElementById(cid);if(c){c.innerHTML='<div style="text-align:center;padding:20px;border:1px solid rgba(201,168,76,.3);"><div style="font-size:20px;margin-bottom:6px;">✉️</div><div style="font-family:\'Shippori Mincho\',serif;font-size:15px;color:var(--kin);">送信完了</div></div>';}}catch{alert('送信に失敗しました。時間をおいてお試しください。');}
+  try{
+    await addDoc(collection(db,'contacts'),{...values,blockId:bid,read:false,createdAt:serverTimestamp()});
+    try{await sendViaAppsScript('block',window._asCfg?.aliasMain,values,'【ブロックフォーム】洲本城公式サイト');}catch(e){console.warn('mail send failed',e);}
+    const c=document.getElementById(cid);if(c){c.innerHTML='<div style="text-align:center;padding:20px;border:1px solid rgba(201,168,76,.3);"><div style="font-size:20px;margin-bottom:6px;">✉️</div><div style="font-family:\'Shippori Mincho\',serif;font-size:15px;color:var(--kin);">送信完了</div></div>';}
+  }catch{alert('送信に失敗しました。時間をおいてお試しください。');}
 };
 function startCD(id,target){const el=document.getElementById('cdn-'+id);if(!el||!target)return;const end=new Date(target);function tick(){const now=new Date();const diff=end-now;if(diff<=0){el.innerHTML='<span style="font-family:\'Shippori Mincho\',serif;font-size:20px;color:var(--kin);">開催中</span>';return;}const d=Math.floor(diff/86400000);const h=Math.floor((diff%86400000)/3600000);const m=Math.floor((diff%3600000)/60000);const s=Math.floor((diff%60000)/1000);el.innerHTML=`<div class="blk-cd-unit"><span class="blk-cd-n">${d}</span><div class="blk-cd-l">日</div></div><div class="blk-cd-sep">:</div><div class="blk-cd-unit"><span class="blk-cd-n">${String(h).padStart(2,'0')}</span><div class="blk-cd-l">時間</div></div><div class="blk-cd-sep">:</div><div class="blk-cd-unit"><span class="blk-cd-n">${String(m).padStart(2,'0')}</span><div class="blk-cd-l">分</div></div><div class="blk-cd-sep">:</div><div class="blk-cd-unit"><span class="blk-cd-n">${String(s).padStart(2,'0')}</span><div class="blk-cd-l">秒</div></div>`;setTimeout(tick,1000);}tick();
 }
@@ -1968,53 +1971,99 @@ function makeSpecialForm(containerId,fields){
 makeSpecialForm('guide-form-fields',GUIDE_FIELDS);
 makeSpecialForm('ad-form-fields',AD_FIELDS);
 
-async function sendForm(fields,containerId,formId,btnId,okId,cfgKey,saveCollection){
+async function sendForm(fields,containerId,formId,btnId,okId,formType,saveCollection){
   const values={};let valid=true;
   for(const f of fields){const id=`${containerId}_${f.id}`;if(f.type==='select'){const el=document.getElementById(id);values[f.label]=el?el.value.trim():'';if(f.required&&!values[f.label])valid=false;}else{const el=document.getElementById(id);values[f.label]=el?el.value.trim():'';if(f.required&&!values[f.label])valid=false;}}
   if(!valid){alert('必須項目を入力してください');return;}
   const btn=document.getElementById(btnId);btn.disabled=true;btn.textContent='送 信 中...';
   try{
     await addDoc(collection(db,saveCollection),{...values,read:false,createdAt:serverTimestamp()});
-    const cfg=window[cfgKey];
-    if(cfg?.pub&&cfg?.svc&&cfg?.tpl){const mb=Object.entries(values).map(([k,v])=>`${k}: ${v}`).join('\n');await emailjs.send(cfg.svc,cfg.tpl,{from_name:values['お名前']||values['担当者名']||'—',from_email:values['メールアドレス']||'—',message:mb});}
+    const cfg=window._asCfg;
+    const alias=formType==='guide'?cfg?.aliasGuide:formType==='ad'?cfg?.aliasAd:cfg?.aliasMain;
+    const subject=formType==='guide'?'【ガイド申込】洲本城公式サイト':formType==='ad'?'【広告掲載申込】洲本城公式サイト':'【お問い合わせ】洲本城公式サイト';
+    try{await sendViaAppsScript(formType,alias,values,subject);}catch(e){console.warn('mail send failed',e);}
     document.getElementById(formId).style.display='none';document.getElementById(okId).style.display='block';
   }catch(e){console.error(e);alert('送信に失敗しました。時間をおいてお試しください。');btn.disabled=false;btn.textContent='申 し 込 む';}
 }
-window.submitGuideForm=()=>sendForm(GUIDE_FIELDS,'guide-form-fields','guide-form-fields','guide-cf-btn','guide-cf-ok','_ejsGuideCfg','guideRequests');
-window.submitAdForm=()=>sendForm(AD_FIELDS,'ad-form-fields','ad-form-fields','ad-cf-btn','ad-cf-ok','_ejsAdCfg','adRequests');
+window.submitGuideForm=()=>sendForm(GUIDE_FIELDS,'guide-form-fields','guide-form-fields','guide-cf-btn','guide-cf-ok','guide','guideRequests');
+window.submitAdForm=()=>sendForm(AD_FIELDS,'ad-form-fields','ad-form-fields','ad-cf-btn','ad-cf-ok','ad','adRequests');
 
 async function sendCFData(prefix,btnId,formId,okId){
   const values={};let valid=true;
   for(const f of formFields){const id=`${prefix}_${f.id}`;if(f.type==='radio'){const c=document.querySelector(`input[name="${id}"]:checked`);values[f.label]=c?c.value:'';if(f.required&&!values[f.label])valid=false;}else if(f.type==='checkbox'){values[f.label]=[...document.querySelectorAll(`input[name="${id}"]:checked`)].map(e=>e.value).join(', ');}else{const el=document.getElementById(id);values[f.label]=el?el.value.trim():'';if(f.required&&!values[f.label])valid=false;}}
   if(!valid){alert('必須項目を入力してください');return;}
   const btn=document.getElementById(btnId);btn.disabled=true;btn.textContent='送 信 中...';
-  try{await addDoc(collection(db,'contacts'),{...values,read:false,createdAt:serverTimestamp()});const cfg=window._ejsCfg;if(cfg?.pub&&cfg?.svc&&cfg?.tpl){const mb=Object.entries(values).map(([k,v])=>`${k}: ${v}`).join('\n');await emailjs.send(cfg.svc,cfg.tpl,{from_name:values['お名前']||'—',from_email:values['メールアドレス']||'—',message:mb});}document.getElementById(formId).style.display='none';document.getElementById(okId).style.display='block';}
+  try{
+    await addDoc(collection(db,'contacts'),{...values,read:false,createdAt:serverTimestamp()});
+    try{await sendViaAppsScript('contact',window._asCfg?.aliasMain,values,'【お問い合わせ】洲本城公式サイト');}catch(e){console.warn('mail send failed',e);}
+    document.getElementById(formId).style.display='none';document.getElementById(okId).style.display='block';
+  }
   catch{alert('送信に失敗しました。時間をおいてお試しください。');btn.disabled=false;btn.textContent='送 信 す る';}
 }
 window._doSend=()=>sendCFData('cf-fields','cf-btn','cf-form','cf-ok');
 window._doSend2=()=>sendCFData('cf-fields2','cf-btn2','contact-form2','cf-ok2');
 
-/* ── EmailJS（複数アカウント） ── */
-async function loadEmailJS(){
+/* ── Google Apps Script（エイリアス送信） ── */
+/*
+  Firestore: siteSettings/appscript
+  {
+    url:        "https://script.google.com/macros/s/XXXXXXXX/exec",  // Apps Script ウェブアプリのURL（デプロイ時に発行）
+    toEmail:    "info@example.com",     // 送信先（管理者）メールアドレス
+    aliasMain:  "info@example.com",     // お問い合わせ／ブロックフォーム用 送信元エイリアス
+    aliasGuide: "guide@example.com",    // ガイド申込用 送信元エイリアス
+    aliasAd:    "ad@example.com"        // 広告掲載申込用 送信元エイリアス
+  }
+  ※ エイリアスは Gmail の「送信元アドレスを追加」で認証済みのものだけ指定可能。
+  ※ Apps Script 側は GmailApp.sendEmail(to, subject, body, {from: alias}) でエイリアス送信する。
+*/
+async function loadAppsScript(){
   try{
-    // メイン（お問い合わせ）
-    const s=await getDoc(doc(db,'siteSettings','emailjs'));
-    if(s.exists()){const d=s.data();window._ejsCfg={pub:d.publicKey,svc:d.serviceId,tpl:d.templateId};if(d.publicKey)emailjs.init(d.publicKey);}
-    // ガイド専用
-    const sg=await getDoc(doc(db,'siteSettings','emailjs_guide'));
-    if(sg.exists()){const d=sg.data();window._ejsGuideCfg={pub:d.publicKey,svc:d.serviceId,tpl:d.templateId};
-      document.getElementById('guide-cf-note').textContent=d.publicKey?'':'※ EmailJS（ガイド用）が未設定のため管理画面から設定してください';}
-    else{document.getElementById('guide-cf-note').textContent='※ EmailJS（ガイド用）が未設定のため管理画面から設定してください';}
-    // 広告専用
-    const sa=await getDoc(doc(db,'siteSettings','emailjs_ad'));
-    if(sa.exists()){const d=sa.data();window._ejsAdCfg={pub:d.publicKey,svc:d.serviceId,tpl:d.templateId};
-      document.getElementById('ad-cf-note').textContent=d.publicKey?'':'※ EmailJS（広告用）が未設定のため管理画面から設定してください';}
-    else{document.getElementById('ad-cf-note').textContent='※ EmailJS（広告用）が未設定のため管理画面から設定してください';}
-  }catch{}
+    const s=await getDoc(doc(db,'siteSettings','appscript'));
+    if(s.exists()){
+      const d=s.data();
+      window._asCfg={
+        url:d.url||'',
+        toEmail:d.toEmail||'',
+        aliasMain:d.aliasMain||'',
+        aliasGuide:d.aliasGuide||d.aliasMain||'',
+        aliasAd:d.aliasAd||d.aliasMain||''
+      };
+    }else{window._asCfg={};}
+  }catch{window._asCfg={};}
+  const ready=!!(window._asCfg?.url);
+  const gEl=document.getElementById('guide-cf-note');if(gEl)gEl.textContent=(ready&&window._asCfg?.aliasGuide)?'':'※ 送信設定（Apps Script／ガイド用エイリアス）が未設定のため管理画面から設定してください';
+  const aEl=document.getElementById('ad-cf-note');if(aEl)aEl.textContent=(ready&&window._asCfg?.aliasAd)?'':'※ 送信設定（Apps Script／広告用エイリアス）が未設定のため管理画面から設定してください';
+  const cEl=document.getElementById('cf-note');if(cEl)cEl.textContent=ready?'':'※ 送信設定（Apps Script）が未設定のため管理画面から設定してください';
+  const cEl2=document.getElementById('cf-note2');if(cEl2)cEl2.textContent=ready?'':'※ 送信設定（Apps Script）が未設定のため管理画面から設定してください';
+}
+
+/* 共通送信関数：Google Apps Script ウェブアプリへ POST し、指定エイリアスからメール送信させる */
+async function sendViaAppsScript(formType,alias,values,subject){
+  const cfg=window._asCfg;
+  if(!cfg?.url)throw new Error('AppsScript URL未設定');
+  const replyTo=values['メールアドレス']||values['Email']||values['email']||'';
+  const fromName=values['お名前']||values['担当者名']||values['会社・お店名']||'—';
+  const bodyText=Object.entries(values).map(([k,v])=>`${k}: ${v}`).join('\n');
+  const payload={
+    type:formType,
+    alias:alias||cfg.aliasMain||'',
+    to:cfg.toEmail||'',
+    subject:subject||'【お問い合わせ】洲本城公式サイト',
+    fromName,
+    replyTo,
+    body:bodyText,
+    fields:values
+  };
+  // Content-Type を text/plain にして preflight(OPTIONS) を回避（Apps Script Web App対策）
+  const res=await fetch(cfg.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+  let data={};
+  try{data=await res.json();}catch{data={result:'ok'};}
+  if(data.result==='error')throw new Error(data.message||'送信エラー');
+  return data;
 }
 
 /* ── INIT ── */
-Promise.all([loadAssets(),loadHero(),loadBreaking(),loadPopup(),loadBlocks(),loadSettings(),loadCastleCards(),loadMapSpots(),loadArticles(),loadEvents(),loadCF(),loadEmailJS()]);
+Promise.all([loadAssets(),loadHero(),loadBreaking(),loadPopup(),loadBlocks(),loadSettings(),loadCastleCards(),loadMapSpots(),loadArticles(),loadEvents(),loadCF(),loadAppsScript()]);
 </script>
 
 <!-- ══════════ SPA ROUTER & UI ══════════ -->
