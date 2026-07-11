@@ -296,10 +296,8 @@ input[type=color]{width:48px;height:38px;padding:4px;cursor:pointer}
         <div class="nav-item" data-p="general" onclick="goPage('general')"><span class="ni">⚙️</span>基本設定</div>
         <div class="nav-item" data-p="castle-cards" onclick="goPage('castle-cards')"><span class="ni">🏯</span>城の説明カード</div>
         <div class="nav-item" data-p="contact-form" onclick="goPage('contact-form')"><span class="ni">📋</span>フォーム設定</div>
-        <div class="sb-sec">EmailJS設定</div>
-        <div class="nav-item" data-p="emailjs" onclick="goPage('emailjs')"><span class="ni">📮</span>一般お問い合わせ</div>
-        <div class="nav-item" data-p="emailjs-guide" onclick="goPage('emailjs-guide')"><span class="ni">🧭</span>ガイド申込用</div>
-        <div class="nav-item" data-p="emailjs-ad" onclick="goPage('emailjs-ad')"><span class="ni">📢</span>広告申込用</div>
+        <div class="sb-sec">フォーム送信設定</div>
+        <div class="nav-item" data-p="appscript" onclick="goPage('appscript')"><span class="ni">📮</span>Apps Script設定</div>
       </div>
       <div class="sb-footer">洲本城 管理システム v5.0</div>
     </nav>
@@ -567,48 +565,53 @@ input[type=color]{width:48px;height:38px;padding:4px;cursor:pointer}
       </div>
 
 
-      <!-- ── EMAILJS (一般) ── -->
-      <div id="page-emailjs" class="page">
-        <div class="ph"><h1 class="pt">EmailJS設定 — 一般お問い合わせ</h1></div>
-        <div class="card" style="max-width:600px;">
-          <p style="font-size:12px;color:var(--gin);line-height:1.9;margin-bottom:20px;">一般お問い合わせフォームの送信先EmailJSアカウントを設定します。<a href="https://www.emailjs.com/" target="_blank" style="color:var(--kin);">EmailJS</a>に登録後、以下の情報を入力してください。</p>
-          <div class="fg"><label class="lbl">Public Key</label><input type="text" id="ejs-pub" placeholder="xxxxxxxxxxxxxxxxxxxx"></div>
-          <div class="fg"><label class="lbl">Service ID</label><input type="text" id="ejs-svc" placeholder="service_xxxxxxx"></div>
-          <div class="fg"><label class="lbl">Template ID</label><input type="text" id="ejs-tpl" placeholder="template_xxxxxxx"></div>
-          <div class="hdiv"></div>
-          <div style="font-size:12px;color:var(--gin);line-height:2;margin-bottom:18px;"><strong style="color:var(--kin);">テンプレート変数</strong><br><code style="background:rgba(255,255,255,.06);padding:1px 6px;">{{from_name}}</code> 送信者名 <code style="background:rgba(255,255,255,.06);padding:1px 6px;">{{from_email}}</code> メール <code style="background:rgba(255,255,255,.06);padding:1px 6px;">{{message}}</code> 全フィールド</div>
-          <button class="btn btn-p" onclick="saveEmailJS('emailjs','ejs-pub','ejs-svc','ejs-tpl')">保 存 す る</button>
+      <!-- ── APPS SCRIPT（フォーム送信設定・エイリアス管理・カテゴリ振り分け） ── -->
+      <div id="page-appscript" class="page">
+        <div class="ph"><h1 class="pt">フォーム送信設定（Google Apps Script）</h1></div>
+
+        <div class="card" style="max-width:760px;">
+          <div class="card-ttl">接続設定</div>
+          <div class="fg"><label class="lbl">Apps Script ウェブアプリURL *</label><input type="url" id="as-url" placeholder="https://script.google.com/macros/s/xxxxxxxxxxxx/exec"><div class="hint">Apps Scriptエディタで「デプロイ → 新しいデプロイ → ウェブアプリ」から発行したURLを入力してください</div></div>
+          <div class="fg"><label class="lbl">共有シークレットキー（任意・推奨）</label><input type="text" id="as-secret" placeholder="Apps Script側 スクリプトプロパティ SECRET と同じ値"><div class="hint">Apps Scriptの「プロジェクトの設定 → スクリプト プロパティ」に SECRET を設定した場合、ここに同じ値を入力してください。未設定なら空欄のままでOKです。</div></div>
+          <div class="fg"><label class="lbl">フォールバック送信先アドレス</label><input type="email" id="as-to" placeholder="info@example.com"><div class="hint">エイリアスが未割当の用途に使う既定の通知先</div></div>
         </div>
-      </div>
 
-
-      <!-- ── EMAILJS (ガイド) ── -->
-      <div id="page-emailjs-guide" class="page">
-        <div class="ph"><h1 class="pt">EmailJS設定 — ガイド申込用</h1></div>
-        <div class="card" style="max-width:600px;">
-          <p style="font-size:12px;color:var(--gin);line-height:1.9;margin-bottom:20px;">ガイド申込フォーム専用のEmailJSアカウントを設定します。<br>一般お問い合わせとは<strong style="color:var(--kin);">別のアカウント・テンプレート</strong>を使用できます。<br>空欄の場合はメール送信をスキップしてFirestoreのみに保存されます。</p>
-          <div class="fg"><label class="lbl">Public Key（ガイド申込専用）</label><input type="text" id="ejsg-pub" placeholder="xxxxxxxxxxxxxxxxxxxx"></div>
-          <div class="fg"><label class="lbl">Service ID（ガイド申込専用）</label><input type="text" id="ejsg-svc" placeholder="service_xxxxxxx"></div>
-          <div class="fg"><label class="lbl">Template ID（ガイド申込専用）</label><input type="text" id="ejsg-tpl" placeholder="template_xxxxxxx"></div>
-          <div class="hdiv"></div>
-          <div style="font-size:12px;color:var(--gin);line-height:2;margin-bottom:18px;"><strong style="color:var(--kin);">ガイドフォームで送信されるフィールド</strong><br>お名前 / メールアドレス / 電話番号 / ご希望日 / 人数 / 備考</div>
-          <button class="btn btn-p" onclick="saveEmailJS('emailjs_guide','ejsg-pub','ejsg-svc','ejsg-tpl')">保 存 す る</button>
+        <div class="card" style="max-width:760px;">
+          <div class="card-ttl">送信元エイリアス一覧</div>
+          <p class="hint" style="margin-bottom:12px;">Gmail側で認証済みのアドレスのみ、実際の送信元として使用できます（5個程度を想定）。</p>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+            <button class="btn btn-s" onclick="fetchAliasesFromGmail()">🔄 Gmailの認証済みアドレスを取得して追加</button>
+            <span id="as-alias-status" style="font-size:11px;color:var(--gin);"></span>
+          </div>
+          <div id="as-alias-list"></div>
+          <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+            <input type="email" id="as-new-alias-email" placeholder="new@example.com" style="flex:1;min-width:180px;">
+            <input type="text" id="as-new-alias-label" placeholder="ラベル（例：イベント担当）" style="flex:1;min-width:180px;">
+            <button class="btn btn-s" onclick="addAliasRow()">＋ 手動で追加</button>
+          </div>
         </div>
-      </div>
 
-
-      <!-- ── EMAILJS (広告) ── -->
-      <div id="page-emailjs-ad" class="page">
-        <div class="ph"><h1 class="pt">EmailJS設定 — 広告申込用</h1></div>
-        <div class="card" style="max-width:600px;">
-          <p style="font-size:12px;color:var(--gin);line-height:1.9;margin-bottom:20px;">広告申込フォーム専用のEmailJSアカウントを設定します。<br>一般お問い合わせとは<strong style="color:var(--kin);">別のアカウント・テンプレート</strong>を使用できます。<br>空欄の場合はメール送信をスキップしてFirestoreのみに保存されます。</p>
-          <div class="fg"><label class="lbl">Public Key（広告申込専用）</label><input type="text" id="ejsa-pub" placeholder="xxxxxxxxxxxxxxxxxxxx"></div>
-          <div class="fg"><label class="lbl">Service ID（広告申込専用）</label><input type="text" id="ejsa-svc" placeholder="service_xxxxxxx"></div>
-          <div class="fg"><label class="lbl">Template ID（広告申込専用）</label><input type="text" id="ejsa-tpl" placeholder="template_xxxxxxx"></div>
-          <div class="hdiv"></div>
-          <div style="font-size:12px;color:var(--gin);line-height:2;margin-bottom:18px;"><strong style="color:var(--kin);">広告フォームで送信されるフィールド</strong><br>会社・お店名 / 担当者名 / メールアドレス / 電話番号 / ご希望プラン / 掲載期間 / その他ご要望</div>
-          <button class="btn btn-p" onclick="saveEmailJS('emailjs_ad','ejsa-pub','ejsa-svc','ejsa-tpl')">保 存 す る</button>
+        <div class="card" style="max-width:760px;">
+          <div class="card-ttl">用途別エイリアス割り当て</div>
+          <div class="fg"><label class="lbl">お問い合わせ・自動返信用（メイン）</label><select id="as-alias-main"></select><div class="hint">お問い合わせフォームの送信者への自動返信、および既定の管理者通知はこのエイリアスから送信されます</div></div>
+          <div class="fg"><label class="lbl">ガイド申込用</label><select id="as-alias-guide"></select></div>
+          <div class="fg"><label class="lbl">広告申込用</label><select id="as-alias-ad"></select></div>
         </div>
+
+        <div class="card" style="max-width:760px;">
+          <div class="card-ttl">送信者への自動返信メール（お問い合わせフォーム）</div>
+          <div class="fg"><label class="lbl">件名</label><input type="text" id="as-auto-subject" placeholder="お問い合わせを受け付けました"></div>
+          <div class="fg"><label class="lbl">本文</label><textarea id="as-auto-body" style="min-height:130px;" placeholder="{{name}} 様..."></textarea><div class="hint"><code>{{name}}</code> は送信者名に自動置換されます</div></div>
+        </div>
+
+        <div class="card" style="max-width:760px;">
+          <div class="card-ttl">お問い合わせ内容カテゴリ ／ 振り分け設定</div>
+          <p class="hint" style="margin-bottom:12px;">サイトのお問い合わせフォームに表示される「お問い合わせ内容」選択肢と、その通知先エイリアスを設定します。複数選択すると、該当カテゴリの問い合わせは選んだ全アドレスに通知されます（例：「イベントについて」→メイン＋festivalエイリアス）。<br>1件も登録しない場合、フォームにお問い合わせ内容の選択欄は表示されません。</p>
+          <div id="as-cat-list"></div>
+          <button class="btn btn-s" style="margin-top:8px;" onclick="addCategoryRow()">＋ カテゴリを追加</button>
+        </div>
+
+        <button class="btn btn-p" onclick="saveAppsScriptSettings()">すべて保存する</button>
       </div>
 
 
@@ -1279,12 +1282,13 @@ async function renderInqList(col,listId){
     if(col==='adRequests'){document.getElementById('st-ad').textContent=all.length;}
     if(!items.length){wrap.innerHTML='<div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">データがありません</div></div>';return;}
     wrap.innerHTML=items.map(item=>{
-      const keys=Object.keys(item).filter(k=>!['id','read','createdAt','blockId'].includes(k));
+      const keys=Object.keys(item).filter(k=>!['id','read','createdAt','blockId','repliedAt','repliedBy','category'].includes(k));
       const dt=item.createdAt?.toDate?item.createdAt.toDate().toLocaleString('ja-JP'):'—';
       return `<div class="inq-item" id="inq-${item.id}">
         <div class="inq-meta">
           ${!item.read&&col==='contacts'?'<span class="inq-new">NEW</span>':''}
           <span class="inq-type">${col==='guideRequests'?'ガイド申込':col==='adRequests'?'広告申込':'お問い合わせ'}</span>
+          ${item.category?`<span class="inq-type" style="border-color:rgba(201,168,76,.4);color:var(--kin);">${esc(item.category)}</span>`:''}
           <span class="inq-date">${dt}</span>
         </div>
         ${keys.map(k=>`<div class="inq-field-row"><span class="inq-field-key">${esc(k)}</span><span class="inq-field-val">${esc(String(item[k]||''))}</span></div>`).join('')}
@@ -1292,6 +1296,7 @@ async function renderInqList(col,listId){
           ${col==='contacts'&&!item.read?`<button class="btn btn-s" style="font-size:10px;padding:5px 10px;" onclick="markRead('${item.id}','${listId}')">既読にする</button>`:''}
           <button class="btn btn-d" style="font-size:10px;padding:5px 10px;" onclick="delInq('${col}','${item.id}','${listId}','${col==='contacts'?'st-inq':col==='guideRequests'?'st-guide':'st-ad'}')">削除</button>
         </div>
+        ${renderReplyBox(item,col)}
       </div>`;
     }).join('');
   }catch(e){wrap.innerHTML=`<div style="padding:20px;color:#f08080;font-size:12px;">読み込み失敗: ${e.message}</div>`;}
@@ -1483,22 +1488,199 @@ window.saveFF=async function(){
 
 
 /* ══════════════════════════════════════
-   EMAILJS SETTINGS
+   APPS SCRIPT 設定（フォーム送信・エイリアス管理・カテゴリ振り分け）
 ══════════════════════════════════════ */
-async function loadEmailJS(){
-  const configs=[
-    {key:'emailjs',   pubId:'ejs-pub', svcId:'ejs-svc', tplId:'ejs-tpl'},
-    {key:'emailjs_guide',pubId:'ejsg-pub',svcId:'ejsg-svc',tplId:'ejsg-tpl'},
-    {key:'emailjs_ad',   pubId:'ejsa-pub',svcId:'ejsa-svc',tplId:'ejsa-tpl'},
-  ];
-  for(const cfg of configs){
-    try{const s=await getDoc(doc(db,'siteSettings',cfg.key));if(s.exists()){const d=s.data();document.getElementById(cfg.pubId).value=d.publicKey||'';document.getElementById(cfg.svcId).value=d.serviceId||'';document.getElementById(cfg.tplId).value=d.templateId||'';}}catch{}
-  }
+let asAliases=[];
+let asCategories=[];
+
+function renderAliasSelects(){
+  const opts='<option value="">— 未選択（既定送信元）—</option>'+asAliases.map(a=>`<option value="${esc(a.id)}">${esc(a.label||a.email)}（${esc(a.email)}）</option>`).join('');
+  ['as-alias-main','as-alias-guide','as-alias-ad'].forEach(id=>{
+    const sel=document.getElementById(id);if(!sel)return;
+    const cur=sel.value;sel.innerHTML=opts;
+    if([...sel.options].some(o=>o.value===cur))sel.value=cur;
+  });
 }
-window.saveEmailJS=async function(settingKey,pubId,svcId,tplId){
-  const data={publicKey:document.getElementById(pubId).value.trim(),serviceId:document.getElementById(svcId).value.trim(),templateId:document.getElementById(tplId).value.trim()};
-  try{await setDoc(doc(db,'siteSettings',settingKey),data);addLog(`EmailJS設定（${settingKey}）を更新`);toast('保存しました');}
-  catch(e){toast('保存に失敗: '+e.message,true);}
+function renderAliasList(){
+  const wrap=document.getElementById('as-alias-list');if(!wrap)return;
+  if(!asAliases.length){wrap.innerHTML='<div class="hint">エイリアスが登録されていません。下のフォームから追加するか、Gmailから取得してください。</div>';}
+  else{
+    wrap.innerHTML=asAliases.map((a,i)=>`
+      <div class="fg-row" style="align-items:center;margin-bottom:8px;">
+        <input type="email" value="${esc(a.email)}" placeholder="メールアドレス" oninput="updAlias(${i},'email',this.value)">
+        <div style="display:flex;gap:8px;">
+          <input type="text" value="${esc(a.label||'')}" placeholder="ラベル（例：メイン／イベント担当）" oninput="updAlias(${i},'label',this.value)" style="flex:1;">
+          <button class="btn btn-d" style="padding:6px 10px;font-size:11px;flex-shrink:0;" onclick="rmAlias(${i})">✕</button>
+        </div>
+      </div>`).join('');
+  }
+  renderAliasSelects();
+  renderCategoryList();
+}
+window.addAliasRow=function(){
+  const email=document.getElementById('as-new-alias-email').value.trim();
+  const label=document.getElementById('as-new-alias-label').value.trim();
+  if(!email){toast('メールアドレスを入力してください',true);return;}
+  asAliases.push({id:'al_'+Date.now()+'_'+Math.floor(Math.random()*1000),email,label:label||email});
+  document.getElementById('as-new-alias-email').value='';document.getElementById('as-new-alias-label').value='';
+  renderAliasList();
+};
+window.updAlias=(i,k,v)=>{if(asAliases[i]){asAliases[i][k]=v;renderAliasSelects();renderCategoryList();}};
+window.rmAlias=function(i){asAliases.splice(i,1);renderAliasList();};
+window.fetchAliasesFromGmail=async function(){
+  const url=document.getElementById('as-url').value.trim();
+  const secret=document.getElementById('as-secret').value.trim();
+  const statusEl=document.getElementById('as-alias-status');
+  if(!url){toast('先にウェブアプリURLを入力してください',true);return;}
+  statusEl.textContent='取得中...';
+  try{
+    let q='action=aliases';if(secret)q+='&secret='+encodeURIComponent(secret);
+    const res=await fetch(url+(url.includes('?')?'&':'?')+q);
+    const data=await res.json();
+    if(data.result==='error')throw new Error(data.message||'取得に失敗しました');
+    const list=data.aliases||[];
+    if(!list.length){statusEl.textContent='0件でした';toast('エイリアスが取得できませんでした。Gmail側の認証状況をご確認ください',true);return;}
+    let added=0;
+    list.forEach((email,idx)=>{
+      if(!asAliases.some(a=>a.email===email)){asAliases.push({id:'al_'+Date.now()+'_'+idx+'_'+Math.floor(Math.random()*1000),email,label:email});added++;}
+    });
+    renderAliasList();
+    statusEl.textContent=`${list.length}件取得（新規追加 ${added}件）`;
+    toast('エイリアス一覧を取得しました');
+  }catch(e){statusEl.textContent='取得に失敗しました';toast('取得に失敗しました: '+e.message,true);}
+};
+
+function renderCategoryList(){
+  const wrap=document.getElementById('as-cat-list');if(!wrap)return;
+  if(!asCategories.length){wrap.innerHTML='<div class="hint">カテゴリが登録されていません（未登録の場合、サイトのフォームに選択欄は表示されません）</div>';return;}
+  wrap.innerHTML=asCategories.map((c,i)=>`
+    <div style="background:rgba(255,255,255,.03);border:1px solid var(--bdr);padding:14px 16px;margin-bottom:10px;">
+      <div class="fg-row" style="margin-bottom:10px;align-items:center;">
+        <input type="text" value="${esc(c.label||'')}" placeholder="カテゴリ名（例：イベントについて）" oninput="updCategory(${i},'label',this.value)">
+        <button class="btn btn-d" style="padding:6px 10px;font-size:11px;justify-self:end;" onclick="rmCategory(${i})">✕ カテゴリを削除</button>
+      </div>
+      <div style="font-size:9px;letter-spacing:.2em;color:var(--kin);margin-bottom:8px;">通知先エイリアス（複数選択可）</div>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;">
+        ${asAliases.length?asAliases.map(a=>`<label style="display:flex;align-items:center;gap:5px;font-size:11px;cursor:pointer;"><input type="checkbox" ${((c.aliasIds||[]).includes(a.id))?'checked':''} onchange="toggleCategoryAlias(${i},'${a.id}',this.checked)" style="accent-color:var(--kin);">${esc(a.label||a.email)}</label>`).join(''):'<span class="hint">先にエイリアスを登録してください</span>'}
+      </div>
+    </div>`).join('');
+}
+window.addCategoryRow=function(){asCategories.push({id:'cat_'+Date.now(),label:'',aliasIds:[]});renderCategoryList();};
+window.updCategory=(i,k,v)=>{if(asCategories[i])asCategories[i][k]=v;};
+window.rmCategory=function(i){asCategories.splice(i,1);renderCategoryList();};
+window.toggleCategoryAlias=function(i,aliasId,checked){
+  const c=asCategories[i];if(!c)return;if(!c.aliasIds)c.aliasIds=[];
+  if(checked){if(!c.aliasIds.includes(aliasId))c.aliasIds.push(aliasId);}
+  else{c.aliasIds=c.aliasIds.filter(x=>x!==aliasId);}
+};
+
+async function loadAppsScriptSettings(){
+  try{
+    const s=await getDoc(doc(db,'siteSettings','appscript'));
+    if(s.exists()){
+      const d=s.data();
+      document.getElementById('as-url').value=d.url||'';
+      document.getElementById('as-secret').value=d.secret||'';
+      document.getElementById('as-to').value=d.toEmail||'';
+      document.getElementById('as-auto-subject').value=d.autoReplySubject||'お問い合わせを受け付けました';
+      document.getElementById('as-auto-body').value=d.autoReplyBody||'{{name}} 様\n\nこの度は洲本城公式サイトよりお問い合わせいただき、誠にありがとうございます。\n内容を確認の上、担当者より改めてご連絡いたします。\n\n※本メールは自動送信されています。';
+      asAliases=[...(d.aliases||[])];
+      asCategories=[...(d.categories||[])];
+      renderAliasList();
+      const mSel=document.getElementById('as-alias-main'),gSel=document.getElementById('as-alias-guide'),aSel=document.getElementById('as-alias-ad');
+      if(d.aliasMain&&mSel)mSel.value=d.aliasMain;
+      if(d.aliasGuide&&gSel)gSel.value=d.aliasGuide;
+      if(d.aliasAd&&aSel)aSel.value=d.aliasAd;
+      window._asCfg={url:d.url||'',secret:d.secret||'',toEmail:d.toEmail||'',aliases:d.aliases||[],aliasMain:d.aliasMain||'',aliasGuide:d.aliasGuide||'',aliasAd:d.aliasAd||''};
+    }else{
+      asAliases=[];asCategories=[];renderAliasList();
+      window._asCfg={aliases:[]};
+    }
+  }catch{asAliases=[];asCategories=[];renderAliasList();window._asCfg={aliases:[]};}
+}
+window.saveAppsScriptSettings=async function(){
+  const cleanAliases=asAliases.map(a=>({id:a.id,email:(a.email||'').trim(),label:(a.label||'').trim()||(a.email||'').trim()})).filter(a=>a.email);
+  const cleanCategories=asCategories.map(c=>({id:c.id,label:(c.label||'').trim(),aliasIds:c.aliasIds||[]})).filter(c=>c.label);
+  const data={
+    url:document.getElementById('as-url').value.trim(),
+    secret:document.getElementById('as-secret').value.trim(),
+    toEmail:document.getElementById('as-to').value.trim(),
+    aliases:cleanAliases,
+    aliasMain:document.getElementById('as-alias-main').value,
+    aliasGuide:document.getElementById('as-alias-guide').value,
+    aliasAd:document.getElementById('as-alias-ad').value,
+    autoReplySubject:document.getElementById('as-auto-subject').value.trim(),
+    autoReplyBody:document.getElementById('as-auto-body').value.trim(),
+    categories:cleanCategories,
+  };
+  if(!data.url){toast('ウェブアプリURLを入力してください',true);return;}
+  try{
+    await setDoc(doc(db,'siteSettings','appscript'),data);
+    window._asCfg={url:data.url,secret:data.secret,toEmail:data.toEmail,aliases:data.aliases,aliasMain:data.aliasMain,aliasGuide:data.aliasGuide,aliasAd:data.aliasAd};
+    addLog('フォーム送信設定（Apps Script）を更新');toast('保存しました');
+    document.getElementById('preview-frame').src=document.getElementById('preview-frame').src;
+    await renderInqList('contacts','inq-list');
+  }catch(e){toast('保存に失敗しました: '+e.message,true);}
+};
+
+/* 管理者からお問い合わせへ直接返信（一般お問い合わせ一覧から使用） */
+function extractEmailFromItem(item){
+  for(const [k,v] of Object.entries(item)){
+    if(typeof v==='string'){const m=v.trim().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);if(m)return m[0];}
+  }
+  return '';
+}
+function renderReplyBox(item,col){
+  if(col!=='contacts')return'';
+  const aliases=window._asCfg?.aliases||[];
+  const inquirerEmail=extractEmailFromItem(item);
+  const defaultAliasId=window._asCfg?.aliasMain||'';
+  const repliedNote=item.repliedAt?`<div style="font-size:10px;color:#6dba8a;margin-top:8px;">✓ ${esc(item.repliedBy||'')} から返信済み${item.repliedAt?.toDate?'（'+item.repliedAt.toDate().toLocaleString('ja-JP')+'）':''}</div>`:'';
+  return `
+    <div style="margin-top:12px;border-top:1px solid rgba(255,255,255,.06);padding-top:10px;">
+      <button class="btn btn-s" style="font-size:10px;padding:5px 10px;" onclick="toggleReplyBox('${item.id}')">✉️ 返信する</button>
+      ${repliedNote}
+      <div id="reply-form-${item.id}" style="display:none;margin-top:12px;">
+        <div class="fg-row">
+          <div class="fg"><label class="lbl">送信元エイリアス</label><select id="reply-alias-${item.id}">${aliases.length?aliases.map(a=>`<option value="${esc(a.id)}" ${a.id===defaultAliasId?'selected':''}>${esc(a.label||a.email)}（${esc(a.email)}）</option>`).join(''):'<option value="">エイリアス未設定</option>'}</select></div>
+          <div class="fg"><label class="lbl">返信先アドレス</label><input type="email" id="reply-to-${item.id}" value="${esc(inquirerEmail)}"></div>
+        </div>
+        <div class="fg"><label class="lbl">件名</label><input type="text" id="reply-subject-${item.id}" value="Re: お問い合わせありがとうございます"></div>
+        <div class="fg"><label class="lbl">本文</label><textarea id="reply-body-${item.id}" style="min-height:110px;" placeholder="返信内容を入力してください"></textarea></div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button class="btn btn-p" style="font-size:11px;padding:8px 18px;" onclick="sendAdminReply('${item.id}')">送 信 す る</button>
+          <span id="reply-status-${item.id}" style="font-size:10px;color:var(--gin);"></span>
+        </div>
+      </div>
+    </div>`;
+}
+window.toggleReplyBox=function(id){const el=document.getElementById('reply-form-'+id);if(el)el.style.display=el.style.display==='none'?'block':'none';};
+window.sendAdminReply=async function(itemId){
+  const aliasSel=document.getElementById('reply-alias-'+itemId);
+  const toEl=document.getElementById('reply-to-'+itemId);
+  const subjEl=document.getElementById('reply-subject-'+itemId);
+  const bodyEl=document.getElementById('reply-body-'+itemId);
+  const statusEl=document.getElementById('reply-status-'+itemId);
+  const aliasId=aliasSel?aliasSel.value:'';
+  const alias=(window._asCfg?.aliases||[]).find(a=>a.id===aliasId);
+  const to=toEl?toEl.value.trim():'';
+  const subject=subjEl?subjEl.value.trim():'Re: お問い合わせありがとうございます';
+  const body=bodyEl?bodyEl.value.trim():'';
+  if(!window._asCfg?.url){toast('Apps ScriptのURLが未設定です',true);return;}
+  if(!to){toast('返信先メールアドレスを入力してください',true);return;}
+  if(!body){toast('本文を入力してください',true);return;}
+  if(statusEl)statusEl.textContent='送信中...';
+  try{
+    const cfg=window._asCfg;
+    const res=await fetch(cfg.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({secret:cfg.secret||'',type:'admin_reply',alias:alias?alias.email:'',to,subject,body})});
+    const data=await res.json().catch(()=>({result:'ok'}));
+    if(data.result==='error')throw new Error(data.message||'送信エラー');
+    await updateDoc(doc(db,'contacts',itemId),{repliedAt:serverTimestamp(),repliedBy:alias?alias.email:'（既定の送信元）',read:true});
+    if(statusEl)statusEl.textContent='送信しました';
+    toast('返信を送信しました');
+    addLog(`お問い合わせに返信しました（${alias?alias.email:'既定'} → ${to}）`);
+    await renderInqList('contacts','inq-list');
+  }catch(e){if(statusEl)statusEl.textContent='送信に失敗しました';toast('送信に失敗しました: '+e.message,true);}
 };
 
 
@@ -1527,6 +1709,7 @@ function renderDashEvs(){
    LOAD ALL
 ══════════════════════════════════════ */
 async function loadAll(){
+  await loadAppsScriptSettings();
   await Promise.all([
     loadAssets(),
     loadHero(),
@@ -1539,7 +1722,6 @@ async function loadAll(){
     loadSpots(),
     loadCastleCards(),
     loadFF(),
-    loadEmailJS(),
     loadContacts(),
   ]);
   document.getElementById('dash-dt').textContent=new Date().toLocaleString('ja-JP',{year:'numeric',month:'2-digit',day:'2-digit',weekday:'short',hour:'2-digit',minute:'2-digit'});
