@@ -780,7 +780,7 @@ input[type=color]{width:48px;height:38px;padding:4px;cursor:pointer}
 
 <script type="module">
 import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import{getFirestore,collection,getDocs,getDoc,doc,addDoc,updateDoc,deleteDoc,setDoc,query,orderBy,serverTimestamp,writeBatch}
+import{getFirestore,collection,getDocs,getDoc,doc,addDoc,updateDoc,deleteDoc,setDoc,query,orderBy,serverTimestamp,writeBatch,arrayUnion,Timestamp}
   from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged}
   from'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
@@ -1292,14 +1292,11 @@ async function renderInqList(col,listId){
     if(col==='guideRequests'){document.getElementById('st-guide').textContent=all.length;}
     if(col==='adRequests'){document.getElementById('st-ad').textContent=all.length;}
     if(!items.length){wrap.innerHTML='<div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">データがありません</div></div>';return;}
-    const htmlParts=await Promise.all(items.map(async item=>{
-      const keys=Object.keys(item).filter(k=>!['id','read','createdAt','blockId','repliedAt','repliedBy','category','mailUsedFrom','mailAliasVerified','mailRequestedAlias'].includes(k));
+    wrap.innerHTML=items.map(item=>{
+      const keys=Object.keys(item).filter(k=>!['id','read','createdAt','blockId','repliedAt','repliedBy','category','mailUsedFrom','mailAliasVerified','mailRequestedAlias','replies'].includes(k));
       const dt=item.createdAt?.toDate?item.createdAt.toDate().toLocaleString('ja-JP'):'—';
       const mailDiag=item.mailUsedFrom?`<div style="font-size:10px;margin-top:8px;padding:6px 10px;background:rgba(255,255,255,.03);border-left:3px solid ${item.mailAliasVerified?'#6dba8a':'#f0a860'};">通知メール送信元: <strong>${esc(item.mailUsedFrom)}</strong> ${item.mailAliasVerified?'（エイリアス使用 ✓）':`（⚠️ エイリアス「${esc(item.mailRequestedAlias||'')}」未検証のため既定アドレスから送信）`}</div>`:'';
-      let replies=[];
-      if(col==='contacts'){
-        try{const rSnap=await getDocs(query(collection(db,`contacts/${item.id}/replies`),orderBy('sentAt','asc')));replies=rSnap.docs.map(d=>({id:d.id,...d.data()}));}catch{replies=[];}
-      }
+      const replies=Array.isArray(item.replies)?item.replies:[];
       return `<div class="inq-item" id="inq-${item.id}">
         <div class="inq-meta">
           ${!item.read&&col==='contacts'?'<span class="inq-new">NEW</span>':''}
@@ -1315,8 +1312,7 @@ async function renderInqList(col,listId){
         </div>
         ${renderReplyBox(item,col,replies)}
       </div>`;
-    }));
-    wrap.innerHTML=htmlParts.join('');
+    }).join('');
   }catch(e){wrap.innerHTML=`<div style="padding:20px;color:#f08080;font-size:12px;">読み込み失敗: ${e.message}</div>`;}
 }
 window.renderInqList=renderInqList;
@@ -1743,15 +1739,20 @@ window.sendAdminReply=async function(itemId){
     const res=await fetch(cfg.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({secret:cfg.secret||'',type:'admin_reply',alias:alias?alias.email:'',to,subject,body})});
     const data=await res.json().catch(()=>({result:'ok'}));
     if(data.result==='error')throw new Error(data.message||'送信エラー');
-    // 返信スレッド（サブコレクション）に追記。何度でも別のエイリアスで返信を重ねられる
-    await addDoc(collection(db,`contacts/${itemId}/replies`),{
+    // 返信履歴を親ドキュメントの配列フィールドに追記（サブコレクションではなく既存のcontactsコレクションのルールだけで書き込める）
+    const replyEntry={
       alias:aliasId||'',
       aliasEmail:alias?alias.email:(data.usedFrom||''),
       to,subject,body,
       aliasVerified:!!data.aliasVerified,
-      sentAt:serverTimestamp()
+      sentAt:Timestamp.now()
+    };
+    await updateDoc(doc(db,'contacts',itemId),{
+      replies:arrayUnion(replyEntry),
+      repliedAt:serverTimestamp(),
+      repliedBy:alias?alias.email:(data.usedFrom||''),
+      read:true
     });
-    await updateDoc(doc(db,'contacts',itemId),{repliedAt:serverTimestamp(),repliedBy:alias?alias.email:(data.usedFrom||''),read:true});
     if(statusEl)statusEl.textContent='送信しました';
     toast('返信を送信しました');
     addLog(`お問い合わせに返信しました（${alias?alias.email:'既定'} → ${to}）`);
