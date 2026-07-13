@@ -593,9 +593,9 @@ input[type=color]{width:48px;height:38px;padding:4px;cursor:pointer}
 
         <div class="card" style="max-width:760px;">
           <div class="card-ttl">用途別エイリアス割り当て</div>
-          <div class="fg"><label class="lbl">お問い合わせ・自動返信用（メイン）</label><select id="as-alias-main"></select><div class="hint">お問い合わせフォームの送信者への自動返信、および既定の管理者通知はこのエイリアスから送信されます</div></div>
-          <div class="fg"><label class="lbl">ガイド申込用</label><select id="as-alias-guide"></select></div>
-          <div class="fg"><label class="lbl">広告申込用</label><select id="as-alias-ad"></select></div>
+          <div class="fg"><label class="lbl">お問い合わせ・自動返信用（メイン）</label><select id="as-alias-main" onchange="updateAliasAssignWarnings()"></select><div class="hint">お問い合わせフォームの送信者への自動返信、および既定の管理者通知はこのエイリアスから送信されます</div></div>
+          <div class="fg"><label class="lbl">ガイド申込用</label><select id="as-alias-guide" onchange="updateAliasAssignWarnings()"></select></div>
+          <div class="fg"><label class="lbl">広告申込用</label><select id="as-alias-ad" onchange="updateAliasAssignWarnings()"></select></div>
         </div>
 
         <div class="card" style="max-width:760px;">
@@ -609,6 +609,17 @@ input[type=color]{width:48px;height:38px;padding:4px;cursor:pointer}
           <p class="hint" style="margin-bottom:12px;">サイトのお問い合わせフォームに表示される「お問い合わせ内容」選択肢と、その通知先エイリアスを設定します。複数選択すると、該当カテゴリの問い合わせは選んだ全アドレスに通知されます（例：「イベントについて」→メイン＋festivalエイリアス）。<br>1件も登録しない場合、フォームにお問い合わせ内容の選択欄は表示されません。</p>
           <div id="as-cat-list"></div>
           <button class="btn btn-s" style="margin-top:8px;" onclick="addCategoryRow()">＋ カテゴリを追加</button>
+        </div>
+
+        <div class="card" style="max-width:760px;">
+          <div class="card-ttl">✉️ テスト送信（エイリアスが実際に使われるか確認）</div>
+          <p class="hint" style="margin-bottom:12px;">選んだエイリアスから実際にメールが送信されるかをテストできます。届いたメールの「差出人（From）」を確認してください。</p>
+          <div class="fg-row">
+            <div class="fg"><label class="lbl">テスト送信元エイリアス</label><select id="as-test-alias"></select></div>
+            <div class="fg"><label class="lbl">テスト送信先アドレス</label><input type="email" id="as-test-to" placeholder="自分のメールアドレス"></div>
+          </div>
+          <button class="btn btn-s" onclick="sendTestMail()">テストメールを送信</button>
+          <div id="as-test-result" style="margin-top:12px;font-size:12px;line-height:1.9;"></div>
         </div>
 
         <button class="btn btn-p" onclick="saveAppsScriptSettings()">すべて保存する</button>
@@ -1281,9 +1292,14 @@ async function renderInqList(col,listId){
     if(col==='guideRequests'){document.getElementById('st-guide').textContent=all.length;}
     if(col==='adRequests'){document.getElementById('st-ad').textContent=all.length;}
     if(!items.length){wrap.innerHTML='<div class="empty"><div class="empty-ico">📭</div><div class="empty-txt">データがありません</div></div>';return;}
-    wrap.innerHTML=items.map(item=>{
-      const keys=Object.keys(item).filter(k=>!['id','read','createdAt','blockId','repliedAt','repliedBy','category'].includes(k));
+    const htmlParts=await Promise.all(items.map(async item=>{
+      const keys=Object.keys(item).filter(k=>!['id','read','createdAt','blockId','repliedAt','repliedBy','category','mailUsedFrom','mailAliasVerified','mailRequestedAlias'].includes(k));
       const dt=item.createdAt?.toDate?item.createdAt.toDate().toLocaleString('ja-JP'):'—';
+      const mailDiag=item.mailUsedFrom?`<div style="font-size:10px;margin-top:8px;padding:6px 10px;background:rgba(255,255,255,.03);border-left:3px solid ${item.mailAliasVerified?'#6dba8a':'#f0a860'};">通知メール送信元: <strong>${esc(item.mailUsedFrom)}</strong> ${item.mailAliasVerified?'（エイリアス使用 ✓）':`（⚠️ エイリアス「${esc(item.mailRequestedAlias||'')}」未検証のため既定アドレスから送信）`}</div>`:'';
+      let replies=[];
+      if(col==='contacts'){
+        try{const rSnap=await getDocs(query(collection(db,`contacts/${item.id}/replies`),orderBy('sentAt','asc')));replies=rSnap.docs.map(d=>({id:d.id,...d.data()}));}catch{replies=[];}
+      }
       return `<div class="inq-item" id="inq-${item.id}">
         <div class="inq-meta">
           ${!item.read&&col==='contacts'?'<span class="inq-new">NEW</span>':''}
@@ -1292,13 +1308,15 @@ async function renderInqList(col,listId){
           <span class="inq-date">${dt}</span>
         </div>
         ${keys.map(k=>`<div class="inq-field-row"><span class="inq-field-key">${esc(k)}</span><span class="inq-field-val">${esc(String(item[k]||''))}</span></div>`).join('')}
+        ${mailDiag}
         <div class="inq-actions">
           ${col==='contacts'&&!item.read?`<button class="btn btn-s" style="font-size:10px;padding:5px 10px;" onclick="markRead('${item.id}','${listId}')">既読にする</button>`:''}
           <button class="btn btn-d" style="font-size:10px;padding:5px 10px;" onclick="delInq('${col}','${item.id}','${listId}','${col==='contacts'?'st-inq':col==='guideRequests'?'st-guide':'st-ad'}')">削除</button>
         </div>
-        ${renderReplyBox(item,col)}
+        ${renderReplyBox(item,col,replies)}
       </div>`;
-    }).join('');
+    }));
+    wrap.innerHTML=htmlParts.join('');
   }catch(e){wrap.innerHTML=`<div style="padding:20px;color:#f08080;font-size:12px;">読み込み失敗: ${e.message}</div>`;}
 }
 window.renderInqList=renderInqList;
@@ -1495,12 +1513,27 @@ let asCategories=[];
 
 function renderAliasSelects(){
   const opts='<option value="">— 未選択（既定送信元）—</option>'+asAliases.map(a=>`<option value="${esc(a.id)}">${esc(a.label||a.email)}（${esc(a.email)}）</option>`).join('');
-  ['as-alias-main','as-alias-guide','as-alias-ad'].forEach(id=>{
+  ['as-alias-main','as-alias-guide','as-alias-ad','as-test-alias'].forEach(id=>{
     const sel=document.getElementById(id);if(!sel)return;
     const cur=sel.value;sel.innerHTML=opts;
     if([...sel.options].some(o=>o.value===cur))sel.value=cur;
   });
+  updateAliasAssignWarnings();
 }
+function updateAliasAssignWarnings(){
+  [['as-alias-main','未選択のままだと、お問い合わせの自動返信・通知が既定アドレスから送信されます'],
+   ['as-alias-guide','未選択のままだと、ガイド申込通知が既定アドレスから送信されます'],
+   ['as-alias-ad','未選択のままだと、広告申込通知が既定アドレスから送信されます']].forEach(([id,msg])=>{
+    const sel=document.getElementById(id);if(!sel)return;
+    let warnEl=document.getElementById(id+'-warn');
+    if(!warnEl){
+      warnEl=document.createElement('div');warnEl.id=id+'-warn';warnEl.style.cssText='font-size:10px;color:#f0a860;margin-top:4px;';
+      sel.parentNode.appendChild(warnEl);
+    }
+    warnEl.textContent=(asAliases.length&&!sel.value)?'⚠️ '+msg:'';
+  });
+}
+window.updateAliasAssignWarnings=updateAliasAssignWarnings;
 function renderAliasList(){
   const wrap=document.getElementById('as-alias-list');if(!wrap)return;
   if(!asAliases.length){wrap.innerHTML='<div class="hint">エイリアスが登録されていません。下のフォームから追加するか、Gmailから取得してください。</div>';}
@@ -1614,6 +1647,7 @@ window.saveAppsScriptSettings=async function(){
     categories:cleanCategories,
   };
   if(!data.url){toast('ウェブアプリURLを入力してください',true);return;}
+  if(cleanAliases.length&&!data.aliasMain){toast('メイン用エイリアスが未選択です。設定は保存されますが、自動返信は既定アドレスから送信されます',true);}
   try{
     await setDoc(doc(db,'siteSettings','appscript'),data);
     window._asCfg={url:data.url,secret:data.secret,toEmail:data.toEmail,aliases:data.aliases,aliasMain:data.aliasMain,aliasGuide:data.aliasGuide,aliasAd:data.aliasAd};
@@ -1623,23 +1657,57 @@ window.saveAppsScriptSettings=async function(){
   }catch(e){toast('保存に失敗しました: '+e.message,true);}
 };
 
-/* 管理者からお問い合わせへ直接返信（一般お問い合わせ一覧から使用） */
+window.sendTestMail=async function(){
+  const url=document.getElementById('as-url').value.trim();
+  const secret=document.getElementById('as-secret').value.trim();
+  const aliasId=document.getElementById('as-test-alias').value;
+  const to=document.getElementById('as-test-to').value.trim();
+  const resultEl=document.getElementById('as-test-result');
+  if(!url){toast('先にウェブアプリURLを入力してください',true);return;}
+  if(!to){toast('テスト送信先アドレスを入力してください',true);return;}
+  const alias=asAliases.find(a=>a.id===aliasId);
+  resultEl.innerHTML='<span style="color:var(--gin);">送信中...</span>';
+  try{
+    const res=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({secret:secret||'',type:'test',alias:alias?alias.email:'',to})});
+    const data=await res.json();
+    if(data.result==='error')throw new Error(data.message||'送信エラー');
+    const ok=!!data.aliasVerified;
+    resultEl.innerHTML=`
+      <div style="padding:12px 14px;background:rgba(255,255,255,.03);border-left:3px solid ${ok?'#6dba8a':'#f0a860'};">
+        要求したエイリアス: <strong>${esc(data.requestedAlias||'（未指定）')}</strong><br>
+        実際の送信元(From): <strong>${esc(data.usedFrom||'')}</strong><br>
+        エイリアス検証: ${ok?'<strong style="color:#6dba8a;">✓ 認証済み・正常に使用されました</strong>':'<strong style="color:#f0a860;">⚠️ 未認証のため既定アドレスから送信されました</strong>'}
+        ${!ok?`<div style="margin-top:8px;font-size:11px;color:var(--gin);">Gmail側「送信者として追加」の確認（verify）が完了しているかご確認ください。取得済みの認証済み一覧: ${(data.verifiedSenders||[]).map(esc).join(', ')||'（なし）'}</div>`:''}
+      </div>`;
+    toast(ok?'テストメールを送信しました（エイリアス使用）':'テストメールを送信しました（エイリアス未使用）',!ok);
+  }catch(e){resultEl.innerHTML=`<span style="color:#f08080;">送信に失敗しました: ${esc(e.message)}</span>`;toast('送信に失敗しました: '+e.message,true);}
+};
 function extractEmailFromItem(item){
   for(const [k,v] of Object.entries(item)){
     if(typeof v==='string'){const m=v.trim().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);if(m)return m[0];}
   }
   return '';
 }
-function renderReplyBox(item,col){
+function renderReplyBox(item,col,replies){
   if(col!=='contacts')return'';
+  replies=replies||[];
   const aliases=window._asCfg?.aliases||[];
   const inquirerEmail=extractEmailFromItem(item);
   const defaultAliasId=window._asCfg?.aliasMain||'';
-  const repliedNote=item.repliedAt?`<div style="font-size:10px;color:#6dba8a;margin-top:8px;">✓ ${esc(item.repliedBy||'')} から返信済み${item.repliedAt?.toDate?'（'+item.repliedAt.toDate().toLocaleString('ja-JP')+'）':''}</div>`:'';
+  const threadHtml=replies.length?`
+    <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;">
+      ${replies.map(r=>`
+        <div style="background:rgba(255,255,255,.03);border-left:3px solid var(--kin);padding:8px 12px;">
+          <div style="font-size:10px;color:var(--kin);margin-bottom:4px;">✓ ${esc(r.aliasEmail||'（既定の送信元）')} → ${esc(r.to||'')} ・ ${r.sentAt?.toDate?r.sentAt.toDate().toLocaleString('ja-JP'):'送信中...'}</div>
+          <div style="font-size:9px;color:var(--gin);margin-bottom:4px;">件名: ${esc(r.subject||'')}</div>
+          <div style="font-size:11px;color:rgba(240,236,228,.75);white-space:pre-wrap;">${esc(r.body||'')}</div>
+        </div>`).join('')}
+    </div>`:'';
+  const toggleLabel=replies.length?`✉️ さらに返信する（返信 ${replies.length}件）`:'✉️ 返信する';
   return `
     <div style="margin-top:12px;border-top:1px solid rgba(255,255,255,.06);padding-top:10px;">
-      <button class="btn btn-s" style="font-size:10px;padding:5px 10px;" onclick="toggleReplyBox('${item.id}')">✉️ 返信する</button>
-      ${repliedNote}
+      ${threadHtml}
+      <button class="btn btn-s" style="font-size:10px;padding:5px 10px;margin-top:${replies.length?'10px':'0'};" onclick="toggleReplyBox('${item.id}')">${toggleLabel}</button>
       <div id="reply-form-${item.id}" style="display:none;margin-top:12px;">
         <div class="fg-row">
           <div class="fg"><label class="lbl">送信元エイリアス</label><select id="reply-alias-${item.id}">${aliases.length?aliases.map(a=>`<option value="${esc(a.id)}" ${a.id===defaultAliasId?'selected':''}>${esc(a.label||a.email)}（${esc(a.email)}）</option>`).join(''):'<option value="">エイリアス未設定</option>'}</select></div>
@@ -1675,7 +1743,15 @@ window.sendAdminReply=async function(itemId){
     const res=await fetch(cfg.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({secret:cfg.secret||'',type:'admin_reply',alias:alias?alias.email:'',to,subject,body})});
     const data=await res.json().catch(()=>({result:'ok'}));
     if(data.result==='error')throw new Error(data.message||'送信エラー');
-    await updateDoc(doc(db,'contacts',itemId),{repliedAt:serverTimestamp(),repliedBy:alias?alias.email:'（既定の送信元）',read:true});
+    // 返信スレッド（サブコレクション）に追記。何度でも別のエイリアスで返信を重ねられる
+    await addDoc(collection(db,`contacts/${itemId}/replies`),{
+      alias:aliasId||'',
+      aliasEmail:alias?alias.email:(data.usedFrom||''),
+      to,subject,body,
+      aliasVerified:!!data.aliasVerified,
+      sentAt:serverTimestamp()
+    });
+    await updateDoc(doc(db,'contacts',itemId),{repliedAt:serverTimestamp(),repliedBy:alias?alias.email:(data.usedFrom||''),read:true});
     if(statusEl)statusEl.textContent='送信しました';
     toast('返信を送信しました');
     addLog(`お問い合わせに返信しました（${alias?alias.email:'既定'} → ${to}）`);
