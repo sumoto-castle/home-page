@@ -1995,8 +1995,13 @@ async function sendForm(fields,containerId,formId,btnId,okId,formType,saveCollec
     const aliasEmail=aliasEmailById(aliasId)||cfg?.toEmail||'';
     const subject=formType==='guide'?'【ガイド申込】洲本城公式サイト':formType==='ad'?'【広告掲載申込】洲本城公式サイト':'【お問い合わせ】洲本城公式サイト';
     const bodyText=Object.entries(values).map(([k,v])=>`${k}: ${v}`).join('\n');
+    const submitterEmail=extractEmail(values);
+    const submitterName=values['お名前']||values['担当者名']||'';
+    const autoSubject=formType==='guide'?cfg?.autoReplySubjectGuide:formType==='ad'?cfg?.autoReplySubjectAd:'';
+    const autoBodyRaw=formType==='guide'?cfg?.autoReplyBodyGuide:formType==='ad'?cfg?.autoReplyBodyAd:'';
+    const autoBody=(autoBodyRaw||'').replace(/\{\{name\}\}/g,submitterName||'お客様');
     try{
-      const diag=await postToAppsScript({type:formType,alias:aliasEmail,to:[aliasEmail].filter(Boolean),subject,body:bodyText,replyTo:extractEmail(values),fields:values});
+      const diag=await postToAppsScript({type:formType,alias:aliasEmail,to:[aliasEmail].filter(Boolean),subject,body:bodyText,replyTo:submitterEmail,submitterEmail,submitterName,autoReplySubject:autoSubject,autoReplyBody:autoBody,fields:values});
       await updateDoc(docRef,{mailUsedFrom:diag.usedFrom||'',mailAliasVerified:!!diag.aliasVerified,mailRequestedAlias:diag.requestedAlias||''}).catch(()=>{});
     }catch(e){console.warn('mail send failed',e);}
     document.getElementById(formId).style.display='none';document.getElementById(okId).style.display='block';
@@ -2075,7 +2080,11 @@ async function loadAppsScript(){
         aliasGuide:d.aliasGuide||d.aliasMain||'',
         aliasAd:d.aliasAd||d.aliasMain||'',
         autoReplySubject:d.autoReplySubject||'お問い合わせを受け付けました',
-        autoReplyBody:d.autoReplyBody||'{{name}} 様\n\nこの度は洲本城公式サイトよりお問い合わせいただき、誠にありがとうございます。\n内容を確認の上、担当者より改めてご連絡いたします。\n\n※本メールは自動送信されています。'
+        autoReplyBody:d.autoReplyBody||'{{name}} 様\n\nこの度は洲本城公式サイトよりお問い合わせいただき、誠にありがとうございます。\n内容を確認の上、担当者より改めてご連絡いたします。\n\n※本メールは自動送信されています。',
+        autoReplySubjectGuide:d.autoReplySubjectGuide||'ガイド申込を受け付けました',
+        autoReplyBodyGuide:d.autoReplyBodyGuide||'{{name}} 様\n\nこの度は洲本城ボランティアガイドにお申し込みいただき、誠にありがとうございます。\n内容を確認の上、担当者より改めてご連絡いたします。\n\n※本メールは自動送信されています。',
+        autoReplySubjectAd:d.autoReplySubjectAd||'広告掲載のお申し込みを受け付けました',
+        autoReplyBodyAd:d.autoReplyBodyAd||'{{name}} 様\n\nこの度は洲本城公式サイトへの広告掲載をお申し込みいただき、誠にありがとうございます。\n内容を確認の上、担当者より改めてご連絡いたします。\n\n※本メールは自動送信されています。'
       };
       window._contactCategories=d.categories||[];
     }else{window._asCfg={aliases:[]};window._contactCategories=[];}
