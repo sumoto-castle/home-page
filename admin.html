@@ -605,6 +605,18 @@ input[type=color]{width:48px;height:38px;padding:4px;cursor:pointer}
         </div>
 
         <div class="card" style="max-width:760px;">
+          <div class="card-ttl">送信者への自動返信メール（ガイド申込）</div>
+          <div class="fg"><label class="lbl">件名</label><input type="text" id="as-auto-subject-guide" placeholder="ガイド申込を受け付けました"></div>
+          <div class="fg"><label class="lbl">本文</label><textarea id="as-auto-body-guide" style="min-height:130px;" placeholder="{{name}} 様..."></textarea><div class="hint"><code>{{name}}</code> は送信者名に自動置換されます</div></div>
+        </div>
+
+        <div class="card" style="max-width:760px;">
+          <div class="card-ttl">送信者への自動返信メール（広告申込）</div>
+          <div class="fg"><label class="lbl">件名</label><input type="text" id="as-auto-subject-ad" placeholder="広告掲載のお申し込みを受け付けました"></div>
+          <div class="fg"><label class="lbl">本文</label><textarea id="as-auto-body-ad" style="min-height:130px;" placeholder="{{name}} 様..."></textarea><div class="hint"><code>{{name}}</code> は送信者名に自動置換されます</div></div>
+        </div>
+
+        <div class="card" style="max-width:760px;">
           <div class="card-ttl">お問い合わせ内容カテゴリ ／ 振り分け設定</div>
           <p class="hint" style="margin-bottom:12px;">サイトのお問い合わせフォームに表示される「お問い合わせ内容」選択肢と、その通知先エイリアスを設定します。複数選択すると、該当カテゴリの問い合わせは選んだ全アドレスに通知されます（例：「イベントについて」→メイン＋festivalエイリアス）。<br>1件も登録しない場合、フォームにお問い合わせ内容の選択欄は表示されません。</p>
           <div id="as-cat-list"></div>
@@ -1613,6 +1625,10 @@ async function loadAppsScriptSettings(){
       document.getElementById('as-to').value=d.toEmail||'';
       document.getElementById('as-auto-subject').value=d.autoReplySubject||'お問い合わせを受け付けました';
       document.getElementById('as-auto-body').value=d.autoReplyBody||'{{name}} 様\n\nこの度は洲本城公式サイトよりお問い合わせいただき、誠にありがとうございます。\n内容を確認の上、担当者より改めてご連絡いたします。\n\n※本メールは自動送信されています。';
+      document.getElementById('as-auto-subject-guide').value=d.autoReplySubjectGuide||'ガイド申込を受け付けました';
+      document.getElementById('as-auto-body-guide').value=d.autoReplyBodyGuide||'{{name}} 様\n\nこの度は洲本城ボランティアガイドにお申し込みいただき、誠にありがとうございます。\n内容を確認の上、担当者より改めてご連絡いたします。\n\n※本メールは自動送信されています。';
+      document.getElementById('as-auto-subject-ad').value=d.autoReplySubjectAd||'広告掲載のお申し込みを受け付けました';
+      document.getElementById('as-auto-body-ad').value=d.autoReplyBodyAd||'{{name}} 様\n\nこの度は洲本城公式サイトへの広告掲載をお申し込みいただき、誠にありがとうございます。\n内容を確認の上、担当者より改めてご連絡いたします。\n\n※本メールは自動送信されています。';
       asAliases=[...(d.aliases||[])];
       asCategories=[...(d.categories||[])];
       renderAliasList();
@@ -1640,6 +1656,10 @@ window.saveAppsScriptSettings=async function(){
     aliasAd:document.getElementById('as-alias-ad').value,
     autoReplySubject:document.getElementById('as-auto-subject').value.trim(),
     autoReplyBody:document.getElementById('as-auto-body').value.trim(),
+    autoReplySubjectGuide:document.getElementById('as-auto-subject-guide').value.trim(),
+    autoReplyBodyGuide:document.getElementById('as-auto-body-guide').value.trim(),
+    autoReplySubjectAd:document.getElementById('as-auto-subject-ad').value.trim(),
+    autoReplyBodyAd:document.getElementById('as-auto-body-ad').value.trim(),
     categories:cleanCategories,
   };
   if(!data.url){toast('ウェブアプリURLを入力してください',true);return;}
@@ -1692,12 +1712,16 @@ function renderReplyBox(item,col,replies){
   const defaultAliasId=window._asCfg?.aliasMain||'';
   const threadHtml=replies.length?`
     <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;">
-      ${replies.map(r=>`
-        <div style="background:rgba(255,255,255,.03);border-left:3px solid ${r.threaded?'var(--kin)':'#f0a860'};padding:8px 12px;">
-          <div style="font-size:10px;color:var(--kin);margin-bottom:4px;">✓ ${esc(r.aliasEmail||'（既定の送信元）')} → ${esc(r.to||'')} ・ ${r.sentAt?.toDate?r.sentAt.toDate().toLocaleString('ja-JP'):'送信中...'} ${r.threaded===false?'<span style="color:#f0a860;">（⚠️新規メールとして送信・スレッド未連結）</span>':''}</div>
+      ${replies.map(r=>{
+        const noteHtml=r.forcedNew
+          ?'<span style="color:var(--gin);">（🆕新規メールとして送信）</span>'
+          :(r.threaded===false?'<span style="color:#f0a860;">（⚠️Gmail API未設定のため新規メールとして送信・スレッド未連結）</span>':'');
+        return `
+        <div style="background:rgba(255,255,255,.03);border-left:3px solid ${r.forcedNew?'var(--gin)':(r.threaded?'var(--kin)':'#f0a860')};padding:8px 12px;">
+          <div style="font-size:10px;color:var(--kin);margin-bottom:4px;">✓ ${esc(r.aliasEmail||'（既定の送信元）')} → ${esc(r.to||'')} ・ ${r.sentAt?.toDate?r.sentAt.toDate().toLocaleString('ja-JP'):'送信中...'} ${noteHtml}</div>
           <div style="font-size:9px;color:var(--gin);margin-bottom:4px;">件名: ${esc(r.subject||'')}</div>
           <div style="font-size:11px;color:rgba(240,236,228,.75);white-space:pre-wrap;">${esc(r.body||'')}</div>
-        </div>`).join('')}
+        </div>`;}).join('')}
     </div>`:'';
   const toggleLabel=replies.length?`✉️ さらに返信する（返信 ${replies.length}件）`:'✉️ 返信する';
   return `
@@ -1711,6 +1735,10 @@ function renderReplyBox(item,col,replies){
         </div>
         <div class="fg"><label class="lbl">件名</label><input type="text" id="reply-subject-${item.id}" value="Re: お問い合わせありがとうございます"></div>
         <div class="fg"><label class="lbl">本文</label><textarea id="reply-body-${item.id}" style="min-height:110px;" placeholder="返信内容を入力してください"></textarea></div>
+        <label style="display:flex;align-items:center;gap:6px;font-size:11px;cursor:pointer;margin-bottom:12px;color:var(--gin);">
+          <input type="checkbox" id="reply-forcenew-${item.id}" style="accent-color:var(--kin);">
+          新規メールとして送信する（このスレッドには連結せず、独立した新しいメールとして送ります）
+        </label>
         <div style="display:flex;gap:10px;align-items:center;">
           <button class="btn btn-p" style="font-size:11px;padding:8px 18px;" onclick="sendAdminReply('${item.id}')">送 信 す る</button>
           <span id="reply-status-${item.id}" style="font-size:10px;color:var(--gin);"></span>
@@ -1725,11 +1753,13 @@ window.sendAdminReply=async function(itemId){
   const subjEl=document.getElementById('reply-subject-'+itemId);
   const bodyEl=document.getElementById('reply-body-'+itemId);
   const statusEl=document.getElementById('reply-status-'+itemId);
+  const forceNewEl=document.getElementById('reply-forcenew-'+itemId);
   const aliasId=aliasSel?aliasSel.value:'';
   const alias=(window._asCfg?.aliases||[]).find(a=>a.id===aliasId);
   const to=toEl?toEl.value.trim():'';
   const subject=subjEl?subjEl.value.trim():'Re: お問い合わせありがとうございます';
   const body=bodyEl?bodyEl.value.trim():'';
+  const forceNew=!!(forceNewEl&&forceNewEl.checked);
   if(!window._asCfg?.url){toast('Apps ScriptのURLが未設定です',true);return;}
   if(!to){toast('返信先メールアドレスを入力してください',true);return;}
   if(!body){toast('本文を入力してください',true);return;}
@@ -1746,7 +1776,9 @@ window.sendAdminReply=async function(itemId){
     const cfg=window._asCfg;
     const res=await fetch(cfg.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({
       secret:cfg.secret||'',type:'admin_reply',alias:alias?alias.email:'',to,subject,body,
-      threadId,inReplyTo:lastMessageId,references
+      threadId:forceNew?'':threadId,
+      inReplyTo:forceNew?'':lastMessageId,
+      references:forceNew?'':references
     })});
     const data=await res.json().catch(()=>({result:'ok'}));
     if(data.result==='error')throw new Error(data.message||'送信エラー');
@@ -1759,20 +1791,26 @@ window.sendAdminReply=async function(itemId){
       aliasVerified:!!data.aliasVerified,
       messageId:data.messageId||'',
       threaded:!!data.threaded,
+      forcedNew:forceNew,
       sentAt:Timestamp.now()
     };
-    const newRefs=[...(item.mailReferences||[])];
-    if(data.messageId)newRefs.push(data.messageId);
-    await updateDoc(doc(db,'contacts',itemId),{
+    const updatePayload={
       replies:arrayUnion(replyEntry),
       repliedAt:serverTimestamp(),
       repliedBy:alias?alias.email:(data.usedFrom||''),
-      read:true,
-      mailThreadId:data.threadId||threadId||'',
-      mailReferences:newRefs
-    });
-    if(statusEl)statusEl.textContent=data.threaded?'送信しました（同じスレッドに連結）':'送信しました（※新規メールとして送信・スレッド連結なし）';
-    toast(data.threaded?'返信を送信しました（スレッド連結）':'返信を送信しました（スレッド連結なし）',!data.threaded);
+      read:true
+    };
+    // 「新規メールとして送信」を選んだ場合は、進行中の通常スレッドの状態には影響させない
+    if(!forceNew){
+      const newRefs=[...(item.mailReferences||[])];
+      if(data.messageId)newRefs.push(data.messageId);
+      updatePayload.mailThreadId=data.threadId||threadId||'';
+      updatePayload.mailReferences=newRefs;
+    }
+    await updateDoc(doc(db,'contacts',itemId),updatePayload);
+    const threadedOk=data.threaded&&!forceNew;
+    if(statusEl)statusEl.textContent=forceNew?'送信しました（新規メールとして送信）':(threadedOk?'送信しました（同じスレッドに連結）':'送信しました（※スレッド連結なし・新規メールとして送信）');
+    toast(forceNew?'返信を送信しました（新規メール）':(threadedOk?'返信を送信しました（スレッド連結）':'返信を送信しました（スレッド連結なし）'),!forceNew&&!threadedOk);
     addLog(`お問い合わせに返信しました（${alias?alias.email:'既定'} → ${to}）`);
     await renderInqList('contacts','inq-list');
   }catch(e){if(statusEl)statusEl.textContent='送信に失敗しました';toast('送信に失敗しました: '+e.message,true);}
