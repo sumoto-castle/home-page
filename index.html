@@ -1603,7 +1603,7 @@ footer{border-top:1px solid rgba(201,168,76,.1);padding:44px 20px 28px;text-alig
 <!-- ══════════ FIREBASE MODULE ══════════ -->
 <script type="module">
 import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import{getFirestore,collection,getDocs,getDoc,addDoc,doc,query,orderBy,serverTimestamp}
+import{getFirestore,collection,getDocs,getDoc,addDoc,updateDoc,doc,query,orderBy,serverTimestamp}
   from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 const FC={apiKey:"AIzaSyA7kshE6i4GPxzPzXC4TfUFPp7EbGuiVdU",authDomain:"bussinesscardmae.firebaseapp.com",projectId:"bussinesscardmae",storageBucket:"bussinesscardmae.firebasestorage.app",messagingSenderId:"142830820792",appId:"1:142830820792:web:ddfeeec8f22010fd2b434d"};
 const db=getFirestore(initializeApp(FC));
@@ -1758,11 +1758,12 @@ window.submitBF=async function(bid,fields,cid){
   for(const f of fields){const id=`bf_${bid}_${f.id}`;if(f.type==='radio'){const c=document.querySelector(`input[name="${id}"]:checked`);values[f.label]=c?c.value:'';if(f.required&&!values[f.label])valid=false;}else if(f.type==='checkbox'){values[f.label]=[...document.querySelectorAll(`input[name="${id}"]:checked`)].map(e=>e.value).join(', ');}else{const el=document.getElementById(id);values[f.label]=el?el.value.trim():'';if(f.required&&!values[f.label])valid=false;}}
   if(!valid){alert('必須項目を入力してください');return;}
   try{
-    await addDoc(collection(db,'contacts'),{...values,blockId:bid,read:false,createdAt:serverTimestamp()});
+    const docRef=await addDoc(collection(db,'contacts'),{...values,blockId:bid,read:false,createdAt:serverTimestamp()});
     try{
       const mainEmail=aliasEmailById(window._asCfg?.aliasMain)||window._asCfg?.toEmail||'';
       const bodyText=Object.entries(values).map(([k,v])=>`${k}: ${v}`).join('\n');
-      await postToAppsScript({type:'block',alias:mainEmail,to:[mainEmail].filter(Boolean),subject:'【ブロックフォーム】洲本城公式サイト',body:bodyText,replyTo:extractEmail(values),fields:values});
+      const diag=await postToAppsScript({type:'block',alias:mainEmail,to:[mainEmail].filter(Boolean),subject:'【ブロックフォーム】洲本城公式サイト',body:bodyText,replyTo:extractEmail(values),fields:values});
+      await updateDoc(docRef,{mailUsedFrom:diag.usedFrom||'',mailAliasVerified:!!diag.aliasVerified,mailRequestedAlias:diag.requestedAlias||''}).catch(()=>{});
     }catch(e){console.warn('mail send failed',e);}
     const c=document.getElementById(cid);if(c){c.innerHTML='<div style="text-align:center;padding:20px;border:1px solid rgba(201,168,76,.3);"><div style="font-size:20px;margin-bottom:6px;">✉️</div><div style="font-family:\'Shippori Mincho\',serif;font-size:15px;color:var(--kin);">送信完了</div></div>';}
   }catch{alert('送信に失敗しました。時間をおいてお試しください。');}
@@ -1988,13 +1989,16 @@ async function sendForm(fields,containerId,formId,btnId,okId,formType,saveCollec
   if(!valid){alert('必須項目を入力してください');return;}
   const btn=document.getElementById(btnId);btn.disabled=true;btn.textContent='送 信 中...';
   try{
-    await addDoc(collection(db,saveCollection),{...values,read:false,createdAt:serverTimestamp()});
+    const docRef=await addDoc(collection(db,saveCollection),{...values,read:false,createdAt:serverTimestamp()});
     const cfg=window._asCfg;
     const aliasId=formType==='guide'?cfg?.aliasGuide:formType==='ad'?cfg?.aliasAd:cfg?.aliasMain;
     const aliasEmail=aliasEmailById(aliasId)||cfg?.toEmail||'';
     const subject=formType==='guide'?'【ガイド申込】洲本城公式サイト':formType==='ad'?'【広告掲載申込】洲本城公式サイト':'【お問い合わせ】洲本城公式サイト';
     const bodyText=Object.entries(values).map(([k,v])=>`${k}: ${v}`).join('\n');
-    try{await postToAppsScript({type:formType,alias:aliasEmail,to:[aliasEmail].filter(Boolean),subject,body:bodyText,replyTo:extractEmail(values),fields:values});}catch(e){console.warn('mail send failed',e);}
+    try{
+      const diag=await postToAppsScript({type:formType,alias:aliasEmail,to:[aliasEmail].filter(Boolean),subject,body:bodyText,replyTo:extractEmail(values),fields:values});
+      await updateDoc(docRef,{mailUsedFrom:diag.usedFrom||'',mailAliasVerified:!!diag.aliasVerified,mailRequestedAlias:diag.requestedAlias||''}).catch(()=>{});
+    }catch(e){console.warn('mail send failed',e);}
     document.getElementById(formId).style.display='none';document.getElementById(okId).style.display='block';
   }catch(e){console.error(e);alert('送信に失敗しました。時間をおいてお試しください。');btn.disabled=false;btn.textContent='申 し 込 む';}
 }
@@ -2010,8 +2014,19 @@ async function sendCFData(prefix,btnId,formId,okId){
   if(!valid){alert('必須項目を入力してください');return;}
   const btn=document.getElementById(btnId);btn.disabled=true;btn.textContent='送 信 中...';
   try{
-    await addDoc(collection(db,'contacts'),{...values,category,read:false,createdAt:serverTimestamp()});
-    try{await sendContactMail(values,category);}catch(e){console.warn('mail send failed',e);}
+    const docRef=await addDoc(collection(db,'contacts'),{...values,category,read:false,createdAt:serverTimestamp()});
+    try{
+      const diag=await sendContactMail(values,category);
+      await updateDoc(docRef,{
+        mailUsedFrom:diag?.usedFrom||'',
+        mailAliasVerified:!!diag?.aliasVerified,
+        mailRequestedAlias:diag?.requestedAlias||'',
+        mailThreadId:diag?.submitterThreadId||'',
+        mailMessageId:diag?.submitterMessageId||'',
+        mailReferences:diag?.submitterMessageId?[diag.submitterMessageId]:[],
+        mailThreaded:!!diag?.threaded
+      }).catch(()=>{});
+    }catch(e){console.warn('mail send failed',e);}
     document.getElementById(formId).style.display='none';document.getElementById(okId).style.display='block';
   }
   catch{alert('送信に失敗しました。時間をおいてお試しください。');btn.disabled=false;btn.textContent='送 信 す る';}
@@ -2097,7 +2112,7 @@ async function sendContactMail(values,category){
   const submitterEmail=extractEmail(values);
   const submitterName=values['お名前']||values['担当者名']||'';
   const bodyText=Object.entries(values).map(([k,v])=>`${k}: ${v}`).join('\n')+(category?`\n\nお問い合わせ内容: ${category}`:'');
-  await postToAppsScript({
+  return await postToAppsScript({
     type:'contact',
     alias:mainEmail,
     to:toList,
