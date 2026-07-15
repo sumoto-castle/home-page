@@ -1295,7 +1295,7 @@ async function renderInqList(col,listId){
     wrap.innerHTML=items.map(item=>{
       const keys=Object.keys(item).filter(k=>!['id','read','createdAt','blockId','repliedAt','repliedBy','category','mailUsedFrom','mailAliasVerified','mailRequestedAlias','replies'].includes(k));
       const dt=item.createdAt?.toDate?item.createdAt.toDate().toLocaleString('ja-JP'):'—';
-      const mailDiag=item.mailUsedFrom?`<div style="font-size:10px;margin-top:8px;padding:6px 10px;background:rgba(255,255,255,.03);border-left:3px solid ${item.mailAliasVerified?'#6dba8a':'#f0a860'};">通知メール送信元: <strong>${esc(item.mailUsedFrom)}</strong> ${item.mailAliasVerified?'（エイリアス使用 ✓）':`（⚠️ エイリアス「${esc(item.mailRequestedAlias||'')}」未検証のため既定アドレスから送信）`}</div>`:'';
+      const mailDiag=item.mailUsedFrom?`<div style="font-size:10px;margin-top:8px;padding:6px 10px;background:rgba(255,255,255,.03);border-left:3px solid ${item.mailAliasVerified?'#6dba8a':'#f0a860'};">通知メール送信元: <strong>${esc(item.mailUsedFrom)}</strong> ${item.mailAliasVerified?'（エイリアス使用 ✓）':`（⚠️ エイリアス「${esc(item.mailRequestedAlias||'')}」未検証のため既定アドレスから送信）`}<br>スレッド連結: ${item.mailThreadId?'<strong style="color:#6dba8a;">有効（返信は同じ会話につながります）</strong>':'<strong style="color:#f0a860;">無効（Gmail API未設定の可能性。返信は新規メールになります）</strong>'}</div>`:'';
       const replies=Array.isArray(item.replies)?item.replies:[];
       return `<div class="inq-item" id="inq-${item.id}">
         <div class="inq-meta">
@@ -1693,8 +1693,8 @@ function renderReplyBox(item,col,replies){
   const threadHtml=replies.length?`
     <div style="margin-top:10px;display:flex;flex-direction:column;gap:6px;">
       ${replies.map(r=>`
-        <div style="background:rgba(255,255,255,.03);border-left:3px solid var(--kin);padding:8px 12px;">
-          <div style="font-size:10px;color:var(--kin);margin-bottom:4px;">✓ ${esc(r.aliasEmail||'（既定の送信元）')} → ${esc(r.to||'')} ・ ${r.sentAt?.toDate?r.sentAt.toDate().toLocaleString('ja-JP'):'送信中...'}</div>
+        <div style="background:rgba(255,255,255,.03);border-left:3px solid ${r.threaded?'var(--kin)':'#f0a860'};padding:8px 12px;">
+          <div style="font-size:10px;color:var(--kin);margin-bottom:4px;">✓ ${esc(r.aliasEmail||'（既定の送信元）')} → ${esc(r.to||'')} ・ ${r.sentAt?.toDate?r.sentAt.toDate().toLocaleString('ja-JP'):'送信中...'} ${r.threaded===false?'<span style="color:#f0a860;">（⚠️新規メールとして送信・スレッド未連結）</span>':''}</div>
           <div style="font-size:9px;color:var(--gin);margin-bottom:4px;">件名: ${esc(r.subject||'')}</div>
           <div style="font-size:11px;color:rgba(240,236,228,.75);white-space:pre-wrap;">${esc(r.body||'')}</div>
         </div>`).join('')}
@@ -1735,26 +1735,44 @@ window.sendAdminReply=async function(itemId){
   if(!body){toast('本文を入力してください',true);return;}
   if(statusEl)statusEl.textContent='送信中...';
   try{
+    // 最新のスレッド情報（threadId・直前のMessage-ID・References履歴）を取得
+    const snap=await getDoc(doc(db,'contacts',itemId));
+    const item=snap.exists()?snap.data():{};
+    const replies=Array.isArray(item.replies)?item.replies:[];
+    const threadId=item.mailThreadId||'';
+    const lastMessageId=replies.length?(replies[replies.length-1].messageId||''):(item.mailMessageId||'');
+    const references=(item.mailReferences||[]).join(' ');
+
     const cfg=window._asCfg;
-    const res=await fetch(cfg.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({secret:cfg.secret||'',type:'admin_reply',alias:alias?alias.email:'',to,subject,body})});
+    const res=await fetch(cfg.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({
+      secret:cfg.secret||'',type:'admin_reply',alias:alias?alias.email:'',to,subject,body,
+      threadId,inReplyTo:lastMessageId,references
+    })});
     const data=await res.json().catch(()=>({result:'ok'}));
     if(data.result==='error')throw new Error(data.message||'送信エラー');
+
     // 返信履歴を親ドキュメントの配列フィールドに追記（サブコレクションではなく既存のcontactsコレクションのルールだけで書き込める）
     const replyEntry={
       alias:aliasId||'',
       aliasEmail:alias?alias.email:(data.usedFrom||''),
       to,subject,body,
       aliasVerified:!!data.aliasVerified,
+      messageId:data.messageId||'',
+      threaded:!!data.threaded,
       sentAt:Timestamp.now()
     };
+    const newRefs=[...(item.mailReferences||[])];
+    if(data.messageId)newRefs.push(data.messageId);
     await updateDoc(doc(db,'contacts',itemId),{
       replies:arrayUnion(replyEntry),
       repliedAt:serverTimestamp(),
       repliedBy:alias?alias.email:(data.usedFrom||''),
-      read:true
+      read:true,
+      mailThreadId:data.threadId||threadId||'',
+      mailReferences:newRefs
     });
-    if(statusEl)statusEl.textContent='送信しました';
-    toast('返信を送信しました');
+    if(statusEl)statusEl.textContent=data.threaded?'送信しました（同じスレッドに連結）':'送信しました（※新規メールとして送信・スレッド連結なし）';
+    toast(data.threaded?'返信を送信しました（スレッド連結）':'返信を送信しました（スレッド連結なし）',!data.threaded);
     addLog(`お問い合わせに返信しました（${alias?alias.email:'既定'} → ${to}）`);
     await renderInqList('contacts','inq-list');
   }catch(e){if(statusEl)statusEl.textContent='送信に失敗しました';toast('送信に失敗しました: '+e.message,true);}
